@@ -1,0 +1,112 @@
+import { useSyncExternalStore } from "react";
+
+export interface AnswerLog {
+  qid: string;
+  category: string;
+  correct: boolean;
+  at: number; // timestamp
+}
+
+export interface AppState {
+  answers: AnswerLog[];
+  wrongQueue: string[]; // qids to repeat
+  streak: number;
+  lastActive: string; // yyyy-mm-dd
+  theme: "light" | "dark";
+}
+
+const KEY = "korkortskollen-v1";
+
+const defaultState: AppState = {
+  answers: [],
+  wrongQueue: [],
+  streak: 0,
+  lastActive: "",
+  theme: "light",
+};
+
+function load(): AppState {
+  if (typeof window === "undefined") return defaultState;
+  try {
+    const raw = localStorage.getItem(KEY);
+    if (!raw) return defaultState;
+    return { ...defaultState, ...JSON.parse(raw) };
+  } catch {
+    return defaultState;
+  }
+}
+
+let state: AppState = defaultState;
+const listeners = new Set<() => void>();
+
+function emit() {
+  if (typeof window !== "undefined") {
+    localStorage.setItem(KEY, JSON.stringify(state));
+    document.documentElement.classList.toggle("dark", state.theme === "dark");
+  }
+  listeners.forEach((l) => l());
+}
+
+function today() {
+  return new Date().toISOString().slice(0, 10);
+}
+
+function bumpStreak() {
+  const t = today();
+  if (state.lastActive === t) return;
+  const yesterday = new Date(Date.now() - 86400000).toISOString().slice(0, 10);
+  state.streak = state.lastActive === yesterday ? state.streak + 1 : 1;
+  state.lastActive = t;
+}
+
+export const store = {
+  get: () => state,
+  subscribe: (l: () => void) => {
+    listeners.add(l);
+    return () => listeners.delete(l);
+  },
+  hydrate: () => {
+    state = load();
+    if (typeof window !== "undefined") {
+      document.documentElement.classList.toggle("dark", state.theme === "dark");
+    }
+    emit();
+  },
+  recordAnswer: (qid: string, category: string, correct: boolean) => {
+    state.answers = [...state.answers, { qid, category, correct, at: Date.now() }];
+    if (!correct) {
+      if (!state.wrongQueue.includes(qid)) state.wrongQueue = [...state.wrongQueue, qid];
+    } else {
+      state.wrongQueue = state.wrongQueue.filter((q) => q !== qid);
+    }
+    bumpStreak();
+    emit();
+  },
+  toggleTheme: () => {
+    state.theme = state.theme === "dark" ? "light" : "dark";
+    emit();
+  },
+  reset: () => {
+    state = { ...defaultState, theme: state.theme };
+    emit();
+  },
+};
+
+export function useStore(): AppState {
+  return useSyncExternalStore(
+    store.subscribe,
+    () => state,
+    () => defaultState,
+  );
+}
+
+export function computeStats(s: AppState) {
+  const total = s.answers.length;
+  const correct = s.answers.filter((a) => a.correct).length;
+  const accuracy = total ? Math.round((correct / total) * 100) : 0;
+  // Readiness: weighted mix of accuracy, volume, and inverse of wrongQueue
+  const volumeScore = Math.min(100, (total / 130) * 100);
+  const wrongPenalty = Math.max(0, 100 - s.wrongQueue.length * 4);
+  const readiness = Math.round(accuracy * 0.5 + volumeScore * 0.3 + wrongPenalty * 0.2);
+  return { total, correct, accuracy, readiness: Math.min(100, readiness) };
+}
