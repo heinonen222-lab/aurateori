@@ -8,9 +8,9 @@ import { SignImage } from "@/components/SignImage";
 export const Route = createFileRoute("/flashcards")({
   head: () => ({
     meta: [
-      { title: "Snabbplugg – Körkortskollen" },
+      { title: "Snabbplugg – Aurateori" },
       { name: "description", content: "Interaktiva flashcards för snabb repetition av svenska vägmärken." },
-      { property: "og:title", content: "Snabbplugg – Körkortskollen" },
+      { property: "og:title", content: "Snabbplugg – Aurateori" },
       { property: "og:description", content: "Interaktiva flashcards för svenska vägmärken." },
     ],
   }),

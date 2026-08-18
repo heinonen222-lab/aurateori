@@ -10,9 +10,9 @@ import { cn } from "@/lib/utils";
 export const Route = createFileRoute("/exam")({
   head: () => ({
     meta: [
-      { title: "Examsimulator – Körkortskollen" },
+      { title: "Examsimulator – Aurateori" },
       { name: "description", content: "Simulera Trafikverkets B-teoriprov: 65 frågor, 50 minuter, gränsen är 52 rätt." },
-      { property: "og:title", content: "Examsimulator – Körkortskollen" },
+      { property: "og:title", content: "Examsimulator – Aurateori" },
       { property: "og:description", content: "Simulera Trafikverkets B-teoriprov." },
     ],
   }),

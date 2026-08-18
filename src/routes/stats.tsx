@@ -10,9 +10,9 @@ import { cn } from "@/lib/utils";
 export const Route = createFileRoute("/stats")({
   head: () => ({
     meta: [
-      { title: "Statistik & svaga punkter – Körkortskollen" },
+      { title: "Statistik & svaga punkter – Aurateori" },
       { name: "description", content: "Följ din utveckling och repetera frågor du svarat fel på." },
-      { property: "og:title", content: "Statistik & svaga punkter – Körkortskollen" },
+      { property: "og:title", content: "Statistik & svaga punkter – Aurateori" },
       { property: "og:description", content: "Följ din utveckling och repetera fel svar." },
     ],
   }),

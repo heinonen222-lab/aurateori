@@ -39,7 +39,7 @@ export function AppShell({ children }: { children: ReactNode }) {
             K
           </div>
           <div>
-            <div className="text-sm font-bold leading-tight">Körkortskollen</div>
+            <div className="text-sm font-bold leading-tight">Aurateori</div>
             <div className="text-[11px] text-muted-foreground">B-behörighet</div>
           </div>
         </Link>
@@ -78,7 +78,7 @@ export function AppShell({ children }: { children: ReactNode }) {
           <div className="grid h-8 w-8 place-items-center rounded-lg bg-primary text-primary-foreground font-black text-sm">
             K
           </div>
-          <span className="text-sm font-bold">Körkortskollen</span>
+          <span className="text-sm font-bold">Aurateori</span>
         </Link>
         <button
           onClick={() => store.toggleTheme()}

@@ -9,9 +9,9 @@ import { cn } from "@/lib/utils";
 export const Route = createFileRoute("/signs")({
   head: () => ({
     meta: [
-      { title: "Vägmärkesarkiv – Körkortskollen" },
+      { title: "Vägmärkesarkiv – Aurateori" },
       { name: "description", content: "Sök och bläddra bland svenska vägmärken – varnings-, förbuds-, påbuds-, anvisnings- och informationsmärken." },
-      { property: "og:title", content: "Vägmärkesarkiv – Körkortskollen" },
+      { property: "og:title", content: "Vägmärkesarkiv – Aurateori" },
       { property: "og:description", content: "Sök och bläddra bland svenska vägmärken." },
     ],
   }),
