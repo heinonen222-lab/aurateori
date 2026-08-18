@@ -86,6 +86,17 @@ function Flashcards() {
             <ChevronRight className="h-5 w-5" />
           </button>
         </div>
+
+        <button
+          onClick={() => {
+            setFlipped(false);
+            setI(0);
+            setSeed((n) => n + 1);
+          }}
+          className="w-full rounded-xl border border-border bg-card py-3 text-sm font-semibold hover:border-primary/40"
+        >
+          Blanda kortleken
+        </button>
       </div>
     </AppShell>
   );
