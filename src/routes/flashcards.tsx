@@ -4,6 +4,7 @@ import { ChevronLeft, ChevronRight, RotateCw } from "lucide-react";
 import { AppShell } from "@/components/AppShell";
 import { ROAD_SIGNS } from "@/data/signs";
 import { SignImage } from "@/components/SignImage";
+import { seededShuffle } from "@/lib/shuffle";
 
 export const Route = createFileRoute("/flashcards")({
   head: () => ({
@@ -18,7 +19,8 @@ export const Route = createFileRoute("/flashcards")({
 });
 
 function Flashcards() {
-  const deck = useMemo(() => [...ROAD_SIGNS].sort(() => Math.random() - 0.5), []);
+  const [seed, setSeed] = useState(0);
+  const deck = useMemo(() => seededShuffle(ROAD_SIGNS, seed), [seed]);
   const [i, setI] = useState(0);
   const [flipped, setFlipped] = useState(false);
   const card = deck[i];
@@ -84,6 +86,17 @@ function Flashcards() {
             <ChevronRight className="h-5 w-5" />
           </button>
         </div>
+
+        <button
+          onClick={() => {
+            setFlipped(false);
+            setI(0);
+            setSeed((n) => n + 1);
+          }}
+          className="w-full rounded-xl border border-border bg-card py-3 text-sm font-semibold hover:border-primary/40"
+        >
+          Blanda kortleken
+        </button>
       </div>
     </AppShell>
   );
