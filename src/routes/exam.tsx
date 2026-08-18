@@ -23,14 +23,29 @@ const TOTAL = 65;
 const PASS = 52;
 const SECONDS = 50 * 60;
 
-function buildExam() {
-  // Repeat existing pool to reach 65 unique-ish entries (mock)
-  const arr = [];
-  for (let i = 0; i < TOTAL; i++) {
-    const src = QUESTIONS[i % QUESTIONS.length];
-    arr.push({ ...src, id: `${src.id}-e${i}` });
+function buildExam(seed: number) {
+  // Draw 65 questions, balanced across categories, without duplicates when possible.
+  const byCat = new Map<string, typeof QUESTIONS>();
+  for (const q of QUESTIONS) {
+    byCat.set(q.category, [...(byCat.get(q.category) ?? []), q]);
   }
-  return arr.sort(() => Math.random() - 0.5);
+  const buckets = [...byCat.values()].map((list, i) => seededShuffle(list, seed + i * 97));
+  const picked: typeof QUESTIONS = [];
+  let round = 0;
+  while (picked.length < TOTAL && round < 200) {
+    for (const b of buckets) {
+      const q = b[round];
+      if (q) picked.push(q);
+      if (picked.length === TOTAL) break;
+    }
+    round++;
+  }
+  // Fallback padding if the pool is smaller than the exam length.
+  for (let i = 0; picked.length < TOTAL; i++) {
+    const src = QUESTIONS[i % QUESTIONS.length]!;
+    picked.push({ ...src, id: `${src.id}-e${i}` });
+  }
+  return seededShuffle(picked, seed);
 }
 
 type Result = { qid: string; category: string; correct: boolean };
@@ -40,7 +55,8 @@ function ExamPage() {
   const [idx, setIdx] = useState(0);
   const [time, setTime] = useState(SECONDS);
   const [results, setResults] = useState<Result[]>([]);
-  const exam = useMemo(() => buildExam(), [phase === "running"]);
+  const [seed, setSeed] = useState(0);
+  const exam = useMemo(() => buildExam(seed), [seed]);
 
   useEffect(() => {
     if (phase !== "running") return;
