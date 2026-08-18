@@ -6,9 +6,9 @@ import { useStore, computeStats } from "@/lib/store";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Körkortskollen – Teoriprov för B-körkort" },
+      { title: "Aurateori – Teoriprov för B-körkort" },
       { name: "description", content: "Träna inför Trafikverkets teoriprov för B-körkort. Övningsfrågor, examsimulator och vägmärken – helt på svenska." },
-      { property: "og:title", content: "Körkortskollen – Teoriprov för B-körkort" },
+      { property: "og:title", content: "Aurateori – Teoriprov för B-körkort" },
       { property: "og:description", content: "Träna inför Trafikverkets teoriprov för B-körkort på svenska." },
     ],
   }),

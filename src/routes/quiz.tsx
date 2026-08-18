@@ -9,9 +9,9 @@ import { cn } from "@/lib/utils";
 export const Route = createFileRoute("/quiz")({
   head: () => ({
     meta: [
-      { title: "Övningsfrågor – Körkortskollen" },
+      { title: "Övningsfrågor – Aurateori" },
       { name: "description", content: "Öva på svenska teorifrågor per kategori: vägmärken, trafikregler, miljö, människan och fordonet." },
-      { property: "og:title", content: "Övningsfrågor – Körkortskollen" },
+      { property: "og:title", content: "Övningsfrågor – Aurateori" },
       { property: "og:description", content: "Öva på svenska teorifrågor per kategori." },
     ],
   }),
