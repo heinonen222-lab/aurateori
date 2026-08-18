@@ -3,6 +3,7 @@ import { useMemo, useState } from "react";
 import { AppShell } from "@/components/AppShell";
 import { QuestionCard } from "@/components/QuestionCard";
 import { QUESTIONS, type QuestionCategory } from "@/data/questions";
+import { seededShuffle } from "@/lib/shuffle";
 import { store } from "@/lib/store";
 import { cn } from "@/lib/utils";
 
@@ -32,10 +33,12 @@ function QuizPage() {
   const [idx, setIdx] = useState(0);
   const [correctCount, setCorrectCount] = useState(0);
 
+  const [seed, setSeed] = useState(0);
+
   const pool = useMemo(() => {
     const list = cat === "Alla" ? QUESTIONS : QUESTIONS.filter((q) => q.category === cat);
-    return [...list].sort(() => Math.random() - 0.5);
-  }, [cat]);
+    return seededShuffle(list, seed);
+  }, [cat, seed]);
 
   const q = pool[idx];
   const done = !q;
@@ -102,6 +105,7 @@ function QuizPage() {
               onClick={() => {
                 setIdx(0);
                 setCorrectCount(0);
+                setSeed((n) => n + 1);
               }}
               className="mt-6 rounded-xl bg-primary px-6 py-3 text-sm font-bold text-primary-foreground"
             >

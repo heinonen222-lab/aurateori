@@ -4,6 +4,7 @@ import { Timer, Trophy, XCircle, CheckCircle2 } from "lucide-react";
 import { AppShell } from "@/components/AppShell";
 import { QuestionCard } from "@/components/QuestionCard";
 import { QUESTIONS } from "@/data/questions";
+import { seededShuffle } from "@/lib/shuffle";
 import { store } from "@/lib/store";
 import { cn } from "@/lib/utils";
 
@@ -98,7 +99,8 @@ function ExamPage() {
           </ul>
           <button
             onClick={() => {
-              setPhase("running");
+              setSeed((n) => n + 1);
+                setPhase("running");
               setIdx(0);
               setResults([]);
               setTime(SECONDS);
