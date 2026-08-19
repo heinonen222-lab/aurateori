@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as StatsRouteImport } from './routes/stats'
 import { Route as SignsRouteImport } from './routes/signs'
 import { Route as QuizRouteImport } from './routes/quiz'
+import { Route as GenereraRouteImport } from './routes/generera'
 import { Route as FlashcardsRouteImport } from './routes/flashcards'
 import { Route as ExamRouteImport } from './routes/exam'
 import { Route as IndexRouteImport } from './routes/index'
@@ -29,6 +30,11 @@ const SignsRoute = SignsRouteImport.update({
 const QuizRoute = QuizRouteImport.update({
   id: '/quiz',
   path: '/quiz',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const GenereraRoute = GenereraRouteImport.update({
+  id: '/generera',
+  path: '/generera',
   getParentRoute: () => rootRouteImport,
 } as any)
 const FlashcardsRoute = FlashcardsRouteImport.update({
@@ -51,6 +57,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/exam': typeof ExamRoute
   '/flashcards': typeof FlashcardsRoute
+  '/generera': typeof GenereraRoute
   '/quiz': typeof QuizRoute
   '/signs': typeof SignsRoute
   '/stats': typeof StatsRoute
@@ -59,6 +66,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/exam': typeof ExamRoute
   '/flashcards': typeof FlashcardsRoute
+  '/generera': typeof GenereraRoute
   '/quiz': typeof QuizRoute
   '/signs': typeof SignsRoute
   '/stats': typeof StatsRoute
@@ -68,22 +76,46 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/exam': typeof ExamRoute
   '/flashcards': typeof FlashcardsRoute
+  '/generera': typeof GenereraRoute
   '/quiz': typeof QuizRoute
   '/signs': typeof SignsRoute
   '/stats': typeof StatsRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/exam' | '/flashcards' | '/quiz' | '/signs' | '/stats'
+  fullPaths:
+    | '/'
+    | '/exam'
+    | '/flashcards'
+    | '/generera'
+    | '/quiz'
+    | '/signs'
+    | '/stats'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/exam' | '/flashcards' | '/quiz' | '/signs' | '/stats'
-  id: '__root__' | '/' | '/exam' | '/flashcards' | '/quiz' | '/signs' | '/stats'
+  to:
+    | '/'
+    | '/exam'
+    | '/flashcards'
+    | '/generera'
+    | '/quiz'
+    | '/signs'
+    | '/stats'
+  id:
+    | '__root__'
+    | '/'
+    | '/exam'
+    | '/flashcards'
+    | '/generera'
+    | '/quiz'
+    | '/signs'
+    | '/stats'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   ExamRoute: typeof ExamRoute
   FlashcardsRoute: typeof FlashcardsRoute
+  GenereraRoute: typeof GenereraRoute
   QuizRoute: typeof QuizRoute
   SignsRoute: typeof SignsRoute
   StatsRoute: typeof StatsRoute
@@ -110,6 +142,13 @@ declare module '@tanstack/react-router' {
       path: '/quiz'
       fullPath: '/quiz'
       preLoaderRoute: typeof QuizRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/generera': {
+      id: '/generera'
+      path: '/generera'
+      fullPath: '/generera'
+      preLoaderRoute: typeof GenereraRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/flashcards': {
@@ -140,6 +179,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   ExamRoute: ExamRoute,
   FlashcardsRoute: FlashcardsRoute,
+  GenereraRoute: GenereraRoute,
   QuizRoute: QuizRoute,
   SignsRoute: SignsRoute,
   StatsRoute: StatsRoute,
