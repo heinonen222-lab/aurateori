@@ -1,0 +1,185 @@
+import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
+import { useEffect, useState } from "react";
+import { Loader2 } from "lucide-react";
+import { AppShell } from "@/components/AppShell";
+import { supabase } from "@/integrations/supabase/client";
+import { lovable } from "@/integrations/lovable";
+import { useAuth } from "@/hooks/useAuth";
+
+export const Route = createFileRoute("/auth")({
+  head: () => ({
+    meta: [
+      { title: "Logga in – Aurateori" },
+      {
+        name: "description",
+        content:
+          "Logga in eller skapa konto i Aurateori för att spara din progress och låsa upp premium.",
+      },
+      { property: "og:title", content: "Logga in – Aurateori" },
+      { property: "og:description", content: "Logga in för att spara progress och få premium." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
+    ],
+  }),
+  component: AuthPage,
+});
+
+function safePath(value: string | null): string {
+  if (!value || !value.startsWith("/") || value.startsWith("//")) return "/";
+  return value;
+}
+
+function AuthPage() {
+  const navigate = useNavigate();
+  const { user, loading } = useAuth();
+  const [mode, setMode] = useState<"signin" | "signup">("signin");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [busy, setBusy] = useState(false);
+  const [message, setMessage] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null);
+
+  const next = safePath(
+    typeof window !== "undefined" ? new URLSearchParams(window.location.search).get("next") : null,
+  );
+
+  useEffect(() => {
+    if (!loading && user) void navigate({ to: next });
+  }, [loading, user, navigate, next]);
+
+  const submit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setBusy(true);
+    setError(null);
+    setMessage(null);
+    try {
+      if (mode === "signup") {
+        const { error: err } = await supabase.auth.signUp({
+          email,
+          password,
+          options: { emailRedirectTo: `${window.location.origin}${next}` },
+        });
+        if (err) throw err;
+        setMessage("Konto skapat. Kolla din e-post om bekräftelse krävs.");
+      } else {
+        const { error: err } = await supabase.auth.signInWithPassword({ email, password });
+        if (err) throw err;
+      }
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Något gick fel.");
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  const google = async () => {
+    setError(null);
+    if (typeof window !== "undefined") {
+      sessionStorage.setItem("aurateori:next", next);
+    }
+    const result = await lovable.auth.signInWithOAuth("google", {
+      redirect_uri: window.location.origin,
+    });
+    if (result.error) {
+      setError("Kunde inte logga in med Google.");
+      return;
+    }
+    if (result.redirected) return;
+    void navigate({ to: next });
+  };
+
+  return (
+    <AppShell>
+      <div className="mx-auto max-w-md space-y-5">
+        <div>
+          <h1 className="text-2xl font-black sm:text-3xl">
+            {mode === "signin" ? "Logga in" : "Skapa konto"}
+          </h1>
+          <p className="mt-1 text-sm text-muted-foreground">
+            Spara din progress och lås upp premium.
+          </p>
+        </div>
+
+        <div className="rounded-3xl border border-border bg-card p-5 shadow-sm sm:p-6">
+          <button
+            onClick={google}
+            className="w-full rounded-xl border border-border py-3 text-sm font-semibold transition hover:border-primary/60"
+          >
+            Fortsätt med Google
+          </button>
+
+          <div className="my-4 flex items-center gap-3 text-xs text-muted-foreground">
+            <div className="h-px flex-1 bg-border" />
+            eller
+            <div className="h-px flex-1 bg-border" />
+          </div>
+
+          <form onSubmit={submit} className="space-y-3">
+            <div>
+              <label htmlFor="email" className="mb-1.5 block text-xs font-bold uppercase tracking-wider text-muted-foreground">
+                E-post
+              </label>
+              <input
+                id="email"
+                type="email"
+                required
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="w-full rounded-xl border border-border bg-background px-3 py-2.5 text-sm outline-none focus:border-primary"
+              />
+            </div>
+            <div>
+              <label htmlFor="password" className="mb-1.5 block text-xs font-bold uppercase tracking-wider text-muted-foreground">
+                Lösenord
+              </label>
+              <input
+                id="password"
+                type="password"
+                required
+                minLength={6}
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className="w-full rounded-xl border border-border bg-background px-3 py-2.5 text-sm outline-none focus:border-primary"
+              />
+            </div>
+
+            <button
+              type="submit"
+              disabled={busy}
+              className="flex w-full items-center justify-center gap-2 rounded-xl bg-primary py-3 text-sm font-bold text-primary-foreground transition hover:opacity-90 disabled:opacity-60"
+            >
+              {busy && <Loader2 className="h-4 w-4 animate-spin" />}
+              {mode === "signin" ? "Logga in" : "Skapa konto"}
+            </button>
+          </form>
+
+          {error && (
+            <p className="mt-3 rounded-xl border border-destructive/40 bg-destructive/10 p-3 text-xs">
+              {error}
+            </p>
+          )}
+          {message && (
+            <p className="mt-3 rounded-xl border border-primary/40 bg-primary/10 p-3 text-xs">
+              {message}
+            </p>
+          )}
+
+          <button
+            onClick={() => setMode(mode === "signin" ? "signup" : "signin")}
+            className="mt-4 w-full text-xs text-muted-foreground hover:text-foreground"
+          >
+            {mode === "signin"
+              ? "Har du inget konto? Skapa ett"
+              : "Har du redan ett konto? Logga in"}
+          </button>
+        </div>
+
+        <p className="text-center text-xs text-muted-foreground">
+          <Link to="/priser" className="text-primary hover:underline">
+            Se priser för premium
+          </Link>
+        </p>
+      </div>
+    </AppShell>
+  );
+}
