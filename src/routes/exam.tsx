@@ -24,10 +24,11 @@ const TOTAL = 65;
 const PASS = 52;
 const SECONDS = 50 * 60;
 
-function buildExam(seed: number) {
+function buildExam(seed: number, source: Question[]) {
   // Draw 65 questions, balanced across categories, without duplicates when possible.
-  const byCat = new Map<string, typeof QUESTIONS>();
-  for (const q of QUESTIONS) {
+  const pool = source.length ? source : QUESTIONS;
+  const byCat = new Map<string, Question[]>();
+  for (const q of pool) {
     byCat.set(q.category, [...(byCat.get(q.category) ?? []), q]);
   }
   const buckets = [...byCat.values()].map((list, i) => seededShuffle(list, seed + i * 97));
