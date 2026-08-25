@@ -12,10 +12,13 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as StatsRouteImport } from './routes/stats'
 import { Route as SignsRouteImport } from './routes/signs'
 import { Route as QuizRouteImport } from './routes/quiz'
+import { Route as PriserRouteImport } from './routes/priser'
 import { Route as GenereraRouteImport } from './routes/generera'
 import { Route as FlashcardsRouteImport } from './routes/flashcards'
 import { Route as ExamRouteImport } from './routes/exam'
+import { Route as AuthRouteImport } from './routes/auth'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as CheckoutSuccessRouteImport } from './routes/checkout.success'
 import { Route as ApiPublicPaymentsWebhookRouteImport } from './routes/api/public/payments/webhook'
 
 const StatsRoute = StatsRouteImport.update({
@@ -33,6 +36,11 @@ const QuizRoute = QuizRouteImport.update({
   path: '/quiz',
   getParentRoute: () => rootRouteImport,
 } as any)
+const PriserRoute = PriserRouteImport.update({
+  id: '/priser',
+  path: '/priser',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const GenereraRoute = GenereraRouteImport.update({
   id: '/generera',
   path: '/generera',
@@ -48,9 +56,19 @@ const ExamRoute = ExamRouteImport.update({
   path: '/exam',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthRoute = AuthRouteImport.update({
+  id: '/auth',
+  path: '/auth',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CheckoutSuccessRoute = CheckoutSuccessRouteImport.update({
+  id: '/checkout/success',
+  path: '/checkout/success',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ApiPublicPaymentsWebhookRoute =
@@ -62,76 +80,97 @@ const ApiPublicPaymentsWebhookRoute =
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/auth': typeof AuthRoute
   '/exam': typeof ExamRoute
   '/flashcards': typeof FlashcardsRoute
   '/generera': typeof GenereraRoute
+  '/priser': typeof PriserRoute
   '/quiz': typeof QuizRoute
   '/signs': typeof SignsRoute
   '/stats': typeof StatsRoute
+  '/checkout/success': typeof CheckoutSuccessRoute
   '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/auth': typeof AuthRoute
   '/exam': typeof ExamRoute
   '/flashcards': typeof FlashcardsRoute
   '/generera': typeof GenereraRoute
+  '/priser': typeof PriserRoute
   '/quiz': typeof QuizRoute
   '/signs': typeof SignsRoute
   '/stats': typeof StatsRoute
+  '/checkout/success': typeof CheckoutSuccessRoute
   '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/auth': typeof AuthRoute
   '/exam': typeof ExamRoute
   '/flashcards': typeof FlashcardsRoute
   '/generera': typeof GenereraRoute
+  '/priser': typeof PriserRoute
   '/quiz': typeof QuizRoute
   '/signs': typeof SignsRoute
   '/stats': typeof StatsRoute
+  '/checkout/success': typeof CheckoutSuccessRoute
   '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/auth'
     | '/exam'
     | '/flashcards'
     | '/generera'
+    | '/priser'
     | '/quiz'
     | '/signs'
     | '/stats'
+    | '/checkout/success'
     | '/api/public/payments/webhook'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/auth'
     | '/exam'
     | '/flashcards'
     | '/generera'
+    | '/priser'
     | '/quiz'
     | '/signs'
     | '/stats'
+    | '/checkout/success'
     | '/api/public/payments/webhook'
   id:
     | '__root__'
     | '/'
+    | '/auth'
     | '/exam'
     | '/flashcards'
     | '/generera'
+    | '/priser'
     | '/quiz'
     | '/signs'
     | '/stats'
+    | '/checkout/success'
     | '/api/public/payments/webhook'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AuthRoute: typeof AuthRoute
   ExamRoute: typeof ExamRoute
   FlashcardsRoute: typeof FlashcardsRoute
   GenereraRoute: typeof GenereraRoute
+  PriserRoute: typeof PriserRoute
   QuizRoute: typeof QuizRoute
   SignsRoute: typeof SignsRoute
   StatsRoute: typeof StatsRoute
+  CheckoutSuccessRoute: typeof CheckoutSuccessRoute
   ApiPublicPaymentsWebhookRoute: typeof ApiPublicPaymentsWebhookRoute
 }
 
@@ -158,6 +197,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof QuizRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/priser': {
+      id: '/priser'
+      path: '/priser'
+      fullPath: '/priser'
+      preLoaderRoute: typeof PriserRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/generera': {
       id: '/generera'
       path: '/generera'
@@ -179,11 +225,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ExamRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/auth': {
+      id: '/auth'
+      path: '/auth'
+      fullPath: '/auth'
+      preLoaderRoute: typeof AuthRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/checkout/success': {
+      id: '/checkout/success'
+      path: '/checkout/success'
+      fullPath: '/checkout/success'
+      preLoaderRoute: typeof CheckoutSuccessRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/api/public/payments/webhook': {
@@ -198,12 +258,15 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AuthRoute: AuthRoute,
   ExamRoute: ExamRoute,
   FlashcardsRoute: FlashcardsRoute,
   GenereraRoute: GenereraRoute,
+  PriserRoute: PriserRoute,
   QuizRoute: QuizRoute,
   SignsRoute: SignsRoute,
   StatsRoute: StatsRoute,
+  CheckoutSuccessRoute: CheckoutSuccessRoute,
   ApiPublicPaymentsWebhookRoute: ApiPublicPaymentsWebhookRoute,
 }
 export const routeTree = rootRouteImport
