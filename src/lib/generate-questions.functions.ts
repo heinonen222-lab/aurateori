@@ -41,6 +41,8 @@ export interface GeneratedQuestion {
 export interface GenerateResult {
   questions: GeneratedQuestion[];
   sources: string[];
+  /** Number of questions persisted to the shared question bank. */
+  saved: number;
 }
 
 export const generateQuestions = createServerFn({ method: "POST" })
