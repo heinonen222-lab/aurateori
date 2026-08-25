@@ -162,5 +162,39 @@ Krav:
       .filter((u): u is string => Boolean(u))
       .slice(0, 8);
 
-    return { questions, sources };
+    // Persist to the shared question bank so the questions can be reused in
+    // the quiz and exam simulator.
+    let saved = 0;
+    const persisted: GeneratedQuestion[] = [];
+    try {
+      const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+      const { data: rows, error } = await supabaseAdmin
+        .from("ai_questions")
+        .upsert(
+          questions.map((q) => ({
+            category: q.category,
+            question: q.question,
+            options: q.options,
+            correct: q.correct,
+            explanation: q.explanation,
+            reference: q.reference,
+            difficulty: data.difficulty,
+            sources,
+          })),
+          { onConflict: "question", ignoreDuplicates: false },
+        )
+        .select("id, question");
+
+      if (error) throw new Error(error.message);
+      saved = rows?.length ?? 0;
+      const idByQuestion = new Map((rows ?? []).map((r) => [r.question, r.id]));
+      for (const q of questions) {
+        const dbId = idByQuestion.get(q.question);
+        persisted.push(dbId ? { ...q, id: `ai-${dbId}` } : q);
+      }
+    } catch (err) {
+      console.error("Kunde inte spara frågor i frågebanken:", err);
+    }
+
+    return { questions: persisted.length ? persisted : questions, sources, saved };
   });
