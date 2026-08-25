@@ -118,7 +118,7 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      has_active_premium: { Args: { _user_id: string }; Returns: boolean }
+      has_active_premium: { Args: never; Returns: boolean }
     }
     Enums: {
       [_ in never]: never
