@@ -37,10 +37,13 @@ function QuizPage() {
 
   const [seed, setSeed] = useState(0);
 
+  const { data: bank } = useQuery(bankQuestionsQuery);
+
   const pool = useMemo(() => {
-    const list = cat === "Alla" ? QUESTIONS : QUESTIONS.filter((q) => q.category === cat);
+    const all = [...QUESTIONS, ...(bank ?? [])];
+    const list = cat === "Alla" ? all : all.filter((q) => q.category === cat);
     return seededShuffle(list, seed);
-  }, [cat, seed]);
+  }, [cat, seed, bank]);
 
   const q = pool[idx];
   const done = !q;
