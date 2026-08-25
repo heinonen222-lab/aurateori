@@ -10,6 +10,7 @@ import {
   Moon,
   Sun,
   Sparkles,
+  Crown,
 } from "lucide-react";
 import { store, useStore } from "@/lib/store";
 import { cn } from "@/lib/utils";
@@ -22,6 +23,7 @@ const NAV = [
   { to: "/flashcards", label: "Snabbplugg", icon: Layers },
   { to: "/generera", label: "AI-frågor", icon: Sparkles },
   { to: "/stats", label: "Statistik", icon: BarChart3 },
+  { to: "/priser", label: "Premium", icon: Crown },
 ] as const;
 
 export function AppShell({ children }: { children: ReactNode }) {
@@ -97,7 +99,7 @@ export function AppShell({ children }: { children: ReactNode }) {
 
       {/* Mobile bottom nav */}
       <nav className="fixed inset-x-0 bottom-0 z-30 border-t border-border bg-background/95 backdrop-blur lg:hidden">
-        <div className="mx-auto grid max-w-2xl grid-cols-7">
+        <div className="mx-auto grid max-w-2xl grid-cols-4 sm:grid-cols-8">
           {NAV.map((n) => {
             const active = n.to === "/" ? pathname === "/" : pathname.startsWith(n.to);
             return (
