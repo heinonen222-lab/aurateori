@@ -1,8 +1,10 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
 import { AppShell } from "@/components/AppShell";
 import { QuestionCard } from "@/components/QuestionCard";
 import { QUESTIONS, type QuestionCategory } from "@/data/questions";
+import { bankQuestionsQuery } from "@/lib/ai-questions";
 import { seededShuffle } from "@/lib/shuffle";
 import { store } from "@/lib/store";
 import { cn } from "@/lib/utils";
@@ -35,10 +37,13 @@ function QuizPage() {
 
   const [seed, setSeed] = useState(0);
 
+  const { data: bank } = useQuery(bankQuestionsQuery);
+
   const pool = useMemo(() => {
-    const list = cat === "Alla" ? QUESTIONS : QUESTIONS.filter((q) => q.category === cat);
+    const all = [...QUESTIONS, ...(bank ?? [])];
+    const list = cat === "Alla" ? all : all.filter((q) => q.category === cat);
     return seededShuffle(list, seed);
-  }, [cat, seed]);
+  }, [cat, seed, bank]);
 
   const q = pool[idx];
   const done = !q;

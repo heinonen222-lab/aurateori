@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Sparkles, Loader2, ExternalLink } from "lucide-react";
 import { AppShell } from "@/components/AppShell";
 import { QuestionCard } from "@/components/QuestionCard";
@@ -11,6 +11,7 @@ import {
   generateQuestions,
   type GeneratedQuestion,
 } from "@/lib/generate-questions.functions";
+import { bankQuestionsQuery } from "@/lib/ai-questions";
 import { store } from "@/lib/store";
 import { cn } from "@/lib/utils";
 
@@ -54,6 +55,8 @@ function GeneratePage() {
   const [idx, setIdx] = useState(0);
   const [correctCount, setCorrectCount] = useState(0);
 
+  const queryClient = useQueryClient();
+  const { data: bank } = useQuery(bankQuestionsQuery);
   const run = useServerFn(generateQuestions);
   const mutation = useMutation({
     mutationFn: (vars: {
@@ -63,6 +66,7 @@ function GeneratePage() {
       avoid: string[];
     }) => run({ data: vars }),
     onSuccess: (res) => {
+      void queryClient.invalidateQueries({ queryKey: bankQuestionsQuery.queryKey });
       setBatch(res.questions);
       setSources(res.sources);
       setIdx(0);
@@ -71,8 +75,9 @@ function GeneratePage() {
   });
 
   const generate = () => {
-    const avoid = QUESTIONS.filter((q) => q.category === cat)
-      .slice(-20)
+    const avoid = [...QUESTIONS, ...(bank ?? [])]
+      .filter((q) => q.category === cat)
+      .slice(-30)
       .map((q) => q.question)
       .concat(batch.map((q) => q.question));
     mutation.mutate({ category: cat, count, difficulty, avoid });
@@ -88,7 +93,8 @@ function GeneratePage() {
           <h1 className="text-2xl font-black sm:text-3xl">AI-frågor</h1>
           <p className="mt-1 text-sm text-muted-foreground">
             Generera helt nya teorifrågor baserade på aktuella svenska trafikregler – med
-            lagrum och källor.
+            lagrum och källor. Frågorna sparas permanent i frågebanken och används sedan
+            i övningsfrågorna och provsimulatorn.
           </p>
         </div>
 
@@ -175,6 +181,13 @@ function GeneratePage() {
                 </>
               )}
             </button>
+
+            {mutation.isSuccess && (
+              <p className="rounded-xl border border-primary/40 bg-primary/10 p-3 text-xs text-foreground">
+                {mutation.data.saved} frågor sparade i frågebanken. Frågebanken innehåller nu{" "}
+                {(bank?.length ?? 0) + QUESTIONS.length} frågor.
+              </p>
+            )}
 
             {mutation.isError && (
               <p className="rounded-xl border border-destructive/40 bg-destructive/10 p-3 text-xs text-foreground">
