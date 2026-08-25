@@ -1,9 +1,11 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
 import { Timer, Trophy, XCircle, CheckCircle2 } from "lucide-react";
 import { AppShell } from "@/components/AppShell";
 import { QuestionCard } from "@/components/QuestionCard";
-import { QUESTIONS } from "@/data/questions";
+import { QUESTIONS, type Question } from "@/data/questions";
+import { bankQuestionsQuery } from "@/lib/ai-questions";
 import { seededShuffle } from "@/lib/shuffle";
 import { store } from "@/lib/store";
 import { cn } from "@/lib/utils";
@@ -32,7 +34,7 @@ function buildExam(seed: number, source: Question[]) {
     byCat.set(q.category, [...(byCat.get(q.category) ?? []), q]);
   }
   const buckets = [...byCat.values()].map((list, i) => seededShuffle(list, seed + i * 97));
-  const picked: typeof QUESTIONS = [];
+  const picked: Question[] = [];
   let round = 0;
   while (picked.length < TOTAL && round < 200) {
     for (const b of buckets) {
@@ -44,7 +46,7 @@ function buildExam(seed: number, source: Question[]) {
   }
   // Fallback padding if the pool is smaller than the exam length.
   for (let i = 0; picked.length < TOTAL; i++) {
-    const src = QUESTIONS[i % QUESTIONS.length]!;
+    const src = pool[i % pool.length]!;
     picked.push({ ...src, id: `${src.id}-e${i}` });
   }
   return seededShuffle(picked, seed);
@@ -58,7 +60,11 @@ function ExamPage() {
   const [time, setTime] = useState(SECONDS);
   const [results, setResults] = useState<Result[]>([]);
   const [seed, setSeed] = useState(0);
-  const exam = useMemo(() => buildExam(seed), [seed]);
+  const { data: bank } = useQuery(bankQuestionsQuery);
+  const exam = useMemo(
+    () => buildExam(seed, [...QUESTIONS, ...(bank ?? [])]),
+    [seed, bank],
+  );
 
   useEffect(() => {
     if (phase !== "running") return;
