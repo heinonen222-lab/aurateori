@@ -9,7 +9,7 @@ import {
   BarChart3,
   Moon,
   Sun,
-  Sparkles,
+  GraduationCap,
   Crown,
 } from "lucide-react";
 import { store, useStore } from "@/lib/store";
