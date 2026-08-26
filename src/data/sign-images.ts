@@ -67,7 +67,7 @@ export const SIGN_IMAGES: Record<string, string> = {
   "pabud-minsta-hastighet": a_pabud_minsta_hastighet.url,
   "pabud-rondellen": a_pabud_rondellen.url,
   "pabud-vanster": a_pabud_vanster.url,
-  "vajningsplikt": a_vajningsplikt.url,
+  vajningsplikt: a_vajningsplikt.url,
   "varning-avsmalnande": a_varning_avsmalnande.url,
   "varning-barn": a_varning_barn.url,
   "varning-cyklande": a_varning_cyklande.url,
