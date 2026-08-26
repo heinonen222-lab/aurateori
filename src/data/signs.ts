@@ -213,10 +213,11 @@ export const ROAD_SIGNS: RoadSign[] = [
   },
   {
     id: "pabud-minsta-hastighet",
-    name: "Påbjuden minsta hastighet",
+    name: "Påbjuden gång- och cykelbana",
     category: "Påbudsmärken",
-    meaning: "Du måste hålla minst den angivna hastigheten om förhållandena tillåter.",
-    trap: "Förväxla inte med hastighetsbegränsning – detta är ett minimum, inte ett maximum.",
+    meaning:
+      "Banan är avsedd för både gående och cyklande. Cyklister och mopedister klass II ska använda den.",
+    trap: "Förväxla inte med påbjuden cykelbana (D4) – här ska gående och cyklande samsas på samma bana.",
   },
   {
     id: "anv-enkelriktat",
