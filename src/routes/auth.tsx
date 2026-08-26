@@ -116,7 +116,10 @@ function AuthPage() {
 
           <form onSubmit={submit} className="space-y-3">
             <div>
-              <label htmlFor="email" className="mb-1.5 block text-xs font-bold uppercase tracking-wider text-muted-foreground">
+              <label
+                htmlFor="email"
+                className="mb-1.5 block text-xs font-bold uppercase tracking-wider text-muted-foreground"
+              >
                 E-post
               </label>
               <input
@@ -129,7 +132,10 @@ function AuthPage() {
               />
             </div>
             <div>
-              <label htmlFor="password" className="mb-1.5 block text-xs font-bold uppercase tracking-wider text-muted-foreground">
+              <label
+                htmlFor="password"
+                className="mb-1.5 block text-xs font-bold uppercase tracking-wider text-muted-foreground"
+              >
                 Lösenord
               </label>
               <input

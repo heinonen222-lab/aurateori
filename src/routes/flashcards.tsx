@@ -10,7 +10,10 @@ export const Route = createFileRoute("/flashcards")({
   head: () => ({
     meta: [
       { title: "Snabbplugg – Aurateori" },
-      { name: "description", content: "Interaktiva flashcards för snabb repetition av svenska vägmärken." },
+      {
+        name: "description",
+        content: "Interaktiva flashcards för snabb repetition av svenska vägmärken.",
+      },
       { property: "og:title", content: "Snabbplugg – Aurateori" },
       { property: "og:description", content: "Interaktiva flashcards för svenska vägmärken." },
     ],
@@ -59,7 +62,9 @@ function Flashcards() {
               className="absolute inset-0 flex flex-col items-center justify-center gap-3 rounded-3xl border border-primary/30 bg-primary p-6 text-primary-foreground shadow-lg [backface-visibility:hidden]"
               style={{ transform: "rotateY(180deg)" }}
             >
-              <div className="text-xs font-bold uppercase tracking-wider opacity-80">{card.category}</div>
+              <div className="text-xs font-bold uppercase tracking-wider opacity-80">
+                {card.category}
+              </div>
               <div className="text-xl font-black">{card.name}</div>
               <p className="text-center text-sm leading-relaxed opacity-90">{card.meaning}</p>
             </div>

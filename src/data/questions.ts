@@ -20,10 +20,12 @@ export const QUESTIONS: Question[] = [
   {
     id: "q1",
     category: "Trafikregler",
-    question: "Vilken är den högsta tillåtna hastigheten inom tättbebyggt område om inget annat anges?",
+    question:
+      "Vilken är den högsta tillåtna hastigheten inom tättbebyggt område om inget annat anges?",
     options: ["30 km/h", "40 km/h", "50 km/h", "70 km/h"],
     correct: 2,
-    explanation: "Bashastigheten inom tättbebyggt område är 50 km/h. Kommuner kan sänka den lokalt.",
+    explanation:
+      "Bashastigheten inom tättbebyggt område är 50 km/h. Kommuner kan sänka den lokalt.",
     reference: "Trafikförordningen 3 kap. 17 §",
   },
   {
@@ -37,7 +39,8 @@ export const QUESTIONS: Question[] = [
       "Övergångsstället gäller endast dagtid",
     ],
     correct: 1,
-    explanation: "Vid obevakat övergångsställe har du väjningsplikt mot gående som gått ut på eller precis ska gå ut på övergångsstället.",
+    explanation:
+      "Vid obevakat övergångsställe har du väjningsplikt mot gående som gått ut på eller precis ska gå ut på övergångsstället.",
     reference: "Trafikförordningen 3 kap. 61 §",
   },
   {
@@ -52,7 +55,8 @@ export const QUESTIONS: Question[] = [
       "Huvudled upphör",
     ],
     correct: 1,
-    explanation: "Stopplikt innebär att du måste stanna helt, även om vägen är fri, och lämna företräde.",
+    explanation:
+      "Stopplikt innebär att du måste stanna helt, även om vägen är fri, och lämna företräde.",
     reference: "Vägmärkesförordning B2",
   },
   {
@@ -60,9 +64,15 @@ export const QUESTIONS: Question[] = [
     category: "Vägmärken",
     image: "anv-huvudled",
     question: "Vilken skylt indikerar huvudled?",
-    options: ["Gul romb med vit kant", "Blå kvadrat med pil", "Röd triangel", "Vit cirkel med röd kant"],
+    options: [
+      "Gul romb med vit kant",
+      "Blå kvadrat med pil",
+      "Röd triangel",
+      "Vit cirkel med röd kant",
+    ],
     correct: 0,
-    explanation: "Huvudled markeras med en gul romb med vit kant. På huvudled har du företräde vid korsningar.",
+    explanation:
+      "Huvudled markeras med en gul romb med vit kant. På huvudled har du företräde vid korsningar.",
     reference: "Vägmärkesförordning B4",
   },
   {
@@ -76,7 +86,8 @@ export const QUESTIONS: Question[] = [
       "Konstant hög hastighet",
     ],
     correct: 1,
-    explanation: "Ecodriving innebär mjuka accelerationer, motorbromsning och att köra på högsta möjliga växel med lågt varvtal.",
+    explanation:
+      "Ecodriving innebär mjuka accelerationer, motorbromsning och att köra på högsta möjliga växel med lågt varvtal.",
     reference: "Miljöanpassad körning – Trafikverket",
   },
   {
@@ -85,7 +96,8 @@ export const QUESTIONS: Question[] = [
     question: "Hur länge får du låta motorn gå på tomgång i stillastående inom tättbebyggt område?",
     options: ["30 sekunder", "1 minut", "3 minuter", "Så länge du vill"],
     correct: 1,
-    explanation: "Tomgångskörning är begränsad till max 1 minut inom tättbebyggt område enligt lokala föreskrifter.",
+    explanation:
+      "Tomgångskörning är begränsad till max 1 minut inom tättbebyggt område enligt lokala föreskrifter.",
     reference: "Miljöbalken – lokala hälsoskyddsföreskrifter",
   },
   {
@@ -94,7 +106,8 @@ export const QUESTIONS: Question[] = [
     question: "Vilken promillegräns gäller för rattfylleri i Sverige?",
     options: ["0,0 ‰", "0,2 ‰", "0,5 ‰", "0,8 ‰"],
     correct: 1,
-    explanation: "Rattfylleri gäller från 0,2 promille. Från 1,0 promille räknas det som grovt rattfylleri.",
+    explanation:
+      "Rattfylleri gäller från 0,2 promille. Från 1,0 promille räknas det som grovt rattfylleri.",
     reference: "Trafikbrottslagen 4 §",
   },
   {
@@ -108,7 +121,8 @@ export const QUESTIONS: Question[] = [
       "Endast synen försämras",
     ],
     correct: 2,
-    explanation: "Trötthet påverkar reaktionstiden lika mycket som alkohol. 17 timmars vakenhet motsvarar 0,5 promille.",
+    explanation:
+      "Trötthet påverkar reaktionstiden lika mycket som alkohol. 17 timmars vakenhet motsvarar 0,5 promille.",
     reference: "VTI-rapporter om trötthet i trafiken",
   },
   {
@@ -117,7 +131,8 @@ export const QUESTIONS: Question[] = [
     question: "Vad är det minsta mönsterdjupet för sommardäck?",
     options: ["1,0 mm", "1,6 mm", "3,0 mm", "4,0 mm"],
     correct: 1,
-    explanation: "Sommardäck måste ha minst 1,6 mm mönsterdjup. Rekommendationen är dock minst 3 mm.",
+    explanation:
+      "Sommardäck måste ha minst 1,6 mm mönsterdjup. Rekommendationen är dock minst 3 mm.",
     reference: "Fordonsförordningen 4 kap.",
   },
   {
@@ -131,7 +146,8 @@ export const QUESTIONS: Question[] = [
       "Aldrig obligatoriskt",
     ],
     correct: 1,
-    explanation: "Vinterdäck krävs 1 december–31 mars när det råder vinterväglag (snö, is, snömodd eller frost).",
+    explanation:
+      "Vinterdäck krävs 1 december–31 mars när det råder vinterväglag (snö, is, snömodd eller frost).",
     reference: "Trafikförordningen 4 kap. 18a §",
   },
   {
@@ -145,7 +161,8 @@ export const QUESTIONS: Question[] = [
       "Bara vid rondeller",
     ],
     correct: 1,
-    explanation: "Vid korsning utan skyltning gäller högerregeln – lämna företräde åt fordon från höger.",
+    explanation:
+      "Vid korsning utan skyltning gäller högerregeln – lämna företräde åt fordon från höger.",
     reference: "Trafikförordningen 3 kap. 18 §",
   },
   {
@@ -160,7 +177,8 @@ export const QUESTIONS: Question[] = [
       "Nästa rondell",
     ],
     correct: 1,
-    explanation: "Hastighetsbegränsningen gäller tills ett nytt hastighetsmärke eller tätortsmärkets slut passeras.",
+    explanation:
+      "Hastighetsbegränsningen gäller tills ett nytt hastighetsmärke eller tätortsmärkets slut passeras.",
     reference: "Vägmärkesförordning C31",
   },
   {
@@ -175,7 +193,8 @@ export const QUESTIONS: Question[] = [
       "Blinka vänster vid ingång",
     ],
     correct: 1,
-    explanation: "Fordon i rondellen har företräde. Blinka höger när du lämnar rondellen – aldrig vid ingång.",
+    explanation:
+      "Fordon i rondellen har företräde. Blinka höger när du lämnar rondellen – aldrig vid ingång.",
     reference: "Trafikförordningen 3 kap.",
   },
   {
@@ -184,7 +203,8 @@ export const QUESTIONS: Question[] = [
     question: "Hur mycket ökar bromssträckan om du fördubblar hastigheten?",
     options: ["2 gånger", "3 gånger", "4 gånger", "Ingen skillnad"],
     correct: 2,
-    explanation: "Bromssträckan ökar med kvadraten av hastigheten. Fördubblad hastighet ger 4 ggr längre bromssträcka.",
+    explanation:
+      "Bromssträckan ökar med kvadraten av hastigheten. Fördubblad hastighet ger 4 ggr längre bromssträcka.",
     reference: "Fysikens lagar – kinetisk energi",
   },
   {
@@ -198,7 +218,8 @@ export const QUESTIONS: Question[] = [
       "Slå av tändningen och starta om",
     ],
     correct: 1,
-    explanation: "Vanliga bromsar fungerar fortfarande men låsningsskyddet är ur funktion. Kör försiktigt till verkstad.",
+    explanation:
+      "Vanliga bromsar fungerar fortfarande men låsningsskyddet är ur funktion. Kör försiktigt till verkstad.",
     reference: "Bilens instruktionsbok / Trafikverket",
   },
   {
@@ -208,7 +229,8 @@ export const QUESTIONS: Question[] = [
     question: "Vad varnar detta märke för?",
     options: ["Tama djur på vägen", "Vilt (t.ex. älg)", "Hundpark", "Ridväg"],
     correct: 1,
-    explanation: "Varning för vilt – oftast älg eller rådjur. Sänk hastigheten och håll extra uppsikt i skymningen.",
+    explanation:
+      "Varning för vilt – oftast älg eller rådjur. Sänk hastigheten och håll extra uppsikt i skymningen.",
     reference: "Vägmärkesförordning A18",
   },
   {
@@ -222,7 +244,8 @@ export const QUESTIONS: Question[] = [
       "Rätt lufttryck i däcken",
     ],
     correct: 1,
-    explanation: "Aggressiv körning kan öka förbrukningen med upp till 40%. Mjuk körning sparar både bränsle och miljö.",
+    explanation:
+      "Aggressiv körning kan öka förbrukningen med upp till 40%. Mjuk körning sparar både bränsle och miljö.",
     reference: "Energimyndigheten – Sparsam körning",
   },
 
@@ -233,7 +256,8 @@ export const QUESTIONS: Question[] = [
     question: "Vilken hastighet gäller normalt på landsväg om inget vägmärke finns?",
     options: ["50 km/h", "70 km/h", "80 km/h", "90 km/h"],
     correct: 1,
-    explanation: "Utanför tättbebyggt område är bashastigheten 70 km/h om inget annat anges med vägmärke.",
+    explanation:
+      "Utanför tättbebyggt område är bashastigheten 70 km/h om inget annat anges med vägmärke.",
     reference: "Trafikförordningen 3 kap. 17 §",
   },
   {
@@ -247,7 +271,8 @@ export const QUESTIONS: Question[] = [
       "Endast nattetid",
     ],
     correct: 1,
-    explanation: "Du får inte stanna eller parkera inom 10 meter före ett övergångsställe, korsning eller cykelöverfart.",
+    explanation:
+      "Du får inte stanna eller parkera inom 10 meter före ett övergångsställe, korsning eller cykelöverfart.",
     reference: "Trafikförordningen 3 kap. 53 §",
   },
   {
@@ -261,7 +286,8 @@ export const QUESTIONS: Question[] = [
       "Endast om ljussignalen blinkar vitt",
     ],
     correct: 1,
-    explanation: "Tåg har alltid företräde. Utan bommar måste du sänka farten och försäkra dig om att spåret är fritt.",
+    explanation:
+      "Tåg har alltid företräde. Utan bommar måste du sänka farten och försäkra dig om att spåret är fritt.",
     reference: "Trafikförordningen 3 kap. 43 §",
   },
   {
@@ -275,7 +301,8 @@ export const QUESTIONS: Question[] = [
       "Vid vägarbete",
     ],
     correct: 1,
-    explanation: "Högeromkörning är tillåten bland annat när fordonet framför svänger vänster, vid köbildning, och i flerfältstrafik inom tättbebyggt område.",
+    explanation:
+      "Högeromkörning är tillåten bland annat när fordonet framför svänger vänster, vid köbildning, och i flerfältstrafik inom tättbebyggt område.",
     reference: "Trafikförordningen 3 kap. 34 §",
   },
   {
@@ -289,7 +316,8 @@ export const QUESTIONS: Question[] = [
       "Den markerar busskörfält",
     ],
     correct: 1,
-    explanation: "En heldragen mittlinje får inte köras på eller korsas. Undantag finns endast vid hinder som gör det nödvändigt.",
+    explanation:
+      "En heldragen mittlinje får inte köras på eller korsas. Undantag finns endast vid hinder som gör det nödvändigt.",
     reference: "Vägmärkesförordningen M1/M3",
   },
   {
@@ -303,7 +331,8 @@ export const QUESTIONS: Question[] = [
       "Du får svänga först om du blinkar",
     ],
     correct: 1,
-    explanation: "Vid vänstersväng har du väjningsplikt mot mötande trafik samt gående och cyklister på den korsande vägen.",
+    explanation:
+      "Vid vänstersväng har du väjningsplikt mot mötande trafik samt gående och cyklister på den korsande vägen.",
     reference: "Trafikförordningen 3 kap. 60 §",
   },
   {
@@ -317,7 +346,8 @@ export const QUESTIONS: Question[] = [
       "Bara om det finns andra fordon",
     ],
     correct: 1,
-    explanation: "Tecken ska ges i god tid före manövern och avbrytas efteråt. Tecken ger dock aldrig förtur.",
+    explanation:
+      "Tecken ska ges i god tid före manövern och avbrytas efteråt. Tecken ger dock aldrig förtur.",
     reference: "Trafikförordningen 3 kap. 64 §",
   },
   {
@@ -331,7 +361,8 @@ export const QUESTIONS: Question[] = [
       "Bara utryckningsfordon",
     ],
     correct: 1,
-    explanation: "Körfältet är reserverat för bussar i linjetrafik och de fordon som anges på tilläggstavla, t.ex. taxi.",
+    explanation:
+      "Körfältet är reserverat för bussar i linjetrafik och de fordon som anges på tilläggstavla, t.ex. taxi.",
     reference: "Trafikförordningen 8 kap.",
   },
   {
@@ -345,7 +376,8 @@ export const QUESTIONS: Question[] = [
       "Ja, om du stannar i vägrenen",
     ],
     correct: 1,
-    explanation: "Det är förbjudet att hålla mobiltelefon i handen under körning. Handsfree är tillåtet men får inte störa körningen.",
+    explanation:
+      "Det är förbjudet att hålla mobiltelefon i handen under körning. Handsfree är tillåtet men får inte störa körningen.",
     reference: "Trafikförordningen 4 kap. 10 e §",
   },
   {
@@ -359,7 +391,8 @@ export const QUESTIONS: Question[] = [
       "Motorfordon är alltid förbjudna",
     ],
     correct: 1,
-    explanation: "På gågata och gångfartsområde gäller gångfart (ca 7 km/h), väjningsplikt mot gående och parkering endast på markerade platser.",
+    explanation:
+      "På gågata och gångfartsområde gäller gångfart (ca 7 km/h), väjningsplikt mot gående och parkering endast på markerade platser.",
     reference: "Trafikförordningen 8 kap. 1 §",
   },
   {
@@ -373,7 +406,8 @@ export const QUESTIONS: Question[] = [
       "Fortsätta som vanligt",
     ],
     correct: 1,
-    explanation: "Du ska lämna fri väg men får inte skapa fara – kör åt sidan när det är säkert, blockera inte korsningar.",
+    explanation:
+      "Du ska lämna fri väg men får inte skapa fara – kör åt sidan när det är säkert, blockera inte korsningar.",
     reference: "Trafikförordningen 2 kap. 4 §",
   },
   {
@@ -387,7 +421,8 @@ export const QUESTIONS: Question[] = [
       "Grön pil betyder bara varning",
     ],
     correct: 1,
-    explanation: "Grön pil tillåter körning i pilens riktning, men du har väjningsplikt mot trafik som har grönt.",
+    explanation:
+      "Grön pil tillåter körning i pilens riktning, men du har väjningsplikt mot trafik som har grönt.",
     reference: "Vägmärkesförordningen 3 kap.",
   },
   // ---- Vägmärken ----
@@ -413,7 +448,8 @@ export const QUESTIONS: Question[] = [
       "Inga fordon alls",
     ],
     correct: 1,
-    explanation: "Förbudet gäller omkörning av motordrivna fordon med fler än två hjul. Cyklar och moped klass II får köras om.",
+    explanation:
+      "Förbudet gäller omkörning av motordrivna fordon med fler än två hjul. Cyklar och moped klass II får köras om.",
     reference: "Vägmärkesförordning C27",
   },
   {
@@ -428,7 +464,8 @@ export const QUESTIONS: Question[] = [
       "Hastigheten höjs till 50 km/h",
     ],
     correct: 1,
-    explanation: "Varningsmärket ändrar inte hastighetsgränsen, men du är skyldig att anpassa farten efter risken.",
+    explanation:
+      "Varningsmärket ändrar inte hastighetsgränsen, men du är skyldig att anpassa farten efter risken.",
     reference: "Vägmärkesförordning A14",
   },
   {
@@ -443,7 +480,8 @@ export const QUESTIONS: Question[] = [
       "Förbud mot infart",
     ],
     correct: 1,
-    explanation: "Väjningsplikt innebär att du ska lämna företräde. Du måste stanna endast om det behövs.",
+    explanation:
+      "Väjningsplikt innebär att du ska lämna företräde. Du måste stanna endast om det behövs.",
     reference: "Vägmärkesförordning B1",
   },
   {
@@ -458,7 +496,8 @@ export const QUESTIONS: Question[] = [
       "Endast lastning förbjuden",
     ],
     correct: 1,
-    explanation: "Parkeringsförbud tillåter kortare stopp för av-/påstigning eller lastning, men inte parkering.",
+    explanation:
+      "Parkeringsförbud tillåter kortare stopp för av-/påstigning eller lastning, men inte parkering.",
     reference: "Vägmärkesförordning C35",
   },
   {
@@ -473,7 +512,8 @@ export const QUESTIONS: Question[] = [
       "Förbud mot infart",
     ],
     correct: 1,
-    explanation: "Märket förbjuder både stannande och parkering, utom vid trafiksignal eller för att undvika fara.",
+    explanation:
+      "Märket förbjuder både stannande och parkering, utom vid trafiksignal eller för att undvika fara.",
     reference: "Vägmärkesförordning C39",
   },
   {
@@ -488,7 +528,8 @@ export const QUESTIONS: Question[] = [
       "Ingen hastighetsgräns",
     ],
     correct: 1,
-    explanation: "På motorväg är endast fordon som kan köra minst 40 km/h tillåtna. Backning, U-sväng och stannande är förbjudet.",
+    explanation:
+      "På motorväg är endast fordon som kan köra minst 40 km/h tillåtna. Backning, U-sväng och stannande är förbjudet.",
     reference: "Trafikförordningen 9 kap.",
   },
   {
@@ -503,7 +544,8 @@ export const QUESTIONS: Question[] = [
       "Du får köra om fritt",
     ],
     correct: 1,
-    explanation: "Vid vägarbete gäller ofta tillfälliga hastighetsgränser och personal kan befinna sig nära körbanan.",
+    explanation:
+      "Vid vägarbete gäller ofta tillfälliga hastighetsgränser och personal kan befinna sig nära körbanan.",
     reference: "Vägmärkesförordning A20",
   },
   {
@@ -533,7 +575,8 @@ export const QUESTIONS: Question[] = [
       "Förbud att svänga",
     ],
     correct: 1,
-    explanation: "Blå runda märken är påbudsmärken – de anger vad du måste göra, till skillnad från rekommendationer.",
+    explanation:
+      "Blå runda märken är påbudsmärken – de anger vad du måste göra, till skillnad från rekommendationer.",
     reference: "Vägmärkesförordning D1",
   },
   // ---- Miljö ----
@@ -543,7 +586,8 @@ export const QUESTIONS: Question[] = [
     question: "Vilket ämne bidrar mest till växthuseffekten från bilavgaser?",
     options: ["Kolmonoxid (CO)", "Koldioxid (CO2)", "Kväveoxider (NOx)", "Svaveldioxid"],
     correct: 1,
-    explanation: "Koldioxid är den största klimatpåverkande gasen från förbränning av fossila drivmedel.",
+    explanation:
+      "Koldioxid är den största klimatpåverkande gasen från förbränning av fossila drivmedel.",
     reference: "Naturvårdsverket – utsläpp från vägtrafik",
   },
   {
@@ -557,7 +601,8 @@ export const QUESTIONS: Question[] = [
       "Inget alls",
     ],
     correct: 1,
-    explanation: "Kväveoxider bidrar till försurning, övergödning och marknära ozon samt irriterar luftvägarna.",
+    explanation:
+      "Kväveoxider bidrar till försurning, övergödning och marknära ozon samt irriterar luftvägarna.",
     reference: "Naturvårdsverket",
   },
   {
@@ -571,7 +616,8 @@ export const QUESTIONS: Question[] = [
       "Endast däckslitaget påverkas",
     ],
     correct: 1,
-    explanation: "För lågt däcktryck ökar rullmotståndet, vilket ger högre förbrukning, mer utsläpp och snabbare däckslitage.",
+    explanation:
+      "För lågt däcktryck ökar rullmotståndet, vilket ger högre förbrukning, mer utsläpp och snabbare däckslitage.",
     reference: "Energimyndigheten – Sparsam körning",
   },
   {
@@ -585,7 +631,8 @@ export const QUESTIONS: Question[] = [
       "Rena motoroljan",
     ],
     correct: 1,
-    explanation: "Katalysatorn omvandlar kolmonoxid, kolväten och kväveoxider till koldioxid, vatten och kväve. Den fungerar bäst när den är varm.",
+    explanation:
+      "Katalysatorn omvandlar kolmonoxid, kolväten och kväveoxider till koldioxid, vatten och kväve. Den fungerar bäst när den är varm.",
     reference: "Transportstyrelsen – avgasrening",
   },
   {
@@ -599,7 +646,8 @@ export const QUESTIONS: Question[] = [
       "På motorväg",
     ],
     correct: 1,
-    explanation: "Vid kallstart är katalysatorn inte varm och renar dåligt. Korta resor ger därför störst utsläpp per kilometer.",
+    explanation:
+      "Vid kallstart är katalysatorn inte varm och renar dåligt. Korta resor ger därför störst utsläpp per kilometer.",
     reference: "Naturvårdsverket",
   },
   {
@@ -608,7 +656,8 @@ export const QUESTIONS: Question[] = [
     question: "Vilket drivmedel räknas som förnybart?",
     options: ["Bensin", "Diesel (MK1)", "HVO100 och etanol E85", "Naturgas från fossila källor"],
     correct: 2,
-    explanation: "HVO100 och etanol tillverkas av förnybar råvara och ger lägre nettoutsläpp av fossil koldioxid.",
+    explanation:
+      "HVO100 och etanol tillverkas av förnybar råvara och ger lägre nettoutsläpp av fossil koldioxid.",
     reference: "Energimyndigheten – förnybara drivmedel",
   },
   {
@@ -617,7 +666,8 @@ export const QUESTIONS: Question[] = [
     question: "Hur mycket bränsle kan sparas genom sparsam körning (ecodriving)?",
     options: ["Cirka 1 %", "Cirka 5 %", "Cirka 10–20 %", "Över 50 %"],
     correct: 2,
-    explanation: "Sparsam körning kan minska förbrukningen med runt 10–20 % utan att restiden ökar nämnvärt.",
+    explanation:
+      "Sparsam körning kan minska förbrukningen med runt 10–20 % utan att restiden ökar nämnvärt.",
     reference: "Trafikverket – Sparsam körning",
   },
   {
@@ -641,7 +691,8 @@ export const QUESTIONS: Question[] = [
     question: "Vad är normal reaktionstid för en pigg förare?",
     options: ["0,1–0,3 sekunder", "Cirka 0,5–1 sekund", "3 sekunder", "5 sekunder"],
     correct: 1,
-    explanation: "Reaktionstiden är normalt 0,5–1 sekund men förlängs av trötthet, alkohol, stress och distraktion.",
+    explanation:
+      "Reaktionstiden är normalt 0,5–1 sekund men förlängs av trötthet, alkohol, stress och distraktion.",
     reference: "Trafikverket – reaktionstid",
   },
   {
@@ -650,7 +701,8 @@ export const QUESTIONS: Question[] = [
     question: "Vilken tidslucka rekommenderas till framförvarande fordon vid god sikt?",
     options: ["1 sekund", "Minst 3 sekunder", "0,5 sekunder", "10 sekunder"],
     correct: 1,
-    explanation: "Tresekundersregeln ger marginal för reaktion och inbromsning. Vid halka bör avståndet fördubblas.",
+    explanation:
+      "Tresekundersregeln ger marginal för reaktion och inbromsning. Vid halka bör avståndet fördubblas.",
     reference: "Trafikverket – säkerhetsavstånd",
   },
   {
@@ -664,7 +716,8 @@ export const QUESTIONS: Question[] = [
       "1 promille per timme",
     ],
     correct: 1,
-    explanation: "Kroppen bryter ned ungefär 0,15 promille per timme. Kaffe, dusch eller mat påskyndar inte processen.",
+    explanation:
+      "Kroppen bryter ned ungefär 0,15 promille per timme. Kaffe, dusch eller mat påskyndar inte processen.",
     reference: "Trafikverket – alkohol i trafiken",
   },
   {
@@ -678,7 +731,8 @@ export const QUESTIONS: Question[] = [
       "För låg hastighet",
     ],
     correct: 1,
-    explanation: "Unga förare överskattar ofta sin förmåga. Hastighet, alkohol och bristande bältesanvändning dominerar statistiken.",
+    explanation:
+      "Unga förare överskattar ofta sin förmåga. Hastighet, alkohol och bristande bältesanvändning dominerar statistiken.",
     reference: "Trafikanalys – olycksstatistik",
   },
   {
@@ -692,7 +746,8 @@ export const QUESTIONS: Question[] = [
       "Ingen förändring sker",
     ],
     correct: 1,
-    explanation: "Ju högre hastighet, desto smalare blir synfältet. Detta gör att du missar risker vid vägkanten.",
+    explanation:
+      "Ju högre hastighet, desto smalare blir synfältet. Detta gör att du missar risker vid vägkanten.",
     reference: "VTI – syn och hastighet",
   },
   {
@@ -706,7 +761,8 @@ export const QUESTIONS: Question[] = [
       "Att köra på morgonen",
     ],
     correct: 1,
-    explanation: "Monotoni, varm kupé och sömnbrist ökar tröttheten kraftigt. Ta paus minst varannan timme.",
+    explanation:
+      "Monotoni, varm kupé och sömnbrist ökar tröttheten kraftigt. Ta paus minst varannan timme.",
     reference: "Trafikverket – trötthet i trafiken",
   },
   {
@@ -720,7 +776,8 @@ export const QUESTIONS: Question[] = [
       "De påverkar bara nattetid",
     ],
     correct: 1,
-    explanation: "Röd varningstriangel på förpackningen betyder att läkemedlet kan påverka körförmågan. Kör inte utan att kontrollera med läkare.",
+    explanation:
+      "Röd varningstriangel på förpackningen betyder att läkemedlet kan påverka körförmågan. Kör inte utan att kontrollera med läkare.",
     reference: "Läkemedelsverket / Transportstyrelsen",
   },
   {
@@ -734,7 +791,8 @@ export const QUESTIONS: Question[] = [
       "Avståndet till framförvarande",
     ],
     correct: 1,
-    explanation: "Stoppsträckan består av reaktionssträckan (medan du reagerar) och bromssträckan (medan bilen bromsar).",
+    explanation:
+      "Stoppsträckan består av reaktionssträckan (medan du reagerar) och bromssträckan (medan bilen bromsar).",
     reference: "Trafikverket – stoppsträcka",
   },
   {
@@ -748,7 +806,8 @@ export const QUESTIONS: Question[] = [
       "Kör om i kurva",
     ],
     correct: 1,
-    explanation: "Cyklister är oskyddade trafikanter och kan vingla. Ett sidoavstånd på minst 1,5 meter rekommenderas.",
+    explanation:
+      "Cyklister är oskyddade trafikanter och kan vingla. Ett sidoavstånd på minst 1,5 meter rekommenderas.",
     reference: "Trafikverket – oskyddade trafikanter",
   },
   // ---- Fordonskännedom ----
@@ -772,7 +831,8 @@ export const QUESTIONS: Question[] = [
       "Endast en påminnelse",
     ],
     correct: 1,
-    explanation: "Röd oljelampa betyder lågt oljetryck. Fortsatt körning kan förstöra motorn – stanna säkert och stäng av.",
+    explanation:
+      "Röd oljelampa betyder lågt oljetryck. Fortsatt körning kan förstöra motorn – stanna säkert och stäng av.",
     reference: "Transportstyrelsen / instruktionsbok",
   },
   {
@@ -786,7 +846,8 @@ export const QUESTIONS: Question[] = [
       "Att styra bilen automatiskt",
     ],
     correct: 1,
-    explanation: "Servon förstärker rattkraften. Om den slutar fungera går bilen fortfarande att styra, men det krävs mycket mer kraft.",
+    explanation:
+      "Servon förstärker rattkraften. Om den slutar fungera går bilen fortfarande att styra, men det krävs mycket mer kraft.",
     reference: "Fordonsteknik – styrsystem",
   },
   {
@@ -800,7 +861,8 @@ export const QUESTIONS: Question[] = [
       "Aldrig efter första gången",
     ],
     correct: 1,
-    explanation: "Nya bilar besiktigas första gången efter 3 år, sedan efter 2 år och därefter årligen.",
+    explanation:
+      "Nya bilar besiktigas första gången efter 3 år, sedan efter 2 år och därefter årligen.",
     reference: "Fordonsförordningen / Transportstyrelsen",
   },
   {
@@ -814,7 +876,8 @@ export const QUESTIONS: Question[] = [
       "Parkeringssensor",
     ],
     correct: 1,
-    explanation: "ESP (antisladdsystem) upptäcker sladd och bromsar enskilda hjul samt reducerar motoreffekt för att stabilisera bilen.",
+    explanation:
+      "ESP (antisladdsystem) upptäcker sladd och bromsar enskilda hjul samt reducerar motoreffekt för att stabilisera bilen.",
     reference: "Fordonsteknik – aktiv säkerhet",
   },
   {
@@ -828,7 +891,8 @@ export const QUESTIONS: Question[] = [
       "Strålkastarna riktas nedåt automatiskt alltid",
     ],
     correct: 1,
-    explanation: "Last bakåt avlastar framaxeln, försämrar styrförmågan och ökar bromssträckan. Justera strålkastarhöjden.",
+    explanation:
+      "Last bakåt avlastar framaxeln, försämrar styrförmågan och ökar bromssträckan. Justera strålkastarhöjden.",
     reference: "Transportstyrelsen – lastning",
   },
   {
@@ -842,7 +906,8 @@ export const QUESTIONS: Question[] = [
       "Endast på motorväg",
     ],
     correct: 1,
-    explanation: "Halvljus ska användas i mörker och vid nedsatt sikt. Varselljus lyser inte bakåt och räcker inte i mörker.",
+    explanation:
+      "Halvljus ska användas i mörker och vid nedsatt sikt. Varselljus lyser inte bakåt och räcker inte i mörker.",
     reference: "Trafikförordningen 3 kap. 72 §",
   },
   {
@@ -856,7 +921,8 @@ export const QUESTIONS: Question[] = [
       "Är obligatoriskt vintertid",
     ],
     correct: 1,
-    explanation: "Dimbakljus är mycket starkt och får bara användas vid kraftigt nedsatt sikt, annars bländar det bakomvarande.",
+    explanation:
+      "Dimbakljus är mycket starkt och får bara användas vid kraftigt nedsatt sikt, annars bländar det bakomvarande.",
     reference: "Trafikförordningen 3 kap. 74 §",
   },
   {
@@ -870,13 +936,15 @@ export const QUESTIONS: Question[] = [
       "När motorn får vatten i luftfiltret",
     ],
     correct: 1,
-    explanation: "Vid vattenplaning tappar däcket greppet. Släpp gasen, styr rakt och undvik att bromsa hårt. Bra mönsterdjup minskar risken.",
+    explanation:
+      "Vid vattenplaning tappar däcket greppet. Släpp gasen, styr rakt och undvik att bromsa hårt. Bra mönsterdjup minskar risken.",
     reference: "Trafikverket – halka och vatten",
   },
   {
     id: "q66",
     category: "Fordonskännedom",
-    question: "Vad är den högsta tillåtna totalvikten för en släpvagn du får dra med B-körkort (utan utökad behörighet)?",
+    question:
+      "Vad är den högsta tillåtna totalvikten för en släpvagn du får dra med B-körkort (utan utökad behörighet)?",
     options: [
       "Fri vikt",
       "Bil + släp får väga högst 3 500 kg totalvikt, eller släp max 750 kg",
@@ -884,7 +952,8 @@ export const QUESTIONS: Question[] = [
       "Släp är inte tillåtet med B",
     ],
     correct: 1,
-    explanation: "Med B får du dra släp på max 750 kg, eller tyngre om bilens och släpets sammanlagda totalvikt är högst 3 500 kg.",
+    explanation:
+      "Med B får du dra släp på max 750 kg, eller tyngre om bilens och släpets sammanlagda totalvikt är högst 3 500 kg.",
     reference: "Körkortslagen – behörighet B",
   },
   {
@@ -893,7 +962,8 @@ export const QUESTIONS: Question[] = [
     question: "Vilken hastighet gäller vid bogsering av ett fordon?",
     options: ["30 km/h", "Högst 30 km/h", "50 km/h", "70 km/h"],
     correct: 1,
-    explanation: "Vid bogsering med lina eller stång gäller högst 30 km/h. Bogsering på motorväg är endast tillåten till närmaste avfart.",
+    explanation:
+      "Vid bogsering med lina eller stång gäller högst 30 km/h. Bogsering på motorväg är endast tillåten till närmaste avfart.",
     reference: "Trafikförordningen 5 kap.",
   },
   {
@@ -907,7 +977,8 @@ export const QUESTIONS: Question[] = [
       "Ska alltid sitta fram",
     ],
     correct: 1,
-    explanation: "Barn kortare än 135 cm ska använda särskild skyddsanordning. Bakåtvänt så länge som möjligt, minst till 4 års ålder.",
+    explanation:
+      "Barn kortare än 135 cm ska använda särskild skyddsanordning. Bakåtvänt så länge som möjligt, minst till 4 års ålder.",
     reference: "Trafikförordningen 4 kap. 10 §",
   },
   {
@@ -922,7 +993,8 @@ export const QUESTIONS: Question[] = [
       "Cykelförbud",
     ],
     correct: 1,
-    explanation: "Märket varnar för korsande eller utsatt cykeltrafik. Sänk farten och håll uppsikt.",
+    explanation:
+      "Märket varnar för korsande eller utsatt cykeltrafik. Sänk farten och håll uppsikt.",
     reference: "Vägmärkesförordning A16",
   },
   {
@@ -937,7 +1009,8 @@ export const QUESTIONS: Question[] = [
       "Polisstation",
     ],
     correct: 1,
-    explanation: "Märket anger parkeringsplats. Tilläggstavlor kan begränsa tid, avgift eller vilka fordon som får stå.",
+    explanation:
+      "Märket anger parkeringsplats. Tilläggstavlor kan begränsa tid, avgift eller vilka fordon som får stå.",
     reference: "Vägmärkesförordning E19",
   },
   {
@@ -951,7 +1024,8 @@ export const QUESTIONS: Question[] = [
       "Zonen gäller bara lastbilar",
     ],
     correct: 1,
-    explanation: "Miljözon klass 2 ställer krav på utsläppsklass (Euro-standard) för personbilar, lätta bussar och lätta lastbilar.",
+    explanation:
+      "Miljözon klass 2 ställer krav på utsläppsklass (Euro-standard) för personbilar, lätta bussar och lätta lastbilar.",
     reference: "Trafikförordningen 10 kap. – miljözoner",
   },
   {
@@ -965,7 +1039,8 @@ export const QUESTIONS: Question[] = [
       "Fotografera skadorna",
     ],
     correct: 1,
-    explanation: "Prioritera säkerhet: varna (varningstriangel och varningsblinkers), larma 112 och rädda liv innan dokumentation.",
+    explanation:
+      "Prioritera säkerhet: varna (varningstriangel och varningsblinkers), larma 112 och rädda liv innan dokumentation.",
     reference: "Trafikförordningen 2 kap. 8 § / första hjälpen",
   },
 ];

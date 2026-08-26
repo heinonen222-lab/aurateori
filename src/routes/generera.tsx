@@ -7,10 +7,7 @@ import { AppShell } from "@/components/AppShell";
 import { QuestionCard } from "@/components/QuestionCard";
 import type { QuestionCategory } from "@/data/questions";
 import { QUESTIONS } from "@/data/questions";
-import {
-  generateQuestions,
-  type GeneratedQuestion,
-} from "@/lib/generate-questions.functions";
+import { generateQuestions, type GeneratedQuestion } from "@/lib/generate-questions.functions";
 import { bankQuestionsQuery } from "@/lib/ai-questions";
 import { store } from "@/lib/store";
 import { cn } from "@/lib/utils";
@@ -92,9 +89,9 @@ function GeneratePage() {
         <div>
           <h1 className="text-2xl font-black sm:text-3xl">AI-frågor</h1>
           <p className="mt-1 text-sm text-muted-foreground">
-            Generera helt nya teorifrågor baserade på aktuella svenska trafikregler – med
-            lagrum och källor. Frågorna sparas permanent i frågebanken och används sedan
-            i övningsfrågorna och provsimulatorn.
+            Generera helt nya teorifrågor baserade på aktuella svenska trafikregler – med lagrum och
+            källor. Frågorna sparas permanent i frågebanken och används sedan i övningsfrågorna och
+            provsimulatorn.
           </p>
         </div>
 

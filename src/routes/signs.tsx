@@ -10,7 +10,11 @@ export const Route = createFileRoute("/signs")({
   head: () => ({
     meta: [
       { title: "Vägmärkesarkiv – Aurateori" },
-      { name: "description", content: "Sök och bläddra bland svenska vägmärken – varnings-, förbuds-, påbuds-, anvisnings- och informationsmärken." },
+      {
+        name: "description",
+        content:
+          "Sök och bläddra bland svenska vägmärken – varnings-, förbuds-, påbuds-, anvisnings- och informationsmärken.",
+      },
       { property: "og:title", content: "Vägmärkesarkiv – Aurateori" },
       { property: "og:description", content: "Sök och bläddra bland svenska vägmärken." },
     ],
@@ -28,13 +32,16 @@ const CATS: (SignCategory | "Alla")[] = [
 ];
 
 function SignsPage() {
-  const [cat, setCat] = useState<(SignCategory | "Alla")>("Alla");
+  const [cat, setCat] = useState<SignCategory | "Alla">("Alla");
   const [q, setQ] = useState("");
   const [active, setActive] = useState<RoadSign | null>(null);
 
   const list = useMemo(() => {
     return ROAD_SIGNS.filter((s) => cat === "Alla" || s.category === cat).filter(
-      (s) => !q || s.name.toLowerCase().includes(q.toLowerCase()) || s.meaning.toLowerCase().includes(q.toLowerCase()),
+      (s) =>
+        !q ||
+        s.name.toLowerCase().includes(q.toLowerCase()) ||
+        s.meaning.toLowerCase().includes(q.toLowerCase()),
     );
   }, [cat, q]);
 
@@ -65,7 +72,9 @@ function SignsPage() {
               onClick={() => setCat(c)}
               className={cn(
                 "shrink-0 rounded-full border px-4 py-1.5 text-xs font-semibold transition",
-                cat === c ? "border-primary bg-primary text-primary-foreground" : "border-border bg-card hover:border-primary/40",
+                cat === c
+                  ? "border-primary bg-primary text-primary-foreground"
+                  : "border-border bg-card hover:border-primary/40",
               )}
             >
               {c}
@@ -83,7 +92,9 @@ function SignsPage() {
               <SignImage id={s.id} className="h-20 w-20 transition group-hover:scale-105" />
               <div>
                 <div className="text-xs font-bold leading-tight">{s.name}</div>
-                <div className="mt-1 text-[10px] uppercase tracking-wider text-muted-foreground">{s.category}</div>
+                <div className="mt-1 text-[10px] uppercase tracking-wider text-muted-foreground">
+                  {s.category}
+                </div>
               </div>
             </button>
           ))}
@@ -127,11 +138,15 @@ function SignModal({ sign, onClose }: { sign: RoadSign; onClose: () => void }) {
         <div className="space-y-4 p-6">
           <h2 className="text-xl font-black">{sign.name}</h2>
           <div>
-            <div className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Betydelse</div>
+            <div className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
+              Betydelse
+            </div>
             <p className="mt-1 text-sm leading-relaxed">{sign.meaning}</p>
           </div>
           <div className="rounded-xl border border-warning/40 bg-warning/10 p-3">
-            <div className="text-xs font-bold uppercase tracking-wider text-warning-foreground">Vanlig fallgrop</div>
+            <div className="text-xs font-bold uppercase tracking-wider text-warning-foreground">
+              Vanlig fallgrop
+            </div>
             <p className="mt-1 text-sm leading-relaxed">{sign.trap}</p>
           </div>
         </div>

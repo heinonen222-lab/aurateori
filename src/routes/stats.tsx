@@ -32,7 +32,11 @@ function StatsPage() {
       const key = d.toISOString().slice(0, 10);
       const label = d.toLocaleDateString("sv-SE", { weekday: "short" });
       const dayAns = s.answers.filter((a) => new Date(a.at).toISOString().slice(0, 10) === key);
-      out.push({ day: label, correct: dayAns.filter((a) => a.correct).length, total: dayAns.length });
+      out.push({
+        day: label,
+        correct: dayAns.filter((a) => a.correct).length,
+        total: dayAns.length,
+      });
     }
     return out;
   }, [s.answers]);
@@ -49,7 +53,10 @@ function StatsPage() {
 
   const maxTotal = Math.max(1, ...days.map((d) => d.total));
 
-  const repeatQuestion = s.wrongQueue.length > 0 ? QUESTIONS.find((q) => q.id === s.wrongQueue[repeatIdx % s.wrongQueue.length]) : null;
+  const repeatQuestion =
+    s.wrongQueue.length > 0
+      ? QUESTIONS.find((q) => q.id === s.wrongQueue[repeatIdx % s.wrongQueue.length])
+      : null;
 
   return (
     <AppShell>
@@ -57,7 +64,9 @@ function StatsPage() {
         <div className="flex items-start justify-between gap-4">
           <div>
             <h1 className="text-2xl font-black sm:text-3xl">Statistik</h1>
-            <p className="mt-1 text-sm text-muted-foreground">Din utveckling och områden att fokusera på.</p>
+            <p className="mt-1 text-sm text-muted-foreground">
+              Din utveckling och områden att fokusera på.
+            </p>
           </div>
           {s.answers.length > 0 && (
             <button
@@ -78,7 +87,9 @@ function StatsPage() {
         </div>
 
         <div className="rounded-3xl border border-border bg-card p-6">
-          <h2 className="text-sm font-bold uppercase tracking-wider text-muted-foreground">Senaste 7 dagarna</h2>
+          <h2 className="text-sm font-bold uppercase tracking-wider text-muted-foreground">
+            Senaste 7 dagarna
+          </h2>
           <div className="mt-5 flex h-40 items-end gap-2">
             {days.map((d, i) => {
               const h = (d.total / maxTotal) * 100;
@@ -105,10 +116,14 @@ function StatsPage() {
         </div>
 
         <div className="rounded-3xl border border-border bg-card p-6">
-          <h2 className="text-sm font-bold uppercase tracking-wider text-muted-foreground">Per kategori</h2>
+          <h2 className="text-sm font-bold uppercase tracking-wider text-muted-foreground">
+            Per kategori
+          </h2>
           <div className="mt-4 space-y-3">
             {Object.keys(catStats).length === 0 && (
-              <div className="text-sm text-muted-foreground">Inga svar än – börja med Övningsfrågor.</div>
+              <div className="text-sm text-muted-foreground">
+                Inga svar än – börja med Övningsfrågor.
+              </div>
             )}
             {Object.entries(catStats).map(([cat, v]) => {
               const pct = Math.round((v.ok / v.total) * 100);
@@ -116,11 +131,16 @@ function StatsPage() {
                 <div key={cat}>
                   <div className="mb-1 flex justify-between text-sm">
                     <span className="font-medium">{cat}</span>
-                    <span className="text-muted-foreground">{v.ok}/{v.total} · {pct}%</span>
+                    <span className="text-muted-foreground">
+                      {v.ok}/{v.total} · {pct}%
+                    </span>
                   </div>
                   <div className="h-2 overflow-hidden rounded-full bg-muted">
                     <div
-                      className={cn("h-full rounded-full", pct >= 80 ? "bg-success" : pct >= 60 ? "bg-warning" : "bg-destructive")}
+                      className={cn(
+                        "h-full rounded-full",
+                        pct >= 80 ? "bg-success" : pct >= 60 ? "bg-warning" : "bg-destructive",
+                      )}
                       style={{ width: `${pct}%` }}
                     />
                   </div>

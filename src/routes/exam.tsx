@@ -14,7 +14,10 @@ export const Route = createFileRoute("/exam")({
   head: () => ({
     meta: [
       { title: "Examsimulator – Aurateori" },
-      { name: "description", content: "Simulera Trafikverkets B-teoriprov: 65 frågor, 50 minuter, gränsen är 52 rätt." },
+      {
+        name: "description",
+        content: "Simulera Trafikverkets B-teoriprov: 65 frågor, 50 minuter, gränsen är 52 rätt.",
+      },
       { property: "og:title", content: "Examsimulator – Aurateori" },
       { property: "og:description", content: "Simulera Trafikverkets B-teoriprov." },
     ],
@@ -61,10 +64,7 @@ function ExamPage() {
   const [results, setResults] = useState<Result[]>([]);
   const [seed, setSeed] = useState(0);
   const { data: bank } = useQuery(bankQuestionsQuery);
-  const exam = useMemo(
-    () => buildExam(seed, [...QUESTIONS, ...(bank ?? [])]),
-    [seed, bank],
-  );
+  const exam = useMemo(() => buildExam(seed, [...QUESTIONS, ...(bank ?? [])]), [seed, bank]);
 
   useEffect(() => {
     if (phase !== "running") return;
@@ -107,7 +107,7 @@ function ExamPage() {
           <button
             onClick={() => {
               setSeed((n) => n + 1);
-                setPhase("running");
+              setPhase("running");
               setIdx(0);
               setResults([]);
               setTime(SECONDS);
@@ -154,7 +154,9 @@ function ExamPage() {
         </div>
       )}
 
-      {phase === "done" && <ExamResults results={results} correct={correctCount} onRestart={() => setPhase("intro")} />}
+      {phase === "done" && (
+        <ExamResults results={results} correct={correctCount} onRestart={() => setPhase("intro")} />
+      )}
     </AppShell>
   );
 }
@@ -187,7 +189,9 @@ function ExamResults({
         <div
           className={cn(
             "mx-auto grid h-16 w-16 place-items-center rounded-2xl",
-            passed ? "bg-success text-success-foreground" : "bg-destructive text-destructive-foreground",
+            passed
+              ? "bg-success text-success-foreground"
+              : "bg-destructive text-destructive-foreground",
           )}
         >
           {passed ? <Trophy className="h-8 w-8" /> : <XCircle className="h-8 w-8" />}
@@ -213,7 +217,10 @@ function ExamResults({
                 </div>
                 <div className="h-2 overflow-hidden rounded-full bg-muted">
                   <div
-                    className={cn("h-full rounded-full", pct >= 80 ? "bg-success" : pct >= 60 ? "bg-warning" : "bg-destructive")}
+                    className={cn(
+                      "h-full rounded-full",
+                      pct >= 80 ? "bg-success" : pct >= 60 ? "bg-warning" : "bg-destructive",
+                    )}
                     style={{ width: `${pct}%` }}
                   />
                 </div>
@@ -235,7 +242,11 @@ function ExamResults({
                 r.correct ? "bg-success/20 text-success" : "bg-destructive/20 text-destructive",
               )}
             >
-              {r.correct ? <CheckCircle2 className="h-3.5 w-3.5" /> : <XCircle className="h-3.5 w-3.5" />}
+              {r.correct ? (
+                <CheckCircle2 className="h-3.5 w-3.5" />
+              ) : (
+                <XCircle className="h-3.5 w-3.5" />
+              )}
             </div>
           ))}
         </div>

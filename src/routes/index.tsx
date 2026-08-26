@@ -7,9 +7,16 @@ export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
       { title: "Aurateori – Teoriprov för B-körkort" },
-      { name: "description", content: "Träna inför Trafikverkets teoriprov för B-körkort. Övningsfrågor, examsimulator och vägmärken – helt på svenska." },
+      {
+        name: "description",
+        content:
+          "Träna inför Trafikverkets teoriprov för B-körkort. Övningsfrågor, examsimulator och vägmärken – helt på svenska.",
+      },
       { property: "og:title", content: "Aurateori – Teoriprov för B-körkort" },
-      { property: "og:description", content: "Träna inför Trafikverkets teoriprov för B-körkort på svenska." },
+      {
+        property: "og:description",
+        content: "Träna inför Trafikverkets teoriprov för B-körkort på svenska.",
+      },
     ],
   }),
   component: Dashboard,
@@ -57,7 +64,9 @@ function Dashboard() {
           <div className="text-xs font-semibold uppercase tracking-widest text-primary">
             Personbil · Behörighet B
           </div>
-          <h1 className="mt-1 text-3xl font-black tracking-tight sm:text-4xl">Hej, redo att köra?</h1>
+          <h1 className="mt-1 text-3xl font-black tracking-tight sm:text-4xl">
+            Hej, redo att köra?
+          </h1>
           <p className="mt-1 text-sm text-muted-foreground">
             Följ din utveckling mot Trafikverkets teoriprov.
           </p>
@@ -66,9 +75,24 @@ function Dashboard() {
         <div className="grid gap-4 rounded-3xl border border-border bg-card p-6 sm:grid-cols-[auto_1fr] sm:items-center sm:gap-8">
           <Gauge value={stats.readiness} />
           <div className="grid grid-cols-3 gap-3">
-            <Stat icon={<Target className="h-4 w-4" />} label="Frågor" value={stats.total} accent="primary" />
-            <Stat icon={<CheckCircle2 className="h-4 w-4" />} label="Träffsäkerhet" value={`${stats.accuracy}%`} accent="success" />
-            <Stat icon={<Flame className="h-4 w-4" />} label="Streak" value={`${s.streak}d`} accent="warning" />
+            <Stat
+              icon={<Target className="h-4 w-4" />}
+              label="Frågor"
+              value={stats.total}
+              accent="primary"
+            />
+            <Stat
+              icon={<CheckCircle2 className="h-4 w-4" />}
+              label="Träffsäkerhet"
+              value={`${stats.accuracy}%`}
+              accent="success"
+            />
+            <Stat
+              icon={<Flame className="h-4 w-4" />}
+              label="Streak"
+              value={`${s.streak}d`}
+              accent="warning"
+            />
           </div>
         </div>
 
@@ -100,7 +124,9 @@ function Dashboard() {
             className="flex items-center justify-between rounded-2xl border border-warning/40 bg-warning/10 p-4 transition hover:bg-warning/15"
           >
             <div>
-              <div className="text-sm font-bold">Du har {s.wrongQueue.length} frågor att repetera</div>
+              <div className="text-sm font-bold">
+                Du har {s.wrongQueue.length} frågor att repetera
+              </div>
               <div className="text-xs text-muted-foreground">Gå till Statistik → Svaga punkter</div>
             </div>
             <span className="text-lg">→</span>
@@ -129,7 +155,9 @@ function Stat({
   }[accent];
   return (
     <div className="rounded-2xl border border-border bg-background p-3">
-      <div className={`mb-2 inline-flex h-7 w-7 items-center justify-center rounded-lg ${accentBg}`}>
+      <div
+        className={`mb-2 inline-flex h-7 w-7 items-center justify-center rounded-lg ${accentBg}`}
+      >
         {icon}
       </div>
       <div className="text-xl font-black leading-none">{value}</div>
@@ -155,9 +183,7 @@ function ActionCard({
     <Link
       to={to}
       className={`group relative overflow-hidden rounded-2xl border p-5 transition-all hover:-translate-y-0.5 hover:shadow-lg ${
-        highlight
-          ? "border-primary/30 bg-primary text-primary-foreground"
-          : "border-border bg-card"
+        highlight ? "border-primary/30 bg-primary text-primary-foreground" : "border-border bg-card"
       }`}
     >
       <div
@@ -168,7 +194,9 @@ function ActionCard({
         {icon}
       </div>
       <div className="mt-4 text-base font-bold">{title}</div>
-      <div className={`mt-1 text-sm ${highlight ? "text-primary-foreground/80" : "text-muted-foreground"}`}>
+      <div
+        className={`mt-1 text-sm ${highlight ? "text-primary-foreground/80" : "text-muted-foreground"}`}
+      >
         {desc}
       </div>
       <div className="mt-3 text-sm font-semibold opacity-70 transition group-hover:opacity-100">
