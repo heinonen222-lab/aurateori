@@ -152,7 +152,8 @@ export const LESSONS: Lesson[] = [
       },
       {
         kind: "check",
-        question: "Vilken hastighet gäller direkt efter märket 'Tättbebyggt område' om inget annat anges?",
+        question:
+          "Vilken hastighet gäller direkt efter märket 'Tättbebyggt område' om inget annat anges?",
         options: ["30 km/h", "40 km/h", "50 km/h", "70 km/h"],
         correct: 2,
         explanation:

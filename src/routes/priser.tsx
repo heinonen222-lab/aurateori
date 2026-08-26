@@ -89,8 +89,8 @@ function PricingPage() {
         <div className="text-center">
           <h1 className="text-2xl font-black sm:text-3xl">Aurateori Premium</h1>
           <p className="mx-auto mt-2 max-w-xl text-sm text-muted-foreground">
-            Full tillgång till hela frågebanken, provsimulatorn och alla interaktiva genomgångar
-            mot gällande svenska trafikregler.
+            Full tillgång till hela frågebanken, provsimulatorn och alla interaktiva genomgångar mot
+            gällande svenska trafikregler.
           </p>
         </div>
 
