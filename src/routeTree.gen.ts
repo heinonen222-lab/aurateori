@@ -13,7 +13,7 @@ import { Route as StatsRouteImport } from './routes/stats'
 import { Route as SignsRouteImport } from './routes/signs'
 import { Route as QuizRouteImport } from './routes/quiz'
 import { Route as PriserRouteImport } from './routes/priser'
-import { Route as GenereraRouteImport } from './routes/generera'
+import { Route as GenomgangarRouteImport } from './routes/genomgangar'
 import { Route as FlashcardsRouteImport } from './routes/flashcards'
 import { Route as ExamRouteImport } from './routes/exam'
 import { Route as AuthRouteImport } from './routes/auth'
@@ -41,9 +41,9 @@ const PriserRoute = PriserRouteImport.update({
   path: '/priser',
   getParentRoute: () => rootRouteImport,
 } as any)
-const GenereraRoute = GenereraRouteImport.update({
-  id: '/generera',
-  path: '/generera',
+const GenomgangarRoute = GenomgangarRouteImport.update({
+  id: '/genomgangar',
+  path: '/genomgangar',
   getParentRoute: () => rootRouteImport,
 } as any)
 const FlashcardsRoute = FlashcardsRouteImport.update({
@@ -83,7 +83,7 @@ export interface FileRoutesByFullPath {
   '/auth': typeof AuthRoute
   '/exam': typeof ExamRoute
   '/flashcards': typeof FlashcardsRoute
-  '/generera': typeof GenereraRoute
+  '/genomgangar': typeof GenomgangarRoute
   '/priser': typeof PriserRoute
   '/quiz': typeof QuizRoute
   '/signs': typeof SignsRoute
@@ -96,7 +96,7 @@ export interface FileRoutesByTo {
   '/auth': typeof AuthRoute
   '/exam': typeof ExamRoute
   '/flashcards': typeof FlashcardsRoute
-  '/generera': typeof GenereraRoute
+  '/genomgangar': typeof GenomgangarRoute
   '/priser': typeof PriserRoute
   '/quiz': typeof QuizRoute
   '/signs': typeof SignsRoute
@@ -110,7 +110,7 @@ export interface FileRoutesById {
   '/auth': typeof AuthRoute
   '/exam': typeof ExamRoute
   '/flashcards': typeof FlashcardsRoute
-  '/generera': typeof GenereraRoute
+  '/genomgangar': typeof GenomgangarRoute
   '/priser': typeof PriserRoute
   '/quiz': typeof QuizRoute
   '/signs': typeof SignsRoute
@@ -125,7 +125,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/exam'
     | '/flashcards'
-    | '/generera'
+    | '/genomgangar'
     | '/priser'
     | '/quiz'
     | '/signs'
@@ -138,7 +138,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/exam'
     | '/flashcards'
-    | '/generera'
+    | '/genomgangar'
     | '/priser'
     | '/quiz'
     | '/signs'
@@ -151,7 +151,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/exam'
     | '/flashcards'
-    | '/generera'
+    | '/genomgangar'
     | '/priser'
     | '/quiz'
     | '/signs'
@@ -165,7 +165,7 @@ export interface RootRouteChildren {
   AuthRoute: typeof AuthRoute
   ExamRoute: typeof ExamRoute
   FlashcardsRoute: typeof FlashcardsRoute
-  GenereraRoute: typeof GenereraRoute
+  GenomgangarRoute: typeof GenomgangarRoute
   PriserRoute: typeof PriserRoute
   QuizRoute: typeof QuizRoute
   SignsRoute: typeof SignsRoute
@@ -204,11 +204,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PriserRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/generera': {
-      id: '/generera'
-      path: '/generera'
-      fullPath: '/generera'
-      preLoaderRoute: typeof GenereraRouteImport
+    '/genomgangar': {
+      id: '/genomgangar'
+      path: '/genomgangar'
+      fullPath: '/genomgangar'
+      preLoaderRoute: typeof GenomgangarRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/flashcards': {
@@ -261,7 +261,7 @@ const rootRouteChildren: RootRouteChildren = {
   AuthRoute: AuthRoute,
   ExamRoute: ExamRoute,
   FlashcardsRoute: FlashcardsRoute,
-  GenereraRoute: GenereraRoute,
+  GenomgangarRoute: GenomgangarRoute,
   PriserRoute: PriserRoute,
   QuizRoute: QuizRoute,
   SignsRoute: SignsRoute,

@@ -14,7 +14,7 @@ export const Route = createFileRoute("/priser")({
       {
         name: "description",
         content:
-          "Lås upp alla teorifrågor, AI-genererade frågor, provsimulator och statistik. 39 kr/mån, 249 kr/år eller 149 kr engångsköp.",
+          "Lås upp alla teorifrågor, interaktiva genomgångar, provsimulator och statistik. 39 kr/mån, 249 kr/år eller 149 kr engångsköp.",
       },
       { property: "og:title", content: "Priser – Aurateori Premium" },
       {
@@ -30,7 +30,7 @@ export const Route = createFileRoute("/priser")({
 
 const FEATURES = [
   "Alla teorifrågor i frågebanken",
-  "Obegränsat med AI-genererade frågor",
+  "Interaktiva genomgångar av alla nyckelkunskaper",
   "Provsimulator: 65 frågor, 50 minuter",
   "Vägmärkesarkiv med fällor och förklaringar",
   "Statistik och repetition av felsvar",
@@ -89,8 +89,8 @@ function PricingPage() {
         <div className="text-center">
           <h1 className="text-2xl font-black sm:text-3xl">Aurateori Premium</h1>
           <p className="mx-auto mt-2 max-w-xl text-sm text-muted-foreground">
-            Full tillgång till hela frågebanken, provsimulatorn och AI-frågor som hålls uppdaterade
-            mot gällande svenska trafikregler.
+            Full tillgång till hela frågebanken, provsimulatorn och alla interaktiva genomgångar mot
+            gällande svenska trafikregler.
           </p>
         </div>
 

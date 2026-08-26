@@ -9,7 +9,7 @@ import {
   BarChart3,
   Moon,
   Sun,
-  Sparkles,
+  GraduationCap,
   Crown,
 } from "lucide-react";
 import { store, useStore } from "@/lib/store";
@@ -21,7 +21,7 @@ const NAV = [
   { to: "/exam", label: "Prov", icon: Timer },
   { to: "/signs", label: "Vägmärken", icon: Signpost },
   { to: "/flashcards", label: "Snabbplugg", icon: Layers },
-  { to: "/generera", label: "AI-frågor", icon: Sparkles },
+  { to: "/genomgangar", label: "Genomgång", icon: GraduationCap },
   { to: "/stats", label: "Statistik", icon: BarChart3 },
   { to: "/priser", label: "Premium", icon: Crown },
 ] as const;
