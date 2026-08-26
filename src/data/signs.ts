@@ -271,10 +271,10 @@ export const ROAD_SIGNS: RoadSign[] = [
   },
   {
     id: "info-vagnr",
-    name: "Vägnummer (Europaväg)",
+    name: "Vägnummer",
     category: "Information",
-    meaning: "Visar vilken väg du färdas på – E-vägar har grön botten.",
-    trap: "Grön skylt betyder Europaväg, blå betyder övriga riksvägar/länsvägar.",
+    meaning: "Visar vilket nummer vägen du färdas på har.",
+    trap: "Blå botten används för riks- och länsvägar, grön botten för Europavägar (E-vägar).",
   },
   {
     id: "info-sjukhus",
