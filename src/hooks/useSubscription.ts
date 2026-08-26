@@ -50,10 +50,10 @@ export function useSubscription() {
   const periodOk = !sub?.current_period_end || new Date(sub.current_period_end) > new Date();
   const isActive = Boolean(
     sub &&
-      ((ACTIVE.includes(sub.status) && periodOk) ||
-        (sub.status === "canceled" && sub.current_period_end
-          ? new Date(sub.current_period_end) > new Date()
-          : false)),
+    ((ACTIVE.includes(sub.status) && periodOk) ||
+      (sub.status === "canceled" && sub.current_period_end
+        ? new Date(sub.current_period_end) > new Date()
+        : false)),
   );
 
   return {

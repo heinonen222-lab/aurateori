@@ -13,7 +13,11 @@ export const Route = createFileRoute("/quiz")({
   head: () => ({
     meta: [
       { title: "Övningsfrågor – Aurateori" },
-      { name: "description", content: "Öva på svenska teorifrågor per kategori: vägmärken, trafikregler, miljö, människan och fordonet." },
+      {
+        name: "description",
+        content:
+          "Öva på svenska teorifrågor per kategori: vägmärken, trafikregler, miljö, människan och fordonet.",
+      },
       { property: "og:title", content: "Övningsfrågor – Aurateori" },
       { property: "og:description", content: "Öva på svenska teorifrågor per kategori." },
     ],
@@ -31,7 +35,7 @@ const CATEGORIES: (QuestionCategory | "Alla")[] = [
 ];
 
 function QuizPage() {
-  const [cat, setCat] = useState<(QuestionCategory | "Alla")>("Alla");
+  const [cat, setCat] = useState<QuestionCategory | "Alla">("Alla");
   const [idx, setIdx] = useState(0);
   const [correctCount, setCorrectCount] = useState(0);
 
@@ -53,7 +57,9 @@ function QuizPage() {
       <div className="space-y-5">
         <div>
           <h1 className="text-2xl font-black sm:text-3xl">Övningsfrågor</h1>
-          <p className="mt-1 text-sm text-muted-foreground">Filtrera på kategori och öva i din takt.</p>
+          <p className="mt-1 text-sm text-muted-foreground">
+            Filtrera på kategori och öva i din takt.
+          </p>
         </div>
 
         <div className="-mx-4 flex gap-2 overflow-x-auto px-4 pb-1 lg:mx-0 lg:flex-wrap lg:px-0">
@@ -104,7 +110,8 @@ function QuizPage() {
             <div className="text-5xl">🎉</div>
             <h2 className="mt-3 text-2xl font-black">Klart!</h2>
             <p className="mt-1 text-muted-foreground">
-              Du fick {correctCount} av {pool.length} rätt ({Math.round((correctCount / pool.length) * 100)}%).
+              Du fick {correctCount} av {pool.length} rätt (
+              {Math.round((correctCount / pool.length) * 100)}%).
             </p>
             <button
               onClick={() => {

@@ -13,7 +13,14 @@ interface Props {
   total?: number;
 }
 
-export function QuestionCard({ question, onAnswer, onNext, showExplanation = true, index, total }: Props) {
+export function QuestionCard({
+  question,
+  onAnswer,
+  onNext,
+  showExplanation = true,
+  index,
+  total,
+}: Props) {
   const [selected, setSelected] = useState<number | null>(null);
   const answered = selected !== null;
 
@@ -32,7 +39,9 @@ export function QuestionCard({ question, onAnswer, onNext, showExplanation = tru
     <div className="rounded-3xl border border-border bg-card p-5 shadow-sm sm:p-7">
       {typeof index === "number" && typeof total === "number" && (
         <div className="mb-4 flex items-center justify-between text-xs font-medium text-muted-foreground">
-          <span>Fråga {index + 1} / {total}</span>
+          <span>
+            Fråga {index + 1} / {total}
+          </span>
           <span className="rounded-full bg-secondary px-2 py-0.5 text-secondary-foreground">
             {question.category}
           </span>
@@ -51,13 +60,7 @@ export function QuestionCard({ question, onAnswer, onNext, showExplanation = tru
         {question.options.map((opt, i) => {
           const isCorrect = i === question.correct;
           const isChosen = selected === i;
-          const state = !answered
-            ? "idle"
-            : isCorrect
-            ? "correct"
-            : isChosen
-            ? "wrong"
-            : "muted";
+          const state = !answered ? "idle" : isCorrect ? "correct" : isChosen ? "wrong" : "muted";
           return (
             <button
               key={i}
@@ -65,7 +68,8 @@ export function QuestionCard({ question, onAnswer, onNext, showExplanation = tru
               disabled={answered}
               className={cn(
                 "flex w-full items-center gap-3 rounded-xl border px-4 py-3 text-left text-sm transition-all",
-                state === "idle" && "border-border bg-background hover:border-primary/50 hover:bg-primary/5",
+                state === "idle" &&
+                  "border-border bg-background hover:border-primary/50 hover:bg-primary/5",
                 state === "correct" && "border-success bg-success/10 text-foreground",
                 state === "wrong" && "border-destructive bg-destructive/10 text-foreground",
                 state === "muted" && "border-border bg-background opacity-60",
@@ -75,11 +79,18 @@ export function QuestionCard({ question, onAnswer, onNext, showExplanation = tru
                 className={cn(
                   "grid h-6 w-6 shrink-0 place-items-center rounded-md border text-xs font-bold",
                   state === "correct" && "border-success bg-success text-success-foreground",
-                  state === "wrong" && "border-destructive bg-destructive text-destructive-foreground",
+                  state === "wrong" &&
+                    "border-destructive bg-destructive text-destructive-foreground",
                   (state === "idle" || state === "muted") && "border-border bg-secondary",
                 )}
               >
-                {state === "correct" ? <Check className="h-3.5 w-3.5" /> : state === "wrong" ? <X className="h-3.5 w-3.5" /> : String.fromCharCode(65 + i)}
+                {state === "correct" ? (
+                  <Check className="h-3.5 w-3.5" />
+                ) : state === "wrong" ? (
+                  <X className="h-3.5 w-3.5" />
+                ) : (
+                  String.fromCharCode(65 + i)
+                )}
               </span>
               <span className="flex-1">{opt}</span>
             </button>
@@ -93,9 +104,7 @@ export function QuestionCard({ question, onAnswer, onNext, showExplanation = tru
             Förklaring
           </div>
           <p className="text-sm leading-relaxed">{question.explanation}</p>
-          <div className="mt-2 text-xs text-muted-foreground">
-            Referens: {question.reference}
-          </div>
+          <div className="mt-2 text-xs text-muted-foreground">Referens: {question.reference}</div>
         </div>
       )}
 

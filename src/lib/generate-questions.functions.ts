@@ -134,7 +134,10 @@ Krav:
     const content = json.choices?.[0]?.message?.content ?? "";
     let parsed: z.infer<typeof payloadSchema>;
     try {
-      const cleaned = content.replace(/^```(?:json)?/i, "").replace(/```$/, "").trim();
+      const cleaned = content
+        .replace(/^```(?:json)?/i, "")
+        .replace(/```$/, "")
+        .trim();
       parsed = payloadSchema.parse(JSON.parse(cleaned));
     } catch {
       console.error("Kunde inte tolka Perplexity-svaret:", content.slice(0, 800));
