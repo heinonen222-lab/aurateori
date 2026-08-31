@@ -104,18 +104,56 @@ function ExamPage() {
             <li>• Du kan inte gå tillbaka till tidigare frågor.</li>
             <li>• Sammanställning per kategori i slutet.</li>
           </ul>
-          <button
-            onClick={() => {
-              setSeed((n) => n + 1);
-              setPhase("running");
-              setIdx(0);
-              setResults([]);
-              setTime(SECONDS);
-            }}
-            className="w-full rounded-xl bg-primary py-3 font-bold text-primary-foreground"
-          >
-            Starta provet
-          </button>
+          {subLoading ? (
+            <div className="h-12 animate-pulse rounded-xl bg-muted" />
+          ) : isActive ? (
+            <>
+              <div className="inline-flex items-center gap-1.5 rounded-full bg-success/15 px-3 py-1 text-xs font-bold text-success">
+                <Crown className="h-3.5 w-3.5" />
+                Premium aktivt
+              </div>
+              <button
+                onClick={() => {
+                  setSeed((n) => n + 1);
+                  setPhase("running");
+                  setIdx(0);
+                  setResults([]);
+                  setTime(SECONDS);
+                }}
+                className="w-full rounded-xl bg-primary py-3 font-bold text-primary-foreground"
+              >
+                Starta provet
+              </button>
+            </>
+          ) : (
+            <div className="rounded-2xl border border-warning/40 bg-warning/10 p-5 text-left">
+              <div className="flex items-center gap-2 text-sm font-bold">
+                <Lock className="h-4 w-4" />
+                Fullständigt prov kräver Premium
+              </div>
+              <p className="mt-1 text-xs text-muted-foreground">
+                {user
+                  ? "Lås upp hela examsimulatorn med Premium. Övningsfrågor och genomgångar är fortsatt gratis."
+                  : "Logga in och aktivera Premium för att köra hela provet. Övningsfrågor och genomgångar är fortsatt gratis."}
+              </p>
+              <div className="mt-4 flex flex-col gap-2 sm:flex-row">
+                <Link
+                  to="/priser"
+                  className="rounded-xl bg-primary px-5 py-3 text-center text-sm font-bold text-primary-foreground transition hover:opacity-90"
+                >
+                  Se priser →
+                </Link>
+                {!user && (
+                  <Link
+                    to="/auth"
+                    className="rounded-xl border border-border px-5 py-3 text-center text-sm font-semibold transition hover:border-primary/60"
+                  >
+                    Logga in
+                  </Link>
+                )}
+              </div>
+            </div>
+          )}
         </div>
       )}
 
