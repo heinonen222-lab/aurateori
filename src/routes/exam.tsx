@@ -10,7 +10,7 @@ import { QUESTIONS, type Question } from "@/data/questions";
 import { EXAM_QUESTIONS } from "@/data/exam-questions";
 import { bankQuestionsQuery } from "@/lib/ai-questions";
 import { seededShuffle } from "@/lib/shuffle";
-import { store } from "@/lib/store";
+import { store, useStore, examUsage } from "@/lib/store";
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/exam")({
