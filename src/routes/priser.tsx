@@ -16,12 +16,12 @@ export const Route = createFileRoute("/priser")({
       {
         name: "description",
         content:
-          "Lås upp alla teorifrågor, interaktiva genomgångar, provsimulator och statistik. 39 kr/mån, 249 kr/år eller 149 kr engångsköp.",
+          "Lås upp alla teorifrågor, interaktiva genomgångar, provsimulator och statistik. 149 kr per 30 dagar eller 499 kr per år.",
       },
       { property: "og:title", content: "Priser – Aurateori Premium" },
       {
         property: "og:description",
-        content: "Premium för svenskt B-körkort: 39 kr/mån, 249 kr/år eller 149 kr engång.",
+        content: "Premium för svenskt B-körkort: 149 kr per 30 dagar eller 499 kr per år.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
@@ -41,27 +41,19 @@ const FEATURES = [
 const PLANS = [
   {
     priceId: "premium_monthly",
-    name: "Premium Månad",
-    price: "39 kr",
-    per: "/mån",
+    name: "Premium 30 dagar",
+    price: "149 kr",
+    per: "/30 dagar",
     note: "Avsluta när du vill",
     highlight: false,
   },
   {
     priceId: "premium_yearly",
     name: "Premium År",
-    price: "249 kr",
+    price: "499 kr",
     per: "/år",
-    note: "≈ 21 kr/mån – spara ca 47 %",
+    note: "≈ 42 kr/mån – spara ca 72 %",
     highlight: true,
-  },
-  {
-    priceId: "lifetime_once",
-    name: "Livstid",
-    price: "149 kr",
-    per: " engång",
-    note: "Full åtkomst för alltid",
-    highlight: false,
   },
 ] as const;
 
