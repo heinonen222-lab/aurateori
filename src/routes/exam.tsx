@@ -66,6 +66,8 @@ function ExamPage() {
   const [results, setResults] = useState<Result[]>([]);
   const [seed, setSeed] = useState(0);
   const { data: bank } = useQuery(bankQuestionsQuery);
+  const { user } = useAuth();
+  const { isActive, loading: subLoading } = useSubscription();
   const exam = useMemo(() => buildExam(seed, [...QUESTIONS, ...(bank ?? [])]), [seed, bank]);
 
   useEffect(() => {
