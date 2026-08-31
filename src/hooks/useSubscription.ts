@@ -6,15 +6,24 @@ import { useAuth } from "@/hooks/useAuth";
 
 const ACTIVE = ["active", "trialing", "past_due"];
 
-export function useSubscription() {
+export function useSubscription(options?: { pollUntilActive?: boolean }) {
   const { user } = useAuth();
   const queryClient = useQueryClient();
   const userId = user?.id;
   const environment = getPaddleEnvironment();
+  const pollUntilActive = options?.pollUntilActive ?? false;
 
   const query = useQuery({
     queryKey: ["subscription", userId, environment],
     enabled: Boolean(userId),
+    // Efter ett köp kan webhooken dröja några sekunder – poll:a tills raden finns.
+    refetchInterval: pollUntilActive
+      ? (q) => {
+          const row = q.state.data as { status?: string } | null | undefined;
+          const active = row ? ACTIVE.includes(row.status ?? "") : false;
+          return active ? false : 2000;
+        }
+      : false,
     queryFn: async () => {
       const { data, error } = await supabase
         .from("subscriptions")
@@ -28,6 +37,7 @@ export function useSubscription() {
       return data;
     },
   });
+
 
   useEffect(() => {
     if (!userId) return;
