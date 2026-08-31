@@ -50,9 +50,9 @@ function TermsPage() {
 
         <LegalSection title="3. Ditt konto">
           <p>
-            Du ansvarar för att uppgifterna du lämnar är korrekta och uppdaterade, för att hålla dina
-            inloggningsuppgifter hemliga och för all aktivitet som sker via ditt konto. Kontakta oss
-            omedelbart om du misstänker obehörig användning.
+            Du ansvarar för att uppgifterna du lämnar är korrekta och uppdaterade, för att hålla
+            dina inloggningsuppgifter hemliga och för all aktivitet som sker via ditt konto.
+            Kontakta oss omedelbart om du misstänker obehörig användning.
           </p>
         </LegalSection>
 
@@ -102,8 +102,7 @@ function TermsPage() {
             >
               Paddles köpvillkor
             </a>
-            . Se även vår{" "}
-            <a href="/refund">återbetalningspolicy</a>.
+            . Se även vår <a href="/refund">återbetalningspolicy</a>.
           </p>
         </LegalSection>
 
@@ -121,9 +120,9 @@ function TermsPage() {
             från alla underförstådda garantier, inklusive allmän lämplighet och lämplighet för ett
             särskilt syfte. Vårt sammanlagda ansvar är begränsat till de avgifter du betalat för
             Tjänsten under de tolv månader som föregick anspråket. Vi ansvarar inte för indirekta
-            skador, följdskador, utebliven vinst, förlorad data eller goodwill. Inget i dessa villkor
-            begränsar ansvar för bedrägeri, dödsfall eller personskada, eller annat ansvar som inte
-            kan begränsas enligt lag.
+            skador, följdskador, utebliven vinst, förlorad data eller goodwill. Inget i dessa
+            villkor begränsar ansvar för bedrägeri, dödsfall eller personskada, eller annat ansvar
+            som inte kan begränsas enligt lag.
           </p>
         </LegalSection>
 
@@ -147,9 +146,9 @@ function TermsPage() {
         <LegalSection title="11. Ändringar och överlåtelse">
           <p>
             Vi kan uppdatera villkoren; den senaste versionen publiceras alltid på denna sida med
-            datum. Du får inte överlåta avtalet utan vårt samtycke. Vi får överlåta avtalet i samband
-            med fusion, förvärv eller överlåtelse av verksamhet. Ingen part ansvarar för förseningar
-            orsakade av händelser utanför rimlig kontroll.
+            datum. Du får inte överlåta avtalet utan vårt samtycke. Vi får överlåta avtalet i
+            samband med fusion, förvärv eller överlåtelse av verksamhet. Ingen part ansvarar för
+            förseningar orsakade av händelser utanför rimlig kontroll.
           </p>
         </LegalSection>
 

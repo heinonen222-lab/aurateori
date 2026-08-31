@@ -29,9 +29,9 @@ function PrivacyPage() {
       <LegalPage title="Integritetspolicy" updated="31 augusti 2026">
         <LegalSection title="1. Personuppgiftsansvarig">
           <p>
-            <strong>Aurateori</strong> är personuppgiftsansvarig för de personuppgifter som behandlas
-            i tjänsten Aurateori. Det innebär att vi bestämmer varför och hur dina uppgifter
-            behandlas. Kontakt:{" "}
+            <strong>Aurateori</strong> är personuppgiftsansvarig för de personuppgifter som
+            behandlas i tjänsten Aurateori. Det innebär att vi bestämmer varför och hur dina
+            uppgifter behandlas. Kontakt:{" "}
             <a href="mailto:support@aurateori.se">support@aurateori.se</a>.
           </p>
         </LegalSection>
@@ -63,8 +63,9 @@ function PrivacyPage() {
               din fråga. Rättslig grund: berättigat intresse.
             </li>
             <li>
-              <strong>Användningsstatistik</strong> i aggregerad form – för att förbättra innehåll och
-              funktioner. Rättslig grund: berättigat intresse, eller samtycke där lag kräver det.
+              <strong>Användningsstatistik</strong> i aggregerad form – för att förbättra innehåll
+              och funktioner. Rättslig grund: berättigat intresse, eller samtycke där lag kräver
+              det.
             </li>
           </ul>
           <p>
@@ -119,9 +120,9 @@ function PrivacyPage() {
             Du har rätt att begära tillgång till dina uppgifter, rättelse, radering, begränsning av
             behandling och dataportabilitet, samt att invända mot behandling som sker med stöd av
             berättigat intresse. Har du lämnat samtycke kan du återkalla det när som helst. Kontakta
-            oss på <a href="mailto:support@aurateori.se">support@aurateori.se</a> – vi svarar normalt
-            inom en månad. Du har även rätt att lämna klagomål till Integritetsskyddsmyndigheten
-            (IMY).
+            oss på <a href="mailto:support@aurateori.se">support@aurateori.se</a> – vi svarar
+            normalt inom en månad. Du har även rätt att lämna klagomål till
+            Integritetsskyddsmyndigheten (IMY).
           </p>
         </LegalSection>
 
@@ -137,9 +138,9 @@ function PrivacyPage() {
           <p>
             Vi använder nödvändiga cookies och lokal lagring (localStorage) för inloggningssession,
             temaval och din studieprogress. Dessa krävs för att tjänsten ska fungera. Använder vi
-            analys- eller marknadsföringscookies inhämtar vi ditt samtycke först, och du kan då ändra
-            ditt val när som helst. Du kan även blockera eller radera cookies i din webbläsare, vilket
-            kan påverka funktionaliteten.
+            analys- eller marknadsföringscookies inhämtar vi ditt samtycke först, och du kan då
+            ändra ditt val när som helst. Du kan även blockera eller radera cookies i din
+            webbläsare, vilket kan påverka funktionaliteten.
           </p>
         </LegalSection>
 
@@ -152,8 +153,8 @@ function PrivacyPage() {
 
         <LegalSection title="10. Ändringar">
           <p>
-            Vi kan uppdatera denna policy. Den senaste versionen publiceras alltid här med datum, och
-            vid väsentliga ändringar informerar vi dig i tjänsten eller via e-post.
+            Vi kan uppdatera denna policy. Den senaste versionen publiceras alltid här med datum,
+            och vid väsentliga ändringar informerar vi dig i tjänsten eller via e-post.
           </p>
         </LegalSection>
       </LegalPage>
