@@ -27,10 +27,7 @@ export function LegalFooter() {
                 {l.label}
               </Link>
             ))}
-            <a
-              href="mailto:support@aurateori.se"
-              className="hover:text-foreground hover:underline"
-            >
+            <a href="mailto:support@aurateori.se" className="hover:text-foreground hover:underline">
               Kontakt
             </a>
           </nav>
