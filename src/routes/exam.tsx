@@ -252,7 +252,16 @@ function ExamPage() {
       )}
 
       {phase === "done" && (
-        <ExamResults results={results} correct={correctCount} onRestart={() => setPhase("intro")} />
+        <ExamResults
+          results={results}
+          correct={correctCount}
+          attemptNo={attemptNo || usage.total}
+          usedToday={usage.usedToday}
+          limit={usage.limit}
+          canRetry={!usage.limitReached}
+          onRestart={() => setPhase("intro")}
+        />
+
       )}
     </AppShell>
   );
