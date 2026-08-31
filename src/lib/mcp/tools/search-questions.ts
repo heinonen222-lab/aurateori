@@ -38,7 +38,9 @@ export default defineTool({
                 .map(
                   (item) =>
                     `[${item.category}] ${item.question}\n` +
-                    item.options.map((o, i) => `${i === item.correct ? "✔" : "·"} ${o}`).join("\n") +
+                    item.options
+                      .map((o, i) => `${i === item.correct ? "✔" : "·"} ${o}`)
+                      .join("\n") +
                     `\nFörklaring: ${item.explanation}\nRegel: ${item.reference}` +
                     (item.source ? `\nKälla: ${item.source.label} – ${item.source.url}` : ""),
                 )
