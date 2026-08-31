@@ -14,6 +14,7 @@ import { Route as StatsRouteImport } from './routes/stats'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as SignsRouteImport } from './routes/signs'
 import { Route as QuizRouteImport } from './routes/quiz'
+import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as PriserRouteImport } from './routes/priser'
 import { Route as GenomgangarRouteImport } from './routes/genomgangar'
 import { Route as FlashcardsRouteImport } from './routes/flashcards'
@@ -46,6 +47,11 @@ const SignsRoute = SignsRouteImport.update({
 const QuizRoute = QuizRouteImport.update({
   id: '/quiz',
   path: '/quiz',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PrivacyRoute = PrivacyRouteImport.update({
+  id: '/privacy',
+  path: '/privacy',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PriserRoute = PriserRouteImport.update({
@@ -97,6 +103,7 @@ export interface FileRoutesByFullPath {
   '/flashcards': typeof FlashcardsRoute
   '/genomgangar': typeof GenomgangarRoute
   '/priser': typeof PriserRoute
+  '/privacy': typeof PrivacyRoute
   '/quiz': typeof QuizRoute
   '/signs': typeof SignsRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
@@ -112,6 +119,7 @@ export interface FileRoutesByTo {
   '/flashcards': typeof FlashcardsRoute
   '/genomgangar': typeof GenomgangarRoute
   '/priser': typeof PriserRoute
+  '/privacy': typeof PrivacyRoute
   '/quiz': typeof QuizRoute
   '/signs': typeof SignsRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
@@ -128,6 +136,7 @@ export interface FileRoutesById {
   '/flashcards': typeof FlashcardsRoute
   '/genomgangar': typeof GenomgangarRoute
   '/priser': typeof PriserRoute
+  '/privacy': typeof PrivacyRoute
   '/quiz': typeof QuizRoute
   '/signs': typeof SignsRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
@@ -145,6 +154,7 @@ export interface FileRouteTypes {
     | '/flashcards'
     | '/genomgangar'
     | '/priser'
+    | '/privacy'
     | '/quiz'
     | '/signs'
     | '/sitemap.xml'
@@ -160,6 +170,7 @@ export interface FileRouteTypes {
     | '/flashcards'
     | '/genomgangar'
     | '/priser'
+    | '/privacy'
     | '/quiz'
     | '/signs'
     | '/sitemap.xml'
@@ -175,6 +186,7 @@ export interface FileRouteTypes {
     | '/flashcards'
     | '/genomgangar'
     | '/priser'
+    | '/privacy'
     | '/quiz'
     | '/signs'
     | '/sitemap.xml'
@@ -191,6 +203,7 @@ export interface RootRouteChildren {
   FlashcardsRoute: typeof FlashcardsRoute
   GenomgangarRoute: typeof GenomgangarRoute
   PriserRoute: typeof PriserRoute
+  PrivacyRoute: typeof PrivacyRoute
   QuizRoute: typeof QuizRoute
   SignsRoute: typeof SignsRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
@@ -235,6 +248,13 @@ declare module '@tanstack/react-router' {
       path: '/quiz'
       fullPath: '/quiz'
       preLoaderRoute: typeof QuizRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/privacy': {
+      id: '/privacy'
+      path: '/privacy'
+      fullPath: '/privacy'
+      preLoaderRoute: typeof PrivacyRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/priser': {
@@ -303,6 +323,7 @@ const rootRouteChildren: RootRouteChildren = {
   FlashcardsRoute: FlashcardsRoute,
   GenomgangarRoute: GenomgangarRoute,
   PriserRoute: PriserRoute,
+  PrivacyRoute: PrivacyRoute,
   QuizRoute: QuizRoute,
   SignsRoute: SignsRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
