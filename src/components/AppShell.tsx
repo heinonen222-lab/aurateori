@@ -1,5 +1,5 @@
 import { Link, useRouterState } from "@tanstack/react-router";
-import { useEffect, type ReactNode } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 import {
   Home,
   BookOpen,
@@ -11,9 +11,12 @@ import {
   Sun,
   GraduationCap,
   Crown,
+  Menu,
+  X,
 } from "lucide-react";
 import { store, useStore } from "@/lib/store";
 import { cn } from "@/lib/utils";
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 
 const NAV = [
   { to: "/", label: "Start", icon: Home },
@@ -26,13 +29,52 @@ const NAV = [
   { to: "/priser", label: "Premium", icon: Crown },
 ] as const;
 
+const PRIMARY_NAV = NAV.slice(0, 4);
+const MORE_NAV = NAV.slice(4);
+
+function NavLink({
+  item,
+  active,
+  onClick,
+  variant = "bottom",
+}: {
+  item: (typeof NAV)[number];
+  active: boolean;
+  onClick?: () => void;
+  variant?: "bottom" | "sheet";
+}) {
+  return (
+    <Link
+      key={item.to}
+      to={item.to}
+      onClick={onClick}
+      className={cn(
+        "flex items-center gap-3 rounded-xl transition-colors",
+        variant === "bottom"
+          ? "flex-col justify-center gap-0.5 py-2 text-[11px] font-semibold"
+          : "px-4 py-3 text-sm font-medium",
+        active ? "text-primary" : "text-muted-foreground hover:bg-muted hover:text-foreground",
+        variant === "sheet" && active && "bg-primary/10 text-primary",
+      )}
+    >
+      <item.icon className={cn(variant === "bottom" ? "h-5 w-5" : "h-5 w-5")} />
+      <span className={cn(variant === "bottom" && "truncate max-w-[4.5rem]")}>{item.label}</span>
+    </Link>
+  );
+}
+
 export function AppShell({ children }: { children: ReactNode }) {
   const s = useStore();
   const pathname = useRouterState({ select: (r) => r.location.pathname });
+  const [moreOpen, setMoreOpen] = useState(false);
 
   useEffect(() => {
     store.hydrate();
   }, []);
+
+  const isMoreActive = MORE_NAV.some((n) =>
+    n.to === "/" ? pathname === "/" : pathname.startsWith(n.to),
+  );
 
   return (
     <div className="min-h-screen bg-background text-foreground">
@@ -93,29 +135,67 @@ export function AppShell({ children }: { children: ReactNode }) {
         </button>
       </header>
 
-      <main className="pb-24 lg:ml-64 lg:pb-8">
+      <main className="pb-20 lg:ml-64 lg:pb-8">
         <div className="mx-auto max-w-5xl px-4 py-4 lg:px-8 lg:py-8">{children}</div>
       </main>
 
       {/* Mobile bottom nav */}
       <nav className="fixed inset-x-0 bottom-0 z-30 border-t border-border bg-background/95 backdrop-blur lg:hidden">
-        <div className="mx-auto grid max-w-2xl grid-cols-4 sm:grid-cols-8">
-          {NAV.map((n) => {
+        <div className="mx-auto grid max-w-md grid-cols-5">
+          {PRIMARY_NAV.map((n) => {
             const active = n.to === "/" ? pathname === "/" : pathname.startsWith(n.to);
-            return (
-              <Link
-                key={n.to}
-                to={n.to}
-                className={cn(
-                  "flex flex-col items-center gap-0.5 py-2.5 text-[10px] font-medium transition-colors",
-                  active ? "text-primary" : "text-muted-foreground",
-                )}
-              >
-                <n.icon className="h-5 w-5" />
-                <span className="truncate">{n.label}</span>
-              </Link>
-            );
+            return <NavLink key={n.to} item={n} active={active} />;
           })}
+          <Sheet open={moreOpen} onOpenChange={setMoreOpen}>
+            <SheetTrigger asChild>
+              <button
+                className={cn(
+                  "flex flex-col items-center justify-center gap-0.5 rounded-xl py-2 text-[11px] font-semibold transition-colors",
+                  isMoreActive ? "text-primary" : "text-muted-foreground hover:text-foreground",
+                )}
+                aria-label="Fler sidor"
+              >
+                {moreOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+                <span>Mer</span>
+              </button>
+            </SheetTrigger>
+            <SheetContent side="bottom" className="rounded-t-2xl px-4 pb-8 pt-4">
+              <SheetHeader className="sr-only">
+                <SheetTitle>Fler sidor</SheetTitle>
+              </SheetHeader>
+              <div className="grid grid-cols-2 gap-2 pt-2">
+                {MORE_NAV.map((n) => {
+                  const active = n.to === "/" ? pathname === "/" : pathname.startsWith(n.to);
+                  return (
+                    <NavLink
+                      key={n.to}
+                      item={n}
+                      active={active}
+                      variant="sheet"
+                      onClick={() => setMoreOpen(false)}
+                    />
+                  );
+                })}
+              </div>
+              <button
+                onClick={() => {
+                  store.toggleTheme();
+                  setMoreOpen(false);
+                }}
+                className="mt-4 flex w-full items-center justify-center gap-2 rounded-xl border border-border py-3 text-sm font-medium text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+              >
+                {s.theme === "dark" ? (
+                  <>
+                    <Sun className="h-4 w-4" /> Ljust läge
+                  </>
+                ) : (
+                  <>
+                    <Moon className="h-4 w-4" /> Mörkt läge
+                  </>
+                )}
+              </button>
+            </SheetContent>
+          </Sheet>
         </div>
       </nav>
     </div>
