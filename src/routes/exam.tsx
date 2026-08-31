@@ -7,6 +7,7 @@ import { useSubscription } from "@/hooks/useSubscription";
 import { AppShell } from "@/components/AppShell";
 import { QuestionCard } from "@/components/QuestionCard";
 import { QUESTIONS, type Question } from "@/data/questions";
+import { EXAM_QUESTIONS } from "@/data/exam-questions";
 import { bankQuestionsQuery } from "@/lib/ai-questions";
 import { seededShuffle } from "@/lib/shuffle";
 import { store } from "@/lib/store";
