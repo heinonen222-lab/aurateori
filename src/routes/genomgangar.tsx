@@ -231,11 +231,7 @@ function LessonPlayer({ lesson, onExit }: { lesson: Lesson; onExit: () => void }
           <div className="mb-3 text-xs font-medium text-muted-foreground">
             Steg {idx + 1} / {lesson.steps.length}
           </div>
-          {step.sign && (
-            <div className="mb-5 grid place-items-center rounded-2xl bg-muted p-6">
-              <SignImage id={step.sign} className="h-32 w-32" />
-            </div>
-          )}
+          <SignRow ids={stepSigns(step)} />
           <h2 className="text-lg font-bold leading-snug sm:text-xl">{step.title}</h2>
           <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{step.body}</p>
           {step.bullets && (
@@ -248,6 +244,7 @@ function LessonPlayer({ lesson, onExit }: { lesson: Lesson; onExit: () => void }
               ))}
             </ul>
           )}
+          <SourceLink source={step.source} />
           <button
             onClick={advance}
             className="mt-6 w-full rounded-xl bg-primary py-3 text-sm font-bold text-primary-foreground transition hover:opacity-90"
