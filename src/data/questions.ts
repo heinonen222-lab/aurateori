@@ -21,6 +21,8 @@ export interface Question {
   reference: string;
   /** Official source page (Trafikverket, Transportstyrelsen or lagtext). */
   source?: QuestionSource;
+  /** True for the 5 non-scored test questions ("testfrågor") in the exam. */
+  trial?: boolean;
 }
 
 export const QUESTIONS: Question[] = [
