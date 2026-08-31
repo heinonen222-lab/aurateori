@@ -1,12 +1,13 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { Timer, Trophy, XCircle, CheckCircle2, Crown, Lock } from "lucide-react";
+import { Timer, Trophy, XCircle, CheckCircle2, Crown, Lock, ExternalLink } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { useSubscription } from "@/hooks/useSubscription";
 import { AppShell } from "@/components/AppShell";
 import { QuestionCard } from "@/components/QuestionCard";
 import { QUESTIONS, type Question } from "@/data/questions";
+import { EXAM_QUESTIONS } from "@/data/exam-questions";
 import { bankQuestionsQuery } from "@/lib/ai-questions";
 import { seededShuffle } from "@/lib/shuffle";
 import { store } from "@/lib/store";
@@ -57,7 +58,7 @@ function buildExam(seed: number, source: Question[]) {
   return seededShuffle(picked, seed);
 }
 
-type Result = { qid: string; category: string; correct: boolean };
+type Result = { qid: string; category: string; correct: boolean; q: Question };
 
 function ExamPage() {
   const [phase, setPhase] = useState<"intro" | "running" | "done">("intro");
@@ -68,7 +69,10 @@ function ExamPage() {
   const { data: bank } = useQuery(bankQuestionsQuery);
   const { user } = useAuth();
   const { isActive, loading: subLoading } = useSubscription();
-  const exam = useMemo(() => buildExam(seed, [...QUESTIONS, ...(bank ?? [])]), [seed, bank]);
+  const exam = useMemo(
+    () => buildExam(seed, [...EXAM_QUESTIONS, ...QUESTIONS, ...(bank ?? [])]),
+    [seed, bank],
+  );
 
   useEffect(() => {
     if (phase !== "running") return;
@@ -107,6 +111,7 @@ function ExamPage() {
             <li>• Alla frågor visas utan förklaring – som i skarpt läge.</li>
             <li>• Du kan inte gå tillbaka till tidigare frågor.</li>
             <li>• Sammanställning per kategori i slutet.</li>
+            <li>• Frågorna följer Trafikverkets provformat och är källhänvisade.</li>
           </ul>
           {subLoading ? (
             <div className="h-12 animate-pulse rounded-xl bg-muted" />
@@ -185,7 +190,10 @@ function ExamPage() {
             showExplanation={false}
             onAnswer={(ok) => {
               const src = exam[idx];
-              setResults((r) => [...r, { qid: src.id, category: src.category, correct: ok }]);
+              setResults((r) => [
+                ...r,
+                { qid: src.id, category: src.category, correct: ok, q: src },
+              ]);
               store.recordAnswer(src.id, src.category, ok);
             }}
             onNext={() => {
@@ -293,6 +301,50 @@ function ExamResults({
           ))}
         </div>
       </div>
+
+      {results.some((r) => !r.correct) && (
+        <div className="rounded-3xl border border-border bg-card p-6">
+          <h2 className="text-lg font-bold">Dina fel – med källor</h2>
+          <p className="mt-1 text-xs text-muted-foreground">
+            Läs rätt svar och gå vidare till Trafikverkets, Transportstyrelsens eller lagtextens
+            egen sida.
+          </p>
+          <ul className="mt-4 space-y-4">
+            {results
+              .map((r, i) => ({ ...r, nr: i + 1 }))
+              .filter((r) => !r.correct)
+              .map((r) => (
+                <li key={r.nr} className="rounded-2xl border border-border bg-secondary/40 p-4">
+                  <div className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                    Fråga {r.nr} · {r.category}
+                  </div>
+                  <p className="mt-1 text-sm font-semibold">{r.q.question}</p>
+                  <p className="mt-2 text-sm">
+                    <span className="font-bold text-success">Rätt svar: </span>
+                    {r.q.options[r.q.correct]}
+                  </p>
+                  <p className="mt-1 text-sm leading-relaxed text-muted-foreground">
+                    {r.q.explanation}
+                  </p>
+                  <div className="mt-2 text-xs text-muted-foreground">
+                    Referens: {r.q.reference}
+                  </div>
+                  {r.q.source && (
+                    <a
+                      href={r.q.source.url}
+                      target="_blank"
+                      rel="noreferrer noopener"
+                      className="mt-2 inline-flex items-center gap-1 text-xs font-semibold text-primary underline decoration-primary/40 underline-offset-2 hover:decoration-primary"
+                    >
+                      {r.q.source.label}
+                      <ExternalLink className="h-3 w-3" />
+                    </a>
+                  )}
+                </li>
+              ))}
+          </ul>
+        </div>
+      )}
 
       <button
         onClick={onRestart}
