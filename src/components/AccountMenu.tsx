@@ -1,0 +1,82 @@
+import { Link, useNavigate } from "@tanstack/react-router";
+import { useQueryClient } from "@tanstack/react-query";
+import { LogIn, LogOut, User as UserIcon } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/hooks/useAuth";
+import { useSubscription } from "@/hooks/useSubscription";
+import { cn } from "@/lib/utils";
+
+export function AccountMenu({
+  variant = "sidebar",
+  onNavigate,
+}: {
+  variant?: "sidebar" | "sheet";
+  onNavigate?: () => void;
+}) {
+  const { user, loading } = useAuth();
+  const { isActive } = useSubscription();
+  const navigate = useNavigate();
+  const queryClient = useQueryClient();
+
+  const signOut = async () => {
+    await queryClient.cancelQueries();
+    queryClient.clear();
+    await supabase.auth.signOut();
+    onNavigate?.();
+    void navigate({ to: "/auth", replace: true });
+  };
+
+  const base = cn(
+    "flex w-full items-center gap-2 rounded-xl text-sm font-medium transition-colors",
+    variant === "sidebar" ? "px-3 py-2" : "justify-center border border-border py-3",
+  );
+
+  if (loading) return null;
+
+  if (!user) {
+    return (
+      <Link
+        to="/auth"
+        onClick={onNavigate}
+        className={cn(base, "text-muted-foreground hover:bg-muted hover:text-foreground")}
+      >
+        <LogIn className="h-4 w-4" />
+        Logga in
+      </Link>
+    );
+  }
+
+  return (
+    <div className={cn("space-y-1", variant === "sheet" && "space-y-2")}>
+      <div
+        className={cn(
+          "flex items-center gap-2 rounded-xl bg-secondary/50 px-3 py-2 text-xs",
+          variant === "sheet" && "justify-center",
+        )}
+      >
+        <UserIcon className="h-4 w-4 shrink-0 text-primary" />
+        <span className="min-w-0 truncate font-semibold">{user.email}</span>
+        {isActive && (
+          <span className="shrink-0 rounded-full bg-primary/15 px-2 py-0.5 text-[10px] font-bold uppercase text-primary">
+            Premium
+          </span>
+        )}
+      </div>
+      <Link
+        to="/priser"
+        onClick={onNavigate}
+        className={cn(base, "text-muted-foreground hover:bg-muted hover:text-foreground")}
+      >
+        <UserIcon className="h-4 w-4" />
+        Mitt konto & betalning
+      </Link>
+      <button
+        onClick={() => void signOut()}
+        className={cn(base, "text-muted-foreground hover:bg-muted hover:text-foreground")}
+      >
+        <LogOut className="h-4 w-4" />
+        Logga ut
+      </button>
+    </div>
+  );
+}
