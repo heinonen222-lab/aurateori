@@ -319,6 +319,8 @@ function ExamResults({
   onRestart: () => void;
 }) {
   const passed = correct >= PASS;
+  const [filter, setFilter] = useState<"all" | "wrong">("all");
+  const wrongCount = results.filter((r) => !r.correct).length;
   const scored = results.filter((r) => !r.trial);
   const byCat = scored.reduce<Record<string, { ok: number; total: number }>>((acc, r) => {
     if (!acc[r.category]) acc[r.category] = { ok: 0, total: 0 };
