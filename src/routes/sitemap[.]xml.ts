@@ -18,6 +18,9 @@ const PUBLIC_ROUTES: SitemapEntry[] = [
   { path: "/priser", changefreq: "weekly", priority: "0.8" },
   { path: "/signs", changefreq: "weekly", priority: "0.9" },
   { path: "/stats", changefreq: "weekly", priority: "0.7" },
+  { path: "/terms", changefreq: "yearly", priority: "0.4" },
+  { path: "/refund", changefreq: "yearly", priority: "0.4" },
+  { path: "/privacy", changefreq: "yearly", priority: "0.4" },
 ];
 
 export const Route = createFileRoute("/sitemap.xml")({

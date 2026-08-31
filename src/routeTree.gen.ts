@@ -9,10 +9,13 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as TermsRouteImport } from './routes/terms'
 import { Route as StatsRouteImport } from './routes/stats'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as SignsRouteImport } from './routes/signs'
+import { Route as RefundRouteImport } from './routes/refund'
 import { Route as QuizRouteImport } from './routes/quiz'
+import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as PriserRouteImport } from './routes/priser'
 import { Route as GenomgangarRouteImport } from './routes/genomgangar'
 import { Route as FlashcardsRouteImport } from './routes/flashcards'
@@ -22,6 +25,11 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as CheckoutSuccessRouteImport } from './routes/checkout.success'
 import { Route as ApiPublicPaymentsWebhookRouteImport } from './routes/api/public/payments/webhook'
 
+const TermsRoute = TermsRouteImport.update({
+  id: '/terms',
+  path: '/terms',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const StatsRoute = StatsRouteImport.update({
   id: '/stats',
   path: '/stats',
@@ -37,9 +45,19 @@ const SignsRoute = SignsRouteImport.update({
   path: '/signs',
   getParentRoute: () => rootRouteImport,
 } as any)
+const RefundRoute = RefundRouteImport.update({
+  id: '/refund',
+  path: '/refund',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const QuizRoute = QuizRouteImport.update({
   id: '/quiz',
   path: '/quiz',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PrivacyRoute = PrivacyRouteImport.update({
+  id: '/privacy',
+  path: '/privacy',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PriserRoute = PriserRouteImport.update({
@@ -91,10 +109,13 @@ export interface FileRoutesByFullPath {
   '/flashcards': typeof FlashcardsRoute
   '/genomgangar': typeof GenomgangarRoute
   '/priser': typeof PriserRoute
+  '/privacy': typeof PrivacyRoute
   '/quiz': typeof QuizRoute
+  '/refund': typeof RefundRoute
   '/signs': typeof SignsRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/stats': typeof StatsRoute
+  '/terms': typeof TermsRoute
   '/checkout/success': typeof CheckoutSuccessRoute
   '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
 }
@@ -105,10 +126,13 @@ export interface FileRoutesByTo {
   '/flashcards': typeof FlashcardsRoute
   '/genomgangar': typeof GenomgangarRoute
   '/priser': typeof PriserRoute
+  '/privacy': typeof PrivacyRoute
   '/quiz': typeof QuizRoute
+  '/refund': typeof RefundRoute
   '/signs': typeof SignsRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/stats': typeof StatsRoute
+  '/terms': typeof TermsRoute
   '/checkout/success': typeof CheckoutSuccessRoute
   '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
 }
@@ -120,10 +144,13 @@ export interface FileRoutesById {
   '/flashcards': typeof FlashcardsRoute
   '/genomgangar': typeof GenomgangarRoute
   '/priser': typeof PriserRoute
+  '/privacy': typeof PrivacyRoute
   '/quiz': typeof QuizRoute
+  '/refund': typeof RefundRoute
   '/signs': typeof SignsRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/stats': typeof StatsRoute
+  '/terms': typeof TermsRoute
   '/checkout/success': typeof CheckoutSuccessRoute
   '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
 }
@@ -136,10 +163,13 @@ export interface FileRouteTypes {
     | '/flashcards'
     | '/genomgangar'
     | '/priser'
+    | '/privacy'
     | '/quiz'
+    | '/refund'
     | '/signs'
     | '/sitemap.xml'
     | '/stats'
+    | '/terms'
     | '/checkout/success'
     | '/api/public/payments/webhook'
   fileRoutesByTo: FileRoutesByTo
@@ -150,10 +180,13 @@ export interface FileRouteTypes {
     | '/flashcards'
     | '/genomgangar'
     | '/priser'
+    | '/privacy'
     | '/quiz'
+    | '/refund'
     | '/signs'
     | '/sitemap.xml'
     | '/stats'
+    | '/terms'
     | '/checkout/success'
     | '/api/public/payments/webhook'
   id:
@@ -164,10 +197,13 @@ export interface FileRouteTypes {
     | '/flashcards'
     | '/genomgangar'
     | '/priser'
+    | '/privacy'
     | '/quiz'
+    | '/refund'
     | '/signs'
     | '/sitemap.xml'
     | '/stats'
+    | '/terms'
     | '/checkout/success'
     | '/api/public/payments/webhook'
   fileRoutesById: FileRoutesById
@@ -179,16 +215,26 @@ export interface RootRouteChildren {
   FlashcardsRoute: typeof FlashcardsRoute
   GenomgangarRoute: typeof GenomgangarRoute
   PriserRoute: typeof PriserRoute
+  PrivacyRoute: typeof PrivacyRoute
   QuizRoute: typeof QuizRoute
+  RefundRoute: typeof RefundRoute
   SignsRoute: typeof SignsRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   StatsRoute: typeof StatsRoute
+  TermsRoute: typeof TermsRoute
   CheckoutSuccessRoute: typeof CheckoutSuccessRoute
   ApiPublicPaymentsWebhookRoute: typeof ApiPublicPaymentsWebhookRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/terms': {
+      id: '/terms'
+      path: '/terms'
+      fullPath: '/terms'
+      preLoaderRoute: typeof TermsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/stats': {
       id: '/stats'
       path: '/stats'
@@ -210,11 +256,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SignsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/refund': {
+      id: '/refund'
+      path: '/refund'
+      fullPath: '/refund'
+      preLoaderRoute: typeof RefundRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/quiz': {
       id: '/quiz'
       path: '/quiz'
       fullPath: '/quiz'
       preLoaderRoute: typeof QuizRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/privacy': {
+      id: '/privacy'
+      path: '/privacy'
+      fullPath: '/privacy'
+      preLoaderRoute: typeof PrivacyRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/priser': {
@@ -283,10 +343,13 @@ const rootRouteChildren: RootRouteChildren = {
   FlashcardsRoute: FlashcardsRoute,
   GenomgangarRoute: GenomgangarRoute,
   PriserRoute: PriserRoute,
+  PrivacyRoute: PrivacyRoute,
   QuizRoute: QuizRoute,
+  RefundRoute: RefundRoute,
   SignsRoute: SignsRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   StatsRoute: StatsRoute,
+  TermsRoute: TermsRoute,
   CheckoutSuccessRoute: CheckoutSuccessRoute,
   ApiPublicPaymentsWebhookRoute: ApiPublicPaymentsWebhookRoute,
 }
