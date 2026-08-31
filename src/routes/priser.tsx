@@ -137,7 +137,7 @@ function PricingPage() {
 
         <div className="grid gap-2 sm:grid-cols-3">
           {[
-            "30 dagars pengarna-tillbaka-garanti",
+            "Direkt tillgång – ingen ångerrätt på digital tjänst",
             "Avsluta prenumerationen när du vill",
             "Säker betalning – Paddle är säljare (Merchant of Record)",
           ].map((t) => (
