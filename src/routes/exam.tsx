@@ -29,13 +29,15 @@ export const Route = createFileRoute("/exam")({
   component: ExamPage,
 });
 
-const TOTAL = 65;
+const TOTAL = 70;
+const SCORED = 65;
+const TRIAL = TOTAL - SCORED;
 const PASS = 52;
 const SECONDS = 50 * 60;
 
-function buildExam(seed: number, source: Question[]) {
-  // Draw 65 questions, balanced across categories, without duplicates when possible.
-  const pool = source.length ? source : QUESTIONS;
+function buildExam(seed: number, source: Question[], trialSource: Question[]) {
+  // Draw 65 scored questions, balanced across categories, without duplicates when possible.
+  const pool = (source.length ? source : QUESTIONS).filter((q) => !q.trial);
   const byCat = new Map<string, Question[]>();
   for (const q of pool) {
     byCat.set(q.category, [...(byCat.get(q.category) ?? []), q]);
@@ -43,20 +45,28 @@ function buildExam(seed: number, source: Question[]) {
   const buckets = [...byCat.values()].map((list, i) => seededShuffle(list, seed + i * 97));
   const picked: Question[] = [];
   let round = 0;
-  while (picked.length < TOTAL && round < 200) {
+  while (picked.length < SCORED && round < 400) {
     for (const b of buckets) {
       const q = b[round];
       if (q) picked.push(q);
-      if (picked.length === TOTAL) break;
+      if (picked.length === SCORED) break;
     }
     round++;
   }
-  // Fallback padding if the pool is smaller than the exam length.
-  for (let i = 0; picked.length < TOTAL; i++) {
+  // Fallback padding if the pool is smaller than the scored exam length.
+  for (let i = 0; picked.length < SCORED; i++) {
     const src = pool[i % pool.length]!;
     picked.push({ ...src, id: `${src.id}-e${i}` });
   }
-  return seededShuffle(picked, seed);
+  // Add the 5 non-scored test questions ("testfrågor") so the exam is 70 questions.
+  const trials = seededShuffle(trialSource, seed + 13)
+    .slice(0, TRIAL)
+    .map((q) => ({ ...q, trial: true as const }));
+  for (let i = 0; trials.length < TRIAL; i++) {
+    const src = trialSource[i % trialSource.length]!;
+    trials.push({ ...src, id: `${src.id}-t${i}`, trial: true as const });
+  }
+  return seededShuffle([...picked, ...trials], seed);
 }
 
 type Result = { qid: string; category: string; correct: boolean; q: Question };
