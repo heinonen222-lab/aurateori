@@ -69,7 +69,13 @@ function buildExam(seed: number, source: Question[], trialSource: Question[]) {
   return seededShuffle([...picked, ...trials], seed);
 }
 
-type Result = { qid: string; category: string; correct: boolean; q: Question };
+type Result = {
+  qid: string;
+  category: string;
+  correct: boolean;
+  q: Question;
+  trial: boolean;
+};
 
 function ExamPage() {
   const [phase, setPhase] = useState<"intro" | "running" | "done">("intro");
@@ -84,14 +90,20 @@ function ExamPage() {
   const usage = examUsage(appState);
   const [attemptNo, setAttemptNo] = useState(0);
   const exam = useMemo(
-    () => buildExam(seed, [...EXAM_QUESTIONS, ...QUESTIONS, ...EXTRA_QUESTIONS, ...(bank ?? [])]),
+    () =>
+      buildExam(
+        seed,
+        [...EXAM_QUESTIONS, ...QUESTIONS, ...EXTRA_QUESTIONS, ...(bank ?? [])],
+        TRIAL_QUESTIONS,
+      ),
     [seed, bank],
   );
 
-  const correctCountRef = results.filter((r) => r.correct).length;
+  const scoredResults = results.filter((r) => !r.trial);
+  const correctCountRef = scoredResults.filter((r) => r.correct).length;
   useEffect(() => {
     if (phase !== "done") return;
-    store.recordExamAttempt(correctCountRef, results.length, correctCountRef >= PASS);
+    store.recordExamAttempt(correctCountRef, scoredResults.length, correctCountRef >= PASS);
     setAttemptNo(examUsage(store.get()).total);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [phase]);
