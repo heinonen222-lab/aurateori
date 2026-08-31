@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as StatsRouteImport } from './routes/stats'
+import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as SignsRouteImport } from './routes/signs'
 import { Route as QuizRouteImport } from './routes/quiz'
 import { Route as PriserRouteImport } from './routes/priser'
@@ -24,6 +25,11 @@ import { Route as ApiPublicPaymentsWebhookRouteImport } from './routes/api/publi
 const StatsRoute = StatsRouteImport.update({
   id: '/stats',
   path: '/stats',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
+  id: '/sitemap.xml',
+  path: '/sitemap.xml',
   getParentRoute: () => rootRouteImport,
 } as any)
 const SignsRoute = SignsRouteImport.update({
@@ -87,6 +93,7 @@ export interface FileRoutesByFullPath {
   '/priser': typeof PriserRoute
   '/quiz': typeof QuizRoute
   '/signs': typeof SignsRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/stats': typeof StatsRoute
   '/checkout/success': typeof CheckoutSuccessRoute
   '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
@@ -100,6 +107,7 @@ export interface FileRoutesByTo {
   '/priser': typeof PriserRoute
   '/quiz': typeof QuizRoute
   '/signs': typeof SignsRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/stats': typeof StatsRoute
   '/checkout/success': typeof CheckoutSuccessRoute
   '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
@@ -114,6 +122,7 @@ export interface FileRoutesById {
   '/priser': typeof PriserRoute
   '/quiz': typeof QuizRoute
   '/signs': typeof SignsRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/stats': typeof StatsRoute
   '/checkout/success': typeof CheckoutSuccessRoute
   '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
@@ -129,6 +138,7 @@ export interface FileRouteTypes {
     | '/priser'
     | '/quiz'
     | '/signs'
+    | '/sitemap.xml'
     | '/stats'
     | '/checkout/success'
     | '/api/public/payments/webhook'
@@ -142,6 +152,7 @@ export interface FileRouteTypes {
     | '/priser'
     | '/quiz'
     | '/signs'
+    | '/sitemap.xml'
     | '/stats'
     | '/checkout/success'
     | '/api/public/payments/webhook'
@@ -155,6 +166,7 @@ export interface FileRouteTypes {
     | '/priser'
     | '/quiz'
     | '/signs'
+    | '/sitemap.xml'
     | '/stats'
     | '/checkout/success'
     | '/api/public/payments/webhook'
@@ -169,6 +181,7 @@ export interface RootRouteChildren {
   PriserRoute: typeof PriserRoute
   QuizRoute: typeof QuizRoute
   SignsRoute: typeof SignsRoute
+  SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   StatsRoute: typeof StatsRoute
   CheckoutSuccessRoute: typeof CheckoutSuccessRoute
   ApiPublicPaymentsWebhookRoute: typeof ApiPublicPaymentsWebhookRoute
@@ -181,6 +194,13 @@ declare module '@tanstack/react-router' {
       path: '/stats'
       fullPath: '/stats'
       preLoaderRoute: typeof StatsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sitemap.xml': {
+      id: '/sitemap.xml'
+      path: '/sitemap.xml'
+      fullPath: '/sitemap.xml'
+      preLoaderRoute: typeof SitemapDotxmlRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/signs': {
@@ -265,6 +285,7 @@ const rootRouteChildren: RootRouteChildren = {
   PriserRoute: PriserRoute,
   QuizRoute: QuizRoute,
   SignsRoute: SignsRoute,
+  SitemapDotxmlRoute: SitemapDotxmlRoute,
   StatsRoute: StatsRoute,
   CheckoutSuccessRoute: CheckoutSuccessRoute,
   ApiPublicPaymentsWebhookRoute: ApiPublicPaymentsWebhookRoute,
