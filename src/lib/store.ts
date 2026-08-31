@@ -128,3 +128,17 @@ export function computeStats(s: AppState) {
   const readiness = Math.round(accuracy * 0.5 + volumeScore * 0.3 + wrongPenalty * 0.2);
   return { total, correct, accuracy, readiness: Math.min(100, readiness) };
 }
+
+export function examUsage(s: AppState) {
+  const attempts = s.examAttempts ?? [];
+  const t = new Date().toISOString().slice(0, 10);
+  const todayAttempts = attempts.filter((a) => new Date(a.at).toISOString().slice(0, 10) === t);
+  const usedToday = todayAttempts.length;
+  return {
+    total: attempts.length,
+    usedToday,
+    remaining: Math.max(0, EXAM_DAILY_LIMIT - usedToday),
+    limitReached: usedToday >= EXAM_DAILY_LIMIT,
+    limit: EXAM_DAILY_LIMIT,
+  };
+}
