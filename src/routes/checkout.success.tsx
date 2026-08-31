@@ -19,7 +19,8 @@ export const Route = createFileRoute("/checkout/success")({
 });
 
 function SuccessPage() {
-  const { isActive, loading } = useSubscription();
+  const { isActive, loading } = useSubscription({ pollUntilActive: true });
+
 
   return (
     <AppShell>
