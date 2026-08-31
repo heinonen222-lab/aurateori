@@ -16,7 +16,7 @@ const ROWS: Row[] = [
     price: "149 kr/30 dagar · 499 kr/år",
     model: "Avsluta när du vill",
     unlimitedExams: true,
-    moneyBack: "30 dagar",
+    moneyBack: "–",
     us: true,
   },
   {
@@ -81,7 +81,7 @@ export function PriceComparison() {
                 )}
                 Obegränsade prov
               </span>
-              <span>Ångerrätt: {r.moneyBack}</span>
+              <span>Pengarna tillbaka: {r.moneyBack}</span>
               {r.source && (
                 <a
                   href={r.source.href}
