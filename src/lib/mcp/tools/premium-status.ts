@@ -15,7 +15,9 @@ export default defineTool({
     const supabase = supabaseForUser(ctx);
     const { data, error } = await supabase
       .from("subscriptions")
-      .select("plan, status, current_period_end, updated_at")
+      .select(
+        "price_id, product_id, status, current_period_end, cancel_at_period_end, environment, updated_at",
+      )
       .order("updated_at", { ascending: false });
 
     if (error) {
@@ -28,7 +30,7 @@ export default defineTool({
         {
           type: "text" as const,
           text: active
-            ? `Premium aktivt (${active.plan}, status ${active.status})` +
+            ? `Premium aktivt (pris ${active.price_id}, status ${active.status})` +
               (active.current_period_end ? `, gäller till ${active.current_period_end}` : "")
             : "Ingen aktiv prenumeration.",
         },
