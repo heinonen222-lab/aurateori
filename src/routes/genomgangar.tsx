@@ -423,11 +423,7 @@ function CheckCard({
           Kontrollfråga
         </span>
       </div>
-      {step.sign && (
-        <div className="mb-5 grid place-items-center rounded-2xl bg-muted p-6">
-          <SignImage id={step.sign} className="h-32 w-32" />
-        </div>
-      )}
+      <SignRow ids={stepSigns(step)} />
       <h2 className="text-lg font-bold leading-snug sm:text-xl">{step.question}</h2>
       <div className="mt-5 space-y-2.5">
         {step.options.map((opt, i) => {
