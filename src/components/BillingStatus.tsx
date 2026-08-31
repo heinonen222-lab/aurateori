@@ -119,6 +119,30 @@ export function BillingStatus() {
                   />
                   <Row label="Prenumerations-ID" value={sub.id} />
                 </dl>
+                {(sub.updatePaymentMethodUrl || sub.cancelUrl) && (
+                  <div className="mt-3 flex flex-wrap gap-2">
+                    {sub.updatePaymentMethodUrl && (
+                      <a
+                        href={sub.updatePaymentMethodUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="rounded-xl border border-border bg-background px-3 py-1.5 text-xs font-semibold hover:border-primary/60"
+                      >
+                        Uppdatera betalkort
+                      </a>
+                    )}
+                    {sub.cancelUrl && !sub.cancelAtPeriodEnd && (
+                      <a
+                        href={sub.cancelUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="rounded-xl border border-border bg-background px-3 py-1.5 text-xs font-semibold hover:border-destructive/60"
+                      >
+                        Avsluta prenumeration
+                      </a>
+                    )}
+                  </div>
+                )}
                 {sub.isPastDue && (
                   <p className="mt-2 text-xs font-semibold">
                     Betalningen misslyckades. Paddle gör nya försök – uppdatera kortet via kvittot i

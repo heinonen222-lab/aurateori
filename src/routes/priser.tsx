@@ -3,6 +3,7 @@ import { Check, Loader2, Crown } from "lucide-react";
 import { AppShell } from "@/components/AppShell";
 import { PaymentTestModeBanner } from "@/components/PaymentTestModeBanner";
 import { BillingStatus } from "@/components/BillingStatus";
+import { PriceComparison } from "@/components/PriceComparison";
 import { usePaddleCheckout } from "@/hooks/usePaddleCheckout";
 import { useAuth } from "@/hooks/useAuth";
 import { useSubscription } from "@/hooks/useSubscription";
@@ -141,6 +142,24 @@ function PricingPage() {
             {error}
           </p>
         )}
+
+        <div className="grid gap-2 sm:grid-cols-3">
+          {[
+            "30 dagars pengarna-tillbaka-garanti",
+            "Avsluta prenumerationen när du vill",
+            "Säker betalning – Paddle är säljare (Merchant of Record)",
+          ].map((t) => (
+            <div
+              key={t}
+              className="flex items-start gap-2 rounded-2xl border border-border bg-background p-3 text-xs"
+            >
+              <Check className="mt-0.5 h-3.5 w-3.5 shrink-0 text-primary" />
+              {t}
+            </div>
+          ))}
+        </div>
+
+        <PriceComparison />
 
         <div className="rounded-3xl border border-border bg-secondary/40 p-5">
           <div className="mb-3 text-xs font-bold uppercase tracking-wider text-muted-foreground">

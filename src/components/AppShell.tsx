@@ -18,6 +18,7 @@ import { store, useStore } from "@/lib/store";
 import { cn } from "@/lib/utils";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { LegalFooter } from "@/components/LegalFooter";
+import { AccountMenu } from "@/components/AccountMenu";
 
 const NAV = [
   { to: "/", label: "Start", icon: Home },
@@ -110,9 +111,12 @@ export function AppShell({ children }: { children: ReactNode }) {
             );
           })}
         </nav>
+        <div className="mt-auto border-t border-border pt-3">
+          <AccountMenu />
+        </div>
         <button
           onClick={() => store.toggleTheme()}
-          className="mt-auto flex items-center gap-2 rounded-lg px-3 py-2 text-sm text-muted-foreground hover:bg-sidebar-accent"
+          className="mt-1 flex items-center gap-2 rounded-lg px-3 py-2 text-sm text-muted-foreground hover:bg-sidebar-accent"
         >
           {s.theme === "dark" ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
           {s.theme === "dark" ? "Ljust läge" : "Mörkt läge"}
@@ -180,6 +184,9 @@ export function AppShell({ children }: { children: ReactNode }) {
                     />
                   );
                 })}
+              </div>
+              <div className="mt-4 border-t border-border pt-4">
+                <AccountMenu variant="sheet" onNavigate={() => setMoreOpen(false)} />
               </div>
               <button
                 onClick={() => {

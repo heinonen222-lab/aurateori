@@ -5,6 +5,7 @@ import { AppShell } from "@/components/AppShell";
 import { supabase } from "@/integrations/supabase/client";
 import { lovable } from "@/integrations/lovable";
 import { useAuth } from "@/hooks/useAuth";
+import { authErrorMessage } from "@/lib/auth-errors";
 
 export const Route = createFileRoute("/auth")({
   head: () => ({
@@ -32,7 +33,7 @@ function safePath(value: string | null): string {
 function AuthPage() {
   const navigate = useNavigate();
   const { user, loading } = useAuth();
-  const [mode, setMode] = useState<"signin" | "signup">("signin");
+  const [mode, setMode] = useState<"signin" | "signup" | "forgot">("signin");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [busy, setBusy] = useState(false);
@@ -53,20 +54,32 @@ function AuthPage() {
     setError(null);
     setMessage(null);
     try {
-      if (mode === "signup") {
-        const { error: err } = await supabase.auth.signUp({
+      if (mode === "forgot") {
+        const { error: err } = await supabase.auth.resetPasswordForEmail(email, {
+          redirectTo: `${window.location.origin}/reset-password`,
+        });
+        if (err) throw err;
+        setMessage("Vi har skickat en återställningslänk till din e-post.");
+      } else if (mode === "signup") {
+        const { data, error: err } = await supabase.auth.signUp({
           email,
           password,
           options: { emailRedirectTo: `${window.location.origin}${next}` },
         });
         if (err) throw err;
-        setMessage("Konto skapat. Kolla din e-post om bekräftelse krävs.");
+        if (data.session) {
+          setMessage("Konto skapat – du är inloggad.");
+        } else {
+          setMessage(
+            "Konto skapat. Bekräfta din e-post via länken vi skickade, sedan kan du logga in.",
+          );
+        }
       } else {
         const { error: err } = await supabase.auth.signInWithPassword({ email, password });
         if (err) throw err;
       }
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Något gick fel.");
+      setError(authErrorMessage(err));
     } finally {
       setBusy(false);
     }
@@ -74,18 +87,20 @@ function AuthPage() {
 
   const google = async () => {
     setError(null);
+    setMessage(null);
     if (typeof window !== "undefined") {
       sessionStorage.setItem("aurateori:next", next);
     }
-    const result = await lovable.auth.signInWithOAuth("google", {
-      redirect_uri: window.location.origin,
-    });
-    if (result.error) {
-      setError("Kunde inte logga in med Google.");
-      return;
+    try {
+      const result = await lovable.auth.signInWithOAuth("google", {
+        redirect_uri: window.location.origin,
+      });
+      if (result.error) throw result.error;
+      if (result.redirected) return;
+      void navigate({ to: next as never });
+    } catch (err) {
+      setError(authErrorMessage(err));
     }
-    if (result.redirected) return;
-    void navigate({ to: next });
   };
 
   return (
@@ -93,10 +108,12 @@ function AuthPage() {
       <div className="mx-auto max-w-md space-y-5">
         <div>
           <h1 className="text-2xl font-black sm:text-3xl">
-            {mode === "signin" ? "Logga in" : "Skapa konto"}
+            {mode === "signin" ? "Logga in" : mode === "signup" ? "Skapa konto" : "Glömt lösenord"}
           </h1>
           <p className="mt-1 text-sm text-muted-foreground">
-            Spara din progress och lås upp premium.
+            {mode === "forgot"
+              ? "Fyll i din e-post – vi skickar en länk för att välja nytt lösenord."
+              : "Spara din progress och lås upp premium."}
           </p>
         </div>
 
@@ -131,23 +148,26 @@ function AuthPage() {
                 className="w-full rounded-xl border border-border bg-background px-3 py-2.5 text-sm outline-none focus:border-primary"
               />
             </div>
-            <div>
-              <label
-                htmlFor="password"
-                className="mb-1.5 block text-xs font-bold uppercase tracking-wider text-muted-foreground"
-              >
-                Lösenord
-              </label>
-              <input
-                id="password"
-                type="password"
-                required
-                minLength={6}
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                className="w-full rounded-xl border border-border bg-background px-3 py-2.5 text-sm outline-none focus:border-primary"
-              />
-            </div>
+            {mode !== "forgot" && (
+              <div>
+                <label
+                  htmlFor="password"
+                  className="mb-1.5 block text-xs font-bold uppercase tracking-wider text-muted-foreground"
+                >
+                  Lösenord
+                </label>
+                <input
+                  id="password"
+                  type="password"
+                  required
+                  minLength={6}
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  autoComplete={mode === "signup" ? "new-password" : "current-password"}
+                  className="w-full rounded-xl border border-border bg-background px-3 py-2.5 text-sm outline-none focus:border-primary"
+                />
+              </div>
+            )}
 
             <button
               type="submit"
@@ -155,7 +175,11 @@ function AuthPage() {
               className="flex w-full items-center justify-center gap-2 rounded-xl bg-primary py-3 text-sm font-bold text-primary-foreground transition hover:opacity-90 disabled:opacity-60"
             >
               {busy && <Loader2 className="h-4 w-4 animate-spin" />}
-              {mode === "signin" ? "Logga in" : "Skapa konto"}
+              {mode === "signin"
+                ? "Logga in"
+                : mode === "signup"
+                  ? "Skapa konto"
+                  : "Skicka återställningslänk"}
             </button>
           </form>
 
@@ -170,14 +194,32 @@ function AuthPage() {
             </p>
           )}
 
-          <button
-            onClick={() => setMode(mode === "signin" ? "signup" : "signin")}
-            className="mt-4 w-full text-xs text-muted-foreground hover:text-foreground"
-          >
-            {mode === "signin"
-              ? "Har du inget konto? Skapa ett"
-              : "Har du redan ett konto? Logga in"}
-          </button>
+          <div className="mt-4 space-y-2 text-center text-xs text-muted-foreground">
+            <button
+              type="button"
+              onClick={() => {
+                setError(null);
+                setMessage(null);
+                setMode(mode === "signup" ? "signin" : "signup");
+              }}
+              className="w-full hover:text-foreground"
+            >
+              {mode === "signup"
+                ? "Har du redan ett konto? Logga in"
+                : "Har du inget konto? Skapa ett"}
+            </button>
+            <button
+              type="button"
+              onClick={() => {
+                setError(null);
+                setMessage(null);
+                setMode(mode === "forgot" ? "signin" : "forgot");
+              }}
+              className="w-full hover:text-foreground"
+            >
+              {mode === "forgot" ? "Tillbaka till inloggning" : "Glömt lösenordet?"}
+            </button>
+          </div>
         </div>
 
         <p className="text-center text-xs text-muted-foreground">
