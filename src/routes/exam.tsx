@@ -69,10 +69,22 @@ function ExamPage() {
   const { data: bank } = useQuery(bankQuestionsQuery);
   const { user } = useAuth();
   const { isActive, loading: subLoading } = useSubscription();
+  const appState = useStore();
+  const usage = examUsage(appState);
+  const [attemptNo, setAttemptNo] = useState(0);
   const exam = useMemo(
     () => buildExam(seed, [...EXAM_QUESTIONS, ...QUESTIONS, ...(bank ?? [])]),
     [seed, bank],
   );
+
+  const correctCountRef = results.filter((r) => r.correct).length;
+  useEffect(() => {
+    if (phase !== "done") return;
+    store.recordExamAttempt(correctCountRef, results.length, correctCountRef >= PASS);
+    setAttemptNo(examUsage(store.get()).total);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [phase]);
+
 
   useEffect(() => {
     if (phase !== "running") return;
