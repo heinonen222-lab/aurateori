@@ -471,7 +471,9 @@ function ExamResults({
                   <span
                     className={cn(
                       "rounded-full px-2 py-0.5 text-[10px]",
-                      r.correct ? "bg-success/20 text-success" : "bg-destructive/20 text-destructive",
+                      r.correct
+                        ? "bg-success/20 text-success"
+                        : "bg-destructive/20 text-destructive",
                     )}
                   >
                     {r.correct ? "Rätt" : "Fel"}
