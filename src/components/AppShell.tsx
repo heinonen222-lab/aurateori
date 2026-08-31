@@ -17,6 +17,7 @@ import {
 import { store, useStore } from "@/lib/store";
 import { cn } from "@/lib/utils";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
+import { LegalFooter } from "@/components/LegalFooter";
 
 const NAV = [
   { to: "/", label: "Start", icon: Home },
