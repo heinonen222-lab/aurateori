@@ -198,7 +198,7 @@ function AuthPage() {
             <button
               type="button"
               onClick={() => {
-      setError(null);
+                setError(null);
                 setMessage(null);
                 setMode(mode === "signup" ? "signin" : "signup");
               }}
@@ -211,7 +211,7 @@ function AuthPage() {
             <button
               type="button"
               onClick={() => {
-      setError(null);
+                setError(null);
                 setMessage(null);
                 setMode(mode === "forgot" ? "signin" : "forgot");
               }}
