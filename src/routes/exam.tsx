@@ -58,7 +58,7 @@ function buildExam(seed: number, source: Question[]) {
   return seededShuffle(picked, seed);
 }
 
-type Result = { qid: string; category: string; correct: boolean };
+type Result = { qid: string; category: string; correct: boolean; q: Question };
 
 function ExamPage() {
   const [phase, setPhase] = useState<"intro" | "running" | "done">("intro");
@@ -69,7 +69,7 @@ function ExamPage() {
   const { data: bank } = useQuery(bankQuestionsQuery);
   const { user } = useAuth();
   const { isActive, loading: subLoading } = useSubscription();
-  const exam = useMemo(() => buildExam(seed, [...QUESTIONS, ...(bank ?? [])]), [seed, bank]);
+  const exam = useMemo(() => buildExam(seed, [...EXAM_QUESTIONS, ...QUESTIONS, ...(bank ?? [])]), [seed, bank]);
 
   useEffect(() => {
     if (phase !== "running") return;
@@ -108,6 +108,7 @@ function ExamPage() {
             <li>• Alla frågor visas utan förklaring – som i skarpt läge.</li>
             <li>• Du kan inte gå tillbaka till tidigare frågor.</li>
             <li>• Sammanställning per kategori i slutet.</li>
+            <li>• Frågorna följer Trafikverkets provformat och är källhänvisade.</li>
           </ul>
           {subLoading ? (
             <div className="h-12 animate-pulse rounded-xl bg-muted" />
@@ -186,7 +187,7 @@ function ExamPage() {
             showExplanation={false}
             onAnswer={(ok) => {
               const src = exam[idx];
-              setResults((r) => [...r, { qid: src.id, category: src.category, correct: ok }]);
+              setResults((r) => [...r, { qid: src.id, category: src.category, correct: ok, q: src }]);
               store.recordAnswer(src.id, src.category, ok);
             }}
             onNext={() => {
