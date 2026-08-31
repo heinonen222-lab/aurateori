@@ -41,7 +41,10 @@ const ROWS: Row[] = [
     model: "Engångsköp",
     unlimitedExams: true,
     moneyBack: "–",
-    source: { label: "teorispelet.ai", href: "https://teorispelet.ai/guide/basta-korkorts-appen.html" },
+    source: {
+      label: "teorispelet.ai",
+      href: "https://teorispelet.ai/guide/basta-korkorts-appen.html",
+    },
   },
 ];
 
