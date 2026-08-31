@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Check, X } from "lucide-react";
+import { Check, ExternalLink, X } from "lucide-react";
 import type { Question } from "@/data/questions";
 import { SignImage } from "@/components/SignImage";
 import { cn } from "@/lib/utils";
