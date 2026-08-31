@@ -480,6 +480,7 @@ function CheckCard({
               Förklaring
             </div>
             <p className="text-sm leading-relaxed">{step.explanation}</p>
+            <SourceLink source={step.source} />
           </div>
           <button
             onClick={onNext}
