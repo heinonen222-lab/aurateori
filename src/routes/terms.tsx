@@ -85,10 +85,10 @@ function TermsPage() {
 
         <LegalSection title="6. Betalning, prenumeration och Paddle">
           <p>
-            Premium säljs som månadsprenumeration (39 kr/mån), årsprenumeration (249 kr/år) eller
-            engångsköp för livstidsåtkomst (149 kr). Priser anges i SEK inklusive tillämplig moms.
-            Prenumerationer förnyas automatiskt vid periodens slut till gällande pris, tills du
-            avslutar dem. Du kan avsluta när du vill och behåller åtkomsten till periodens slut.
+            Premium säljs som prenumeration om 30 dagar (149 kr) eller årsprenumeration (499 kr).
+            Priser anges i SEK inklusive tillämplig moms. Prenumerationer förnyas automatiskt vid
+            periodens slut till gällande pris, tills du avslutar dem. Du kan avsluta när du vill och
+            behåller åtkomsten till periodens slut.
           </p>
           <p>
             Vår orderhantering sköts av vår återförsäljare Paddle.com. Paddle.com är Merchant of
