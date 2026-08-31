@@ -13,6 +13,7 @@ import { Route as TermsRouteImport } from './routes/terms'
 import { Route as StatsRouteImport } from './routes/stats'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as SignsRouteImport } from './routes/signs'
+import { Route as RefundRouteImport } from './routes/refund'
 import { Route as QuizRouteImport } from './routes/quiz'
 import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as PriserRouteImport } from './routes/priser'
@@ -42,6 +43,11 @@ const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
 const SignsRoute = SignsRouteImport.update({
   id: '/signs',
   path: '/signs',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RefundRoute = RefundRouteImport.update({
+  id: '/refund',
+  path: '/refund',
   getParentRoute: () => rootRouteImport,
 } as any)
 const QuizRoute = QuizRouteImport.update({
@@ -105,6 +111,7 @@ export interface FileRoutesByFullPath {
   '/priser': typeof PriserRoute
   '/privacy': typeof PrivacyRoute
   '/quiz': typeof QuizRoute
+  '/refund': typeof RefundRoute
   '/signs': typeof SignsRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/stats': typeof StatsRoute
@@ -121,6 +128,7 @@ export interface FileRoutesByTo {
   '/priser': typeof PriserRoute
   '/privacy': typeof PrivacyRoute
   '/quiz': typeof QuizRoute
+  '/refund': typeof RefundRoute
   '/signs': typeof SignsRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/stats': typeof StatsRoute
@@ -138,6 +146,7 @@ export interface FileRoutesById {
   '/priser': typeof PriserRoute
   '/privacy': typeof PrivacyRoute
   '/quiz': typeof QuizRoute
+  '/refund': typeof RefundRoute
   '/signs': typeof SignsRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/stats': typeof StatsRoute
@@ -156,6 +165,7 @@ export interface FileRouteTypes {
     | '/priser'
     | '/privacy'
     | '/quiz'
+    | '/refund'
     | '/signs'
     | '/sitemap.xml'
     | '/stats'
@@ -172,6 +182,7 @@ export interface FileRouteTypes {
     | '/priser'
     | '/privacy'
     | '/quiz'
+    | '/refund'
     | '/signs'
     | '/sitemap.xml'
     | '/stats'
@@ -188,6 +199,7 @@ export interface FileRouteTypes {
     | '/priser'
     | '/privacy'
     | '/quiz'
+    | '/refund'
     | '/signs'
     | '/sitemap.xml'
     | '/stats'
@@ -205,6 +217,7 @@ export interface RootRouteChildren {
   PriserRoute: typeof PriserRoute
   PrivacyRoute: typeof PrivacyRoute
   QuizRoute: typeof QuizRoute
+  RefundRoute: typeof RefundRoute
   SignsRoute: typeof SignsRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   StatsRoute: typeof StatsRoute
@@ -241,6 +254,13 @@ declare module '@tanstack/react-router' {
       path: '/signs'
       fullPath: '/signs'
       preLoaderRoute: typeof SignsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/refund': {
+      id: '/refund'
+      path: '/refund'
+      fullPath: '/refund'
+      preLoaderRoute: typeof RefundRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/quiz': {
@@ -325,6 +345,7 @@ const rootRouteChildren: RootRouteChildren = {
   PriserRoute: PriserRoute,
   PrivacyRoute: PrivacyRoute,
   QuizRoute: QuizRoute,
+  RefundRoute: RefundRoute,
   SignsRoute: SignsRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   StatsRoute: StatsRoute,
