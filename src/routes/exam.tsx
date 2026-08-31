@@ -388,13 +388,17 @@ function ExamResults({
 
       <div className="rounded-3xl border border-border bg-card p-6">
         <h2 className="text-lg font-bold">Detaljerad genomgång</h2>
+        <p className="mt-1 text-xs text-muted-foreground">
+          Tryck på en ruta för att hoppa till frågan. Grå rutor är testfrågor som inte räknas.
+        </p>
         <div className="mt-3 grid grid-cols-8 gap-1.5 sm:grid-cols-10">
           {results.map((r, i) => (
-            <div
+            <a
               key={i}
+              href={`#fraga-${i + 1}`}
               title={`Fråga ${i + 1}: ${r.correct ? "rätt" : "fel"}${r.trial ? " (testfråga, räknas inte)" : ""}`}
               className={cn(
-                "flex h-8 items-center justify-center rounded-md text-[10px] font-bold",
+                "flex h-8 items-center justify-center gap-0.5 rounded-md text-[10px] font-bold transition hover:opacity-80",
                 r.trial
                   ? "bg-muted text-muted-foreground"
                   : r.correct
@@ -407,54 +411,105 @@ function ExamResults({
               ) : (
                 <XCircle className="h-3.5 w-3.5" />
               )}
-            </div>
+            </a>
           ))}
         </div>
       </div>
 
-      {results.some((r) => !r.correct) && (
-        <div className="rounded-3xl border border-border bg-card p-6">
-          <h2 className="text-lg font-bold">Dina fel – med källor</h2>
-          <p className="mt-1 text-xs text-muted-foreground">
-            Läs rätt svar och gå vidare till Trafikverkets, Transportstyrelsens eller lagtextens
-            egen sida.
-          </p>
-          <ul className="mt-4 space-y-4">
-            {results
-              .map((r, i) => ({ ...r, nr: i + 1 }))
-              .filter((r) => !r.correct)
-              .map((r) => (
-                <li key={r.nr} className="rounded-2xl border border-border bg-secondary/40 p-4">
-                  <div className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-                    Fråga {r.nr} · {r.category}
-                  </div>
-                  <p className="mt-1 text-sm font-semibold">{r.q.question}</p>
-                  <p className="mt-2 text-sm">
-                    <span className="font-bold text-success">Rätt svar: </span>
-                    {r.q.options[r.q.correct]}
-                  </p>
-                  <p className="mt-1 text-sm leading-relaxed text-muted-foreground">
-                    {r.q.explanation}
-                  </p>
-                  <div className="mt-2 text-xs text-muted-foreground">
-                    Referens: {r.q.reference}
-                  </div>
-                  {r.q.source && (
-                    <a
-                      href={r.q.source.url}
-                      target="_blank"
-                      rel="noreferrer noopener"
-                      className="mt-2 inline-flex items-center gap-1 text-xs font-semibold text-primary underline decoration-primary/40 underline-offset-2 hover:decoration-primary"
-                    >
-                      {r.q.source.label}
-                      <ExternalLink className="h-3 w-3" />
-                    </a>
-                  )}
-                </li>
-              ))}
-          </ul>
+      <div className="rounded-3xl border border-border bg-card p-6">
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          <div>
+            <h2 className="text-lg font-bold">Alla frågor – svar, förklaring och källa</h2>
+            <p className="mt-1 text-xs text-muted-foreground">
+              Ditt svar, rätt svar och regelhänvisning för varje fråga i provet.
+            </p>
+          </div>
+          <div className="flex rounded-full border border-border p-0.5 text-xs font-semibold">
+            {(
+              [
+                ["all", `Alla (${results.length})`],
+                ["wrong", `Endast fel (${wrongCount})`],
+              ] as const
+            ).map(([key, label]) => (
+              <button
+                key={key}
+                onClick={() => setFilter(key)}
+                className={cn(
+                  "rounded-full px-3 py-1.5 transition",
+                  filter === key
+                    ? "bg-primary text-primary-foreground"
+                    : "text-muted-foreground hover:text-foreground",
+                )}
+              >
+                {label}
+              </button>
+            ))}
+          </div>
         </div>
-      )}
+
+        <ul className="mt-4 space-y-4">
+          {results
+            .map((r, i) => ({ ...r, nr: i + 1 }))
+            .filter((r) => (filter === "wrong" ? !r.correct : true))
+            .map((r) => (
+              <li
+                key={r.nr}
+                id={`fraga-${r.nr}`}
+                className={cn(
+                  "scroll-mt-24 rounded-2xl border p-4",
+                  r.correct
+                    ? "border-success/30 bg-success/5"
+                    : "border-destructive/30 bg-destructive/5",
+                )}
+              >
+                <div className="flex flex-wrap items-center gap-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                  <span>
+                    Fråga {r.nr} · {r.category}
+                  </span>
+                  <span
+                    className={cn(
+                      "rounded-full px-2 py-0.5 text-[10px]",
+                      r.correct ? "bg-success/20 text-success" : "bg-destructive/20 text-destructive",
+                    )}
+                  >
+                    {r.correct ? "Rätt" : "Fel"}
+                  </span>
+                  {r.trial && (
+                    <span className="rounded-full bg-muted px-2 py-0.5 text-[10px] text-muted-foreground">
+                      Testfråga – räknas inte
+                    </span>
+                  )}
+                </div>
+                <p className="mt-1 text-sm font-semibold">{r.q.question}</p>
+                {!r.correct && (
+                  <p className="mt-2 text-sm">
+                    <span className="font-bold text-destructive">Ditt svar: </span>
+                    {r.q.options[r.chosen] ?? "Inget svar"}
+                  </p>
+                )}
+                <p className="mt-1 text-sm">
+                  <span className="font-bold text-success">Rätt svar: </span>
+                  {r.q.options[r.q.correct]}
+                </p>
+                <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
+                  {r.q.explanation}
+                </p>
+                <div className="mt-2 text-xs text-muted-foreground">Referens: {r.q.reference}</div>
+                {r.q.source && (
+                  <a
+                    href={r.q.source.url}
+                    target="_blank"
+                    rel="noreferrer noopener"
+                    className="mt-2 inline-flex items-center gap-1 text-xs font-semibold text-primary underline decoration-primary/40 underline-offset-2 hover:decoration-primary"
+                  >
+                    {r.q.source.label}
+                    <ExternalLink className="h-3 w-3" />
+                  </a>
+                )}
+              </li>
+            ))}
+        </ul>
+      </div>
 
       {canRetry ? (
         <button
