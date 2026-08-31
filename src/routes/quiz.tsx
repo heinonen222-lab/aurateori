@@ -5,6 +5,7 @@ import { AppShell } from "@/components/AppShell";
 import { QuestionCard } from "@/components/QuestionCard";
 import { QUESTIONS, type QuestionCategory } from "@/data/questions";
 import { EXAM_QUESTIONS } from "@/data/exam-questions";
+import { EXTRA_QUESTIONS } from "@/data/extra-questions";
 import { bankQuestionsQuery } from "@/lib/ai-questions";
 import { seededShuffle } from "@/lib/shuffle";
 import { store } from "@/lib/store";
@@ -45,7 +46,7 @@ function QuizPage() {
   const { data: bank } = useQuery(bankQuestionsQuery);
 
   const pool = useMemo(() => {
-    const all = [...EXAM_QUESTIONS, ...QUESTIONS, ...(bank ?? [])];
+    const all = [...EXAM_QUESTIONS, ...QUESTIONS, ...EXTRA_QUESTIONS, ...(bank ?? [])];
     const list = cat === "Alla" ? all : all.filter((q) => q.category === cat);
     return seededShuffle(list, seed);
   }, [cat, seed, bank]);

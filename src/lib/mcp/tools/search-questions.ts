@@ -2,8 +2,9 @@ import { defineTool } from "@lovable.dev/mcp-js";
 import { z } from "zod";
 import { QUESTIONS } from "@/data/questions";
 import { EXAM_QUESTIONS } from "@/data/exam-questions";
+import { EXTRA_QUESTIONS } from "@/data/extra-questions";
 
-const ALL = [...QUESTIONS, ...EXAM_QUESTIONS];
+const ALL = [...QUESTIONS, ...EXAM_QUESTIONS, ...EXTRA_QUESTIONS];
 
 export default defineTool({
   name: "search_theory_questions",
