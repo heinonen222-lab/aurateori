@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { Timer, Trophy, XCircle, CheckCircle2, Crown, Lock } from "lucide-react";
+import { Timer, Trophy, XCircle, CheckCircle2, Crown, Lock, ExternalLink } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { useSubscription } from "@/hooks/useSubscription";
 import { AppShell } from "@/components/AppShell";
@@ -69,7 +69,10 @@ function ExamPage() {
   const { data: bank } = useQuery(bankQuestionsQuery);
   const { user } = useAuth();
   const { isActive, loading: subLoading } = useSubscription();
-  const exam = useMemo(() => buildExam(seed, [...EXAM_QUESTIONS, ...QUESTIONS, ...(bank ?? [])]), [seed, bank]);
+  const exam = useMemo(
+    () => buildExam(seed, [...EXAM_QUESTIONS, ...QUESTIONS, ...(bank ?? [])]),
+    [seed, bank],
+  );
 
   useEffect(() => {
     if (phase !== "running") return;
@@ -187,7 +190,10 @@ function ExamPage() {
             showExplanation={false}
             onAnswer={(ok) => {
               const src = exam[idx];
-              setResults((r) => [...r, { qid: src.id, category: src.category, correct: ok, q: src }]);
+              setResults((r) => [
+                ...r,
+                { qid: src.id, category: src.category, correct: ok, q: src },
+              ]);
               store.recordAnswer(src.id, src.category, ok);
             }}
             onNext={() => {

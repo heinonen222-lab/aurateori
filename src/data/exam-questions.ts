@@ -355,12 +355,7 @@ export const EXAM_QUESTIONS: Question[] = [
     category: "Vägmärken",
     image: "varning-halka",
     question: "Vad varnar detta märke för?",
-    options: [
-      "Ojämn väg",
-      "Risk för halka",
-      "Vägarbete",
-      "Kurvig väg",
-    ],
+    options: ["Ojämn väg", "Risk för halka", "Vägarbete", "Kurvig väg"],
     correct: 1,
     explanation:
       "Märket varnar för att vägen kan vara extra hal, t.ex. vid regn, is eller lövhalka. Anpassa hastigheten och undvik tvära manövrar.",
@@ -474,12 +469,7 @@ export const EXAM_QUESTIONS: Question[] = [
     category: "Vägmärken",
     image: "info-vagnr",
     question: "Vilken typ av märke är vägnummermärket?",
-    options: [
-      "Varningsmärke",
-      "Lokaliseringsmärke för vägvisning",
-      "Förbudsmärke",
-      "Påbudsmärke",
-    ],
+    options: ["Varningsmärke", "Lokaliseringsmärke för vägvisning", "Förbudsmärke", "Påbudsmärke"],
     correct: 1,
     explanation:
       "Vägnummermärken hör till lokaliseringsmärken för vägvisning och hjälper dig hitta rätt väg – de innehåller ingen regel du måste följa.",
@@ -508,12 +498,7 @@ export const EXAM_QUESTIONS: Question[] = [
     category: "Vägmärken",
     image: "varning-avsmalnande",
     question: "Vad varnar märket för?",
-    options: [
-      "Avsmalnande väg",
-      "Vägen delar sig",
-      "Bro med begränsad bärighet",
-      "Tunnel",
-    ],
+    options: ["Avsmalnande väg", "Vägen delar sig", "Bro med begränsad bärighet", "Tunnel"],
     correct: 0,
     explanation:
       "Märket varnar för att vägen smalnar av. Sänk hastigheten och var beredd på att samsas om utrymmet vid möte.",
@@ -742,7 +727,8 @@ export const EXAM_QUESTIONS: Question[] = [
   {
     id: "tv-fk-7",
     category: "Fordonskännedom",
-    question: "Vad gäller om bilen inte är godkänd vid kontrollbesiktning med föreläggande om körförbud?",
+    question:
+      "Vad gäller om bilen inte är godkänd vid kontrollbesiktning med föreläggande om körförbud?",
     options: [
       "Bilen får köras fritt i två veckor",
       "Bilen får inte köras annat än till verkstad eller besiktning kortaste lämpliga väg",
@@ -803,7 +789,8 @@ export const EXAM_QUESTIONS: Question[] = [
   {
     id: "tv-mi-4",
     category: "Miljö",
-    question: "Varifrån kommer merparten av de partiklar (PM10) som bildas i svensk vägtrafik vintertid?",
+    question:
+      "Varifrån kommer merparten av de partiklar (PM10) som bildas i svensk vägtrafik vintertid?",
     options: [
       "Avgaser från bensinbilar",
       "Slitage av vägbanan, främst från dubbdäck",
