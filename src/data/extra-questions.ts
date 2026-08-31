@@ -2,6 +2,7 @@ import type { Question, QuestionCategory } from "@/data/questions";
 import type { Fact } from "@/data/fact-types";
 import { FACTS_A } from "@/data/fact-questions-a";
 import { FACTS_B } from "@/data/fact-questions-b";
+import { FACTS_C } from "@/data/fact-questions-c";
 import { ROAD_SIGNS } from "@/data/signs";
 import { seededShuffle } from "@/lib/shuffle";
 
@@ -307,7 +308,7 @@ function numberQuestions(): Question[] {
 /* ------------------------------------------------------------------ */
 
 function factQuestions(): Question[] {
-  const facts: Fact[] = [...FACTS_A, ...FACTS_B];
+  const facts: Fact[] = [...FACTS_A, ...FACTS_B, ...FACTS_C];
   return facts.map(([category, question, correct, d1, d2, d3, explanation, reference], i) =>
     build(
       `xf-${i + 1}`,
