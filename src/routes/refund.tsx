@@ -72,8 +72,8 @@ function RefundPage() {
         <LegalSection title="Avsluta prenumeration">
           <p>
             Du kan avsluta din prenumeration när du vill. Då debiteras inga fler perioder och du
-            behåller premiumåtkomsten till slutet av den period du redan betalat för. Redan
-            betalda perioder återbetalas inte. Avslut sker via{" "}
+            behåller premiumåtkomsten till slutet av den period du redan betalat för. Redan betalda
+            perioder återbetalas inte. Avslut sker via{" "}
             <a href="https://paddle.net" target="_blank" rel="noopener noreferrer">
               paddle.net
             </a>{" "}
