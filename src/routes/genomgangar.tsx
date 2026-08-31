@@ -293,6 +293,11 @@ function LessonPlayer({ lesson, onExit }: { lesson: Lesson; onExit: () => void }
             </div>
           )}
 
+          <div className="mt-6">
+            <SourceList sources={lesson.sources} />
+          </div>
+
+
           <div className="mt-6 flex flex-col gap-2 sm:flex-row sm:justify-center">
             <button
               onClick={restart}
