@@ -12,7 +12,7 @@ import {
 } from "lucide-react";
 import { AppShell } from "@/components/AppShell";
 import { SignImage } from "@/components/SignImage";
-import { SIGNS } from "@/data/signs";
+import { ROAD_SIGNS } from "@/data/signs";
 import { LESSONS, type Lesson, type LessonSource, type LessonStep } from "@/data/lessons";
 import { cn } from "@/lib/utils";
 
@@ -26,7 +26,7 @@ function SignRow({ ids }: { ids: string[] }) {
   return (
     <div className="mb-5 flex flex-wrap items-start justify-center gap-4 rounded-2xl bg-muted p-5">
       {ids.map((id) => {
-        const sign = SIGNS.find((s) => s.id === id);
+        const sign = ROAD_SIGNS.find((s) => s.id === id);
         return (
           <figure key={id} className="w-24 text-center">
             <SignImage id={id} className="mx-auto h-20 w-20" />
