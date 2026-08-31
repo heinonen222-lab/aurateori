@@ -149,8 +149,7 @@ export function BillingStatus() {
                     <div className="min-w-0">
                       <div className="font-semibold">{t.total ?? "–"}</div>
                       <div className="truncate text-muted-foreground">
-                        {fmtDate(t.billedAt ?? t.createdAt)} ·{" "}
-                        {STATUS_LABEL[t.status] ?? t.status}
+                        {fmtDate(t.billedAt ?? t.createdAt)} · {STATUS_LABEL[t.status] ?? t.status}
                       </div>
                     </div>
                     <span

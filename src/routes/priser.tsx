@@ -2,6 +2,7 @@ import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { Check, Loader2, Crown } from "lucide-react";
 import { AppShell } from "@/components/AppShell";
 import { PaymentTestModeBanner } from "@/components/PaymentTestModeBanner";
+import { BillingStatus } from "@/components/BillingStatus";
 import { usePaddleCheckout } from "@/hooks/usePaddleCheckout";
 import { useAuth } from "@/hooks/useAuth";
 import { useSubscription } from "@/hooks/useSubscription";
@@ -100,6 +101,8 @@ function PricingPage() {
             Du har redan premium – tack!
           </div>
         )}
+
+        <BillingStatus />
 
         <div className="grid gap-4 sm:grid-cols-3">
           {PLANS.map((p) => (
