@@ -85,7 +85,6 @@ function ExamPage() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [phase]);
 
-
   useEffect(() => {
     if (phase !== "running") return;
     const t = setInterval(() => {
@@ -180,7 +179,6 @@ function ExamPage() {
                 </button>
               )}
             </>
-
           ) : (
             <div className="rounded-2xl border border-warning/40 bg-warning/10 p-5 text-left">
               <div className="flex items-center gap-2 text-sm font-bold">
@@ -261,7 +259,6 @@ function ExamPage() {
           canRetry={!usage.limitReached}
           onRestart={() => setPhase("intro")}
         />
-
       )}
     </AppShell>
   );
@@ -284,7 +281,6 @@ function ExamResults({
   canRetry: boolean;
   onRestart: () => void;
 }) {
-
   const passed = correct >= PASS;
   const byCat = results.reduce<Record<string, { ok: number; total: number }>>((acc, r) => {
     if (!acc[r.category]) acc[r.category] = { ok: 0, total: 0 };
@@ -323,7 +319,6 @@ function ExamResults({
           </span>
         </p>
       </div>
-
 
       <div className="rounded-3xl border border-border bg-card p-6">
         <h2 className="text-lg font-bold">Resultat per kategori</h2>
@@ -431,7 +426,6 @@ function ExamResults({
           Du har använt alla {limit} prov för idag. Nya prov låses upp imorgon.
         </div>
       )}
-
     </div>
   );
 }

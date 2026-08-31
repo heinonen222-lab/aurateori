@@ -37,7 +37,6 @@ const defaultState: AppState = {
   examAttempts: [],
 };
 
-
 function load(): AppState {
   if (typeof window === "undefined") return defaultState;
   try {
