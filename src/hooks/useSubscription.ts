@@ -32,7 +32,7 @@ export function useSubscription() {
   useEffect(() => {
     if (!userId) return;
     const channel = supabase
-      .channel("subscriptions-changes")
+      .channel(`subscriptions-changes-${userId}-${Math.random().toString(36).slice(2)}`)
       .on(
         "postgres_changes",
         { event: "*", schema: "public", table: "subscriptions", filter: `user_id=eq.${userId}` },
