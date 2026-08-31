@@ -5,6 +5,11 @@ export type QuestionCategory =
   | "Människan & Trafiken"
   | "Fordonskännedom";
 
+export interface QuestionSource {
+  label: string;
+  url: string;
+}
+
 export interface Question {
   id: string;
   category: QuestionCategory;
@@ -14,6 +19,8 @@ export interface Question {
   correct: number;
   explanation: string;
   reference: string;
+  /** Official source page (Trafikverket, Transportstyrelsen or lagtext). */
+  source?: QuestionSource;
 }
 
 export const QUESTIONS: Question[] = [
