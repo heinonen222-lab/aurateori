@@ -270,12 +270,21 @@ function ExamPage() {
 function ExamResults({
   results,
   correct,
+  attemptNo,
+  usedToday,
+  limit,
+  canRetry,
   onRestart,
 }: {
   results: Result[];
   correct: number;
+  attemptNo: number;
+  usedToday: number;
+  limit: number;
+  canRetry: boolean;
   onRestart: () => void;
 }) {
+
   const passed = correct >= PASS;
   const byCat = results.reduce<Record<string, { ok: number; total: number }>>((acc, r) => {
     if (!acc[r.category]) acc[r.category] = { ok: 0, total: 0 };
