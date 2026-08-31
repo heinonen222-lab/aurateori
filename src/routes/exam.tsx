@@ -419,12 +419,19 @@ function ExamResults({
         </div>
       )}
 
-      <button
-        onClick={onRestart}
-        className="w-full rounded-xl bg-primary py-3 font-bold text-primary-foreground"
-      >
-        Gör om provet
-      </button>
+      {canRetry ? (
+        <button
+          onClick={onRestart}
+          className="w-full rounded-xl bg-primary py-3 font-bold text-primary-foreground"
+        >
+          Gör om provet
+        </button>
+      ) : (
+        <div className="rounded-xl border border-border bg-secondary/40 p-4 text-center text-sm text-muted-foreground">
+          Du har använt alla {limit} prov för idag. Nya prov låses upp imorgon.
+        </div>
+      )}
+
     </div>
   );
 }
