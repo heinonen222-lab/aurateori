@@ -95,10 +95,15 @@ export const store = {
     bumpStreak();
     emit();
   },
+  recordExamAttempt: (correct: number, total: number, passed: boolean) => {
+    state.examAttempts = [...state.examAttempts, { at: Date.now(), correct, total, passed }];
+    emit();
+  },
   toggleTheme: () => {
     state.theme = state.theme === "dark" ? "light" : "dark";
     emit();
   },
+
   reset: () => {
     state = { ...defaultState, theme: state.theme };
     emit();
