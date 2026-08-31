@@ -6,7 +6,7 @@ import { cn } from "@/lib/utils";
 
 interface Props {
   question: Question;
-  onAnswer: (correct: boolean) => void;
+  onAnswer: (correct: boolean, chosen: number) => void;
   onNext: () => void;
   showExplanation?: boolean;
   index?: number;
@@ -27,7 +27,7 @@ export function QuestionCard({
   const pick = (i: number) => {
     if (answered) return;
     setSelected(i);
-    onAnswer(i === question.correct);
+    onAnswer(i === question.correct, i);
   };
 
   const next = () => {
