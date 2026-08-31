@@ -26,6 +26,8 @@ export type BillingSubscription = {
   isExpired: boolean;
   isPastDue: boolean;
   isActive: boolean;
+  updatePaymentMethodUrl: string | null;
+  cancelUrl: string | null;
   environment: string;
   paddleStatus: string | null;
 };
@@ -76,6 +78,8 @@ export const getBillingStatus = createServerFn({ method: "GET" })
       let paddleStatus: string | null = null;
       let nextBilledAt: string | null = null;
       let scheduledChange: string | null = null;
+      let updatePaymentMethodUrl: string | null = null;
+      let cancelUrl: string | null = null;
       let periodEnd = row.current_period_end;
       let periodStart = row.current_period_start;
       let cancelAtPeriodEnd = Boolean(row.cancel_at_period_end);
@@ -91,12 +95,15 @@ export const getBillingStatus = createServerFn({ method: "GET" })
               status?: string;
               next_billed_at?: string | null;
               scheduled_change?: { action?: string; effective_at?: string } | null;
+              management_urls?: { update_payment_method?: string; cancel?: string } | null;
               current_billing_period?: { starts_at?: string; ends_at?: string } | null;
             };
           };
           const sub = json.data;
           if (sub) {
             paddleStatus = sub.status ?? null;
+            updatePaymentMethodUrl = sub.management_urls?.update_payment_method ?? null;
+            cancelUrl = sub.management_urls?.cancel ?? null;
             nextBilledAt = sub.next_billed_at ?? null;
             periodStart = sub.current_billing_period?.starts_at ?? periodStart;
             periodEnd = sub.current_billing_period?.ends_at ?? periodEnd;
@@ -130,6 +137,8 @@ export const getBillingStatus = createServerFn({ method: "GET" })
         isActive:
           (ACTIVE_STATUSES.includes(status) && withinPeriod) ||
           (status === "canceled" && withinPeriod && endMs !== null),
+        updatePaymentMethodUrl,
+        cancelUrl,
         environment: row.environment,
         paddleStatus,
       });
