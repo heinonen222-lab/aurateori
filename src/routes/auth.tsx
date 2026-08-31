@@ -196,8 +196,9 @@ function AuthPage() {
 
           <div className="mt-4 space-y-2 text-center text-xs text-muted-foreground">
             <button
+              type="button"
               onClick={() => {
-                setError(null);
+      setError(null);
                 setMessage(null);
                 setMode(mode === "signup" ? "signin" : "signup");
               }}
@@ -208,8 +209,9 @@ function AuthPage() {
                 : "Har du inget konto? Skapa ett"}
             </button>
             <button
+              type="button"
               onClick={() => {
-                setError(null);
+      setError(null);
                 setMessage(null);
                 setMode(mode === "forgot" ? "signin" : "forgot");
               }}
