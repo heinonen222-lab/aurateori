@@ -16,13 +16,7 @@ import {
 } from "lucide-react";
 import { store, useStore } from "@/lib/store";
 import { cn } from "@/lib/utils";
-import {
-  Sheet,
-  SheetContent,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from "@/components/ui/sheet";
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 
 const NAV = [
   { to: "/", label: "Start", icon: Home },
@@ -59,16 +53,12 @@ function NavLink({
         variant === "bottom"
           ? "flex-col justify-center gap-0.5 py-2 text-[11px] font-semibold"
           : "px-4 py-3 text-sm font-medium",
-        active
-          ? "text-primary"
-          : "text-muted-foreground hover:bg-muted hover:text-foreground",
+        active ? "text-primary" : "text-muted-foreground hover:bg-muted hover:text-foreground",
         variant === "sheet" && active && "bg-primary/10 text-primary",
       )}
     >
       <item.icon className={cn(variant === "bottom" ? "h-5 w-5" : "h-5 w-5")} />
-      <span className={cn(variant === "bottom" && "truncate max-w-[4.5rem]")}>
-        {item.label}
-      </span>
+      <span className={cn(variant === "bottom" && "truncate max-w-[4.5rem]")}>{item.label}</span>
     </Link>
   );
 }
@@ -82,8 +72,8 @@ export function AppShell({ children }: { children: ReactNode }) {
     store.hydrate();
   }, []);
 
-  const isMoreActive = MORE_NAV.some(
-    (n) => (n.to === "/" ? pathname === "/" : pathname.startsWith(n.to)),
+  const isMoreActive = MORE_NAV.some((n) =>
+    n.to === "/" ? pathname === "/" : pathname.startsWith(n.to),
   );
 
   return (
@@ -175,8 +165,7 @@ export function AppShell({ children }: { children: ReactNode }) {
               </SheetHeader>
               <div className="grid grid-cols-2 gap-2 pt-2">
                 {MORE_NAV.map((n) => {
-                  const active =
-                    n.to === "/" ? pathname === "/" : pathname.startsWith(n.to);
+                  const active = n.to === "/" ? pathname === "/" : pathname.startsWith(n.to);
                   return (
                     <NavLink
                       key={n.to}
