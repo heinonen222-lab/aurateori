@@ -7,15 +7,26 @@ export interface AnswerLog {
   at: number; // timestamp
 }
 
+export interface ExamAttempt {
+  at: number; // timestamp
+  correct: number;
+  total: number;
+  passed: boolean;
+}
+
 export interface AppState {
   answers: AnswerLog[];
   wrongQueue: string[]; // qids to repeat
   streak: number;
   lastActive: string; // yyyy-mm-dd
   theme: "light" | "dark";
+  examAttempts: ExamAttempt[];
 }
 
 const KEY = "korkortskollen-v1";
+
+/** Max antal fullständiga prov per dygn. */
+export const EXAM_DAILY_LIMIT = 3;
 
 const defaultState: AppState = {
   answers: [],
@@ -23,6 +34,7 @@ const defaultState: AppState = {
   streak: 0,
   lastActive: "",
   theme: "light",
+  examAttempts: [],
 };
 
 function load(): AppState {
@@ -82,10 +94,15 @@ export const store = {
     bumpStreak();
     emit();
   },
+  recordExamAttempt: (correct: number, total: number, passed: boolean) => {
+    state.examAttempts = [...state.examAttempts, { at: Date.now(), correct, total, passed }];
+    emit();
+  },
   toggleTheme: () => {
     state.theme = state.theme === "dark" ? "light" : "dark";
     emit();
   },
+
   reset: () => {
     state = { ...defaultState, theme: state.theme };
     emit();
@@ -109,4 +126,18 @@ export function computeStats(s: AppState) {
   const wrongPenalty = Math.max(0, 100 - s.wrongQueue.length * 4);
   const readiness = Math.round(accuracy * 0.5 + volumeScore * 0.3 + wrongPenalty * 0.2);
   return { total, correct, accuracy, readiness: Math.min(100, readiness) };
+}
+
+export function examUsage(s: AppState) {
+  const attempts = s.examAttempts ?? [];
+  const t = new Date().toISOString().slice(0, 10);
+  const todayAttempts = attempts.filter((a) => new Date(a.at).toISOString().slice(0, 10) === t);
+  const usedToday = todayAttempts.length;
+  return {
+    total: attempts.length,
+    usedToday,
+    remaining: Math.max(0, EXAM_DAILY_LIMIT - usedToday),
+    limitReached: usedToday >= EXAM_DAILY_LIMIT,
+    limit: EXAM_DAILY_LIMIT,
+  };
 }

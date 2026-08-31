@@ -10,7 +10,7 @@ import { QUESTIONS, type Question } from "@/data/questions";
 import { EXAM_QUESTIONS } from "@/data/exam-questions";
 import { bankQuestionsQuery } from "@/lib/ai-questions";
 import { seededShuffle } from "@/lib/shuffle";
-import { store } from "@/lib/store";
+import { store, useStore, examUsage } from "@/lib/store";
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/exam")({
@@ -69,10 +69,21 @@ function ExamPage() {
   const { data: bank } = useQuery(bankQuestionsQuery);
   const { user } = useAuth();
   const { isActive, loading: subLoading } = useSubscription();
+  const appState = useStore();
+  const usage = examUsage(appState);
+  const [attemptNo, setAttemptNo] = useState(0);
   const exam = useMemo(
     () => buildExam(seed, [...EXAM_QUESTIONS, ...QUESTIONS, ...(bank ?? [])]),
     [seed, bank],
   );
+
+  const correctCountRef = results.filter((r) => r.correct).length;
+  useEffect(() => {
+    if (phase !== "done") return;
+    store.recordExamAttempt(correctCountRef, results.length, correctCountRef >= PASS);
+    setAttemptNo(examUsage(store.get()).total);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [phase]);
 
   useEffect(() => {
     if (phase !== "running") return;
@@ -112,6 +123,9 @@ function ExamPage() {
             <li>• Du kan inte gå tillbaka till tidigare frågor.</li>
             <li>• Sammanställning per kategori i slutet.</li>
             <li>• Frågorna följer Trafikverkets provformat och är källhänvisade.</li>
+            <li>
+              • Max {usage.limit} prov per dygn · {usage.usedToday}/{usage.limit} använda idag.
+            </li>
           </ul>
           {subLoading ? (
             <div className="h-12 animate-pulse rounded-xl bg-muted" />
@@ -121,18 +135,49 @@ function ExamPage() {
                 <Crown className="h-3.5 w-3.5" />
                 Premium aktivt
               </div>
-              <button
-                onClick={() => {
-                  setSeed((n) => n + 1);
-                  setPhase("running");
-                  setIdx(0);
-                  setResults([]);
-                  setTime(SECONDS);
-                }}
-                className="w-full rounded-xl bg-primary py-3 font-bold text-primary-foreground"
-              >
-                Starta provet
-              </button>
+              <p className="text-xs text-muted-foreground">
+                Totalt genomförda prov: <span className="font-bold">{usage.total}</span> ·{" "}
+                {usage.remaining} kvar idag
+              </p>
+              {usage.limitReached ? (
+                <div className="rounded-2xl border border-warning/40 bg-warning/10 p-5 text-left">
+                  <div className="flex items-center gap-2 text-sm font-bold">
+                    <Lock className="h-4 w-4" />
+                    Dagsgränsen är nådd
+                  </div>
+                  <p className="mt-1 text-xs text-muted-foreground">
+                    Du har gjort {usage.limit} prov idag. Kom tillbaka imorgon – öva vidare med
+                    övningsfrågor eller genomgångar under tiden.
+                  </p>
+                  <div className="mt-4 flex flex-col gap-2 sm:flex-row">
+                    <Link
+                      to="/quiz"
+                      className="rounded-xl bg-primary px-5 py-3 text-center text-sm font-bold text-primary-foreground transition hover:opacity-90"
+                    >
+                      Öva frågor →
+                    </Link>
+                    <Link
+                      to="/genomgangar"
+                      className="rounded-xl border border-border px-5 py-3 text-center text-sm font-semibold transition hover:border-primary/60"
+                    >
+                      Genomgångar
+                    </Link>
+                  </div>
+                </div>
+              ) : (
+                <button
+                  onClick={() => {
+                    setSeed((n) => n + 1);
+                    setPhase("running");
+                    setIdx(0);
+                    setResults([]);
+                    setTime(SECONDS);
+                  }}
+                  className="w-full rounded-xl bg-primary py-3 font-bold text-primary-foreground"
+                >
+                  Starta provet
+                </button>
+              )}
             </>
           ) : (
             <div className="rounded-2xl border border-warning/40 bg-warning/10 p-5 text-left">
@@ -205,7 +250,15 @@ function ExamPage() {
       )}
 
       {phase === "done" && (
-        <ExamResults results={results} correct={correctCount} onRestart={() => setPhase("intro")} />
+        <ExamResults
+          results={results}
+          correct={correctCount}
+          attemptNo={attemptNo || usage.total}
+          usedToday={usage.usedToday}
+          limit={usage.limit}
+          canRetry={!usage.limitReached}
+          onRestart={() => setPhase("intro")}
+        />
       )}
     </AppShell>
   );
@@ -214,10 +267,18 @@ function ExamPage() {
 function ExamResults({
   results,
   correct,
+  attemptNo,
+  usedToday,
+  limit,
+  canRetry,
   onRestart,
 }: {
   results: Result[];
   correct: number;
+  attemptNo: number;
+  usedToday: number;
+  limit: number;
+  canRetry: boolean;
   onRestart: () => void;
 }) {
   const passed = correct >= PASS;
@@ -249,6 +310,13 @@ function ExamResults({
         <h1 className="mt-4 text-3xl font-black">{passed ? "Godkänt!" : "Underkänt"}</h1>
         <p className="mt-1 text-muted-foreground">
           {correct} av {results.length} rätt · gränsen är {PASS}
+        </p>
+        <p className="mt-3 inline-flex flex-wrap items-center justify-center gap-x-2 rounded-full bg-background/60 px-3 py-1 text-xs font-semibold text-muted-foreground">
+          <span>Prov nr {attemptNo} totalt</span>
+          <span>·</span>
+          <span>
+            {usedToday}/{limit} idag
+          </span>
         </p>
       </div>
 
@@ -346,12 +414,18 @@ function ExamResults({
         </div>
       )}
 
-      <button
-        onClick={onRestart}
-        className="w-full rounded-xl bg-primary py-3 font-bold text-primary-foreground"
-      >
-        Gör om provet
-      </button>
+      {canRetry ? (
+        <button
+          onClick={onRestart}
+          className="w-full rounded-xl bg-primary py-3 font-bold text-primary-foreground"
+        >
+          Gör om provet
+        </button>
+      ) : (
+        <div className="rounded-xl border border-border bg-secondary/40 p-4 text-center text-sm text-muted-foreground">
+          Du har använt alla {limit} prov för idag. Nya prov låses upp imorgon.
+        </div>
+      )}
     </div>
   );
 }
