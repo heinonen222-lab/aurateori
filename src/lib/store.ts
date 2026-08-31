@@ -7,15 +7,26 @@ export interface AnswerLog {
   at: number; // timestamp
 }
 
+export interface ExamAttempt {
+  at: number; // timestamp
+  correct: number;
+  total: number;
+  passed: boolean;
+}
+
 export interface AppState {
   answers: AnswerLog[];
   wrongQueue: string[]; // qids to repeat
   streak: number;
   lastActive: string; // yyyy-mm-dd
   theme: "light" | "dark";
+  examAttempts: ExamAttempt[];
 }
 
 const KEY = "korkortskollen-v1";
+
+/** Max antal fullständiga prov per dygn. */
+export const EXAM_DAILY_LIMIT = 3;
 
 const defaultState: AppState = {
   answers: [],
@@ -23,7 +34,9 @@ const defaultState: AppState = {
   streak: 0,
   lastActive: "",
   theme: "light",
+  examAttempts: [],
 };
+
 
 function load(): AppState {
   if (typeof window === "undefined") return defaultState;
