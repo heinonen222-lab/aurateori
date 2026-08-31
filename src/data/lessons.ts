@@ -328,7 +328,12 @@ export const LESSONS: Lesson[] = [
         kind: "info",
         title: "Förbudsmärken",
         body: "Anger att något är förbjudet. De gäller från märket fram till nästa korsning om inget annat anges med tilläggstavla.",
-        signs: ["forbud-infart", "forbud-omkorning", "forbud-stannaparkera", "forbud-svang-vanster"],
+        signs: [
+          "forbud-infart",
+          "forbud-omkorning",
+          "forbud-stannaparkera",
+          "forbud-svang-vanster",
+        ],
         source: TS.forbudsmarken,
       },
       {
