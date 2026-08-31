@@ -75,6 +75,7 @@ type Result = {
   qid: string;
   category: string;
   correct: boolean;
+  chosen: number;
   q: Question;
   trial: boolean;
 };
