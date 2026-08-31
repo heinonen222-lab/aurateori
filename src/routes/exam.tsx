@@ -9,6 +9,7 @@ import { QuestionCard } from "@/components/QuestionCard";
 import { QUESTIONS, type Question } from "@/data/questions";
 import { EXAM_QUESTIONS } from "@/data/exam-questions";
 import { EXTRA_QUESTIONS } from "@/data/extra-questions";
+import { TRIAL_QUESTIONS } from "@/data/trial-questions";
 import { bankQuestionsQuery } from "@/lib/ai-questions";
 import { seededShuffle } from "@/lib/shuffle";
 import { store, useStore, examUsage } from "@/lib/store";
@@ -20,7 +21,8 @@ export const Route = createFileRoute("/exam")({
       { title: "Examsimulator – Aurateori" },
       {
         name: "description",
-        content: "Simulera Trafikverkets B-teoriprov: 65 frågor, 50 minuter, gränsen är 52 rätt.",
+        content:
+          "Simulera Trafikverkets B-teoriprov: 70 frågor (65 räknas), 50 minuter, gränsen är 52 rätt.",
       },
       { property: "og:title", content: "Examsimulator – Aurateori" },
       { property: "og:description", content: "Simulera Trafikverkets B-teoriprov." },
@@ -126,7 +128,7 @@ function ExamPage() {
   const mm = String(Math.floor(time / 60)).padStart(2, "0");
   const ss = String(time % 60).padStart(2, "0");
 
-  const correctCount = results.filter((r) => r.correct).length;
+  const correctCount = scoredResults.filter((r) => r.correct).length;
 
   return (
     <AppShell>
@@ -138,12 +140,13 @@ function ExamPage() {
           <div>
             <h1 className="text-2xl font-black">Trafikverket-prov</h1>
             <p className="mt-2 text-sm text-muted-foreground">
-              65 frågor · 50 minuter · minst 52 rätt för att klara provet.
+              70 frågor · 50 minuter · minst 52 rätt för att klara provet.
             </p>
           </div>
           <ul className="mx-auto max-w-sm space-y-2 text-left text-sm text-muted-foreground">
             <li>• Alla frågor visas utan förklaring – som i skarpt läge.</li>
             <li>• Du kan inte gå tillbaka till tidigare frågor.</li>
+            <li>• 5 av de 70 frågorna är testfrågor och räknas inte i resultatet.</li>
             <li>• Sammanställning per kategori i slutet.</li>
             <li>• Frågorna följer Trafikverkets provformat och är källhänvisade.</li>
             <li>
@@ -260,7 +263,7 @@ function ExamPage() {
               const src = exam[idx];
               setResults((r) => [
                 ...r,
-                { qid: src.id, category: src.category, correct: ok, q: src },
+                { qid: src.id, category: src.category, correct: ok, q: src, trial: !!src.trial },
               ]);
               store.recordAnswer(src.id, src.category, ok);
             }}
@@ -276,6 +279,7 @@ function ExamPage() {
         <ExamResults
           results={results}
           correct={correctCount}
+          scoredTotal={scoredResults.length}
           attemptNo={attemptNo || usage.total}
           usedToday={usage.usedToday}
           limit={usage.limit}
@@ -290,6 +294,7 @@ function ExamPage() {
 function ExamResults({
   results,
   correct,
+  scoredTotal,
   attemptNo,
   usedToday,
   limit,
@@ -298,6 +303,7 @@ function ExamResults({
 }: {
   results: Result[];
   correct: number;
+  scoredTotal: number;
   attemptNo: number;
   usedToday: number;
   limit: number;
@@ -305,7 +311,8 @@ function ExamResults({
   onRestart: () => void;
 }) {
   const passed = correct >= PASS;
-  const byCat = results.reduce<Record<string, { ok: number; total: number }>>((acc, r) => {
+  const scored = results.filter((r) => !r.trial);
+  const byCat = scored.reduce<Record<string, { ok: number; total: number }>>((acc, r) => {
     if (!acc[r.category]) acc[r.category] = { ok: 0, total: 0 };
     acc[r.category].total++;
     if (r.correct) acc[r.category].ok++;
@@ -332,7 +339,7 @@ function ExamResults({
         </div>
         <h1 className="mt-4 text-3xl font-black">{passed ? "Godkänt!" : "Underkänt"}</h1>
         <p className="mt-1 text-muted-foreground">
-          {correct} av {results.length} rätt · gränsen är {PASS}
+          {correct} av {scoredTotal} rätt · gränsen är {PASS}
         </p>
         <p className="mt-3 inline-flex flex-wrap items-center justify-center gap-x-2 rounded-full bg-background/60 px-3 py-1 text-xs font-semibold text-muted-foreground">
           <span>Prov nr {attemptNo} totalt</span>
