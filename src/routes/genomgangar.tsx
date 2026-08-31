@@ -136,7 +136,7 @@ function LessonsPage() {
                 </div>
                 <h2 className="mt-3 text-base font-bold leading-snug">{l.title}</h2>
                 <p className="mt-1 text-sm text-muted-foreground">{l.summary}</p>
-                <div className="mt-3 flex items-center gap-4 text-[11px] font-medium text-muted-foreground">
+                <div className="mt-3 flex flex-wrap items-center gap-4 text-[11px] font-medium text-muted-foreground">
                   <span className="inline-flex items-center gap-1">
                     <Clock className="h-3.5 w-3.5" />
                     {l.minutes} min
@@ -144,6 +144,10 @@ function LessonsPage() {
                   <span className="inline-flex items-center gap-1">
                     <BookOpenCheck className="h-3.5 w-3.5" />
                     {l.steps.length} steg
+                  </span>
+                  <span className="inline-flex items-center gap-1">
+                    <ExternalLink className="h-3.5 w-3.5" />
+                    {l.sources.length} källor
                   </span>
                 </div>
               </button>
