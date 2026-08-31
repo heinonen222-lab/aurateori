@@ -5,14 +5,81 @@ import {
   BookOpenCheck,
   Check,
   Clock,
+  ExternalLink,
   GraduationCap,
   RotateCcw,
   X,
 } from "lucide-react";
 import { AppShell } from "@/components/AppShell";
 import { SignImage } from "@/components/SignImage";
-import { LESSONS, type Lesson } from "@/data/lessons";
+import { SIGNS } from "@/data/signs";
+import { LESSONS, type Lesson, type LessonSource, type LessonStep } from "@/data/lessons";
 import { cn } from "@/lib/utils";
+
+function stepSigns(step: LessonStep): string[] {
+  if (step.signs?.length) return step.signs;
+  return step.sign ? [step.sign] : [];
+}
+
+function SignRow({ ids }: { ids: string[] }) {
+  if (ids.length === 0) return null;
+  return (
+    <div className="mb-5 flex flex-wrap items-start justify-center gap-4 rounded-2xl bg-muted p-5">
+      {ids.map((id) => {
+        const sign = SIGNS.find((s) => s.id === id);
+        return (
+          <figure key={id} className="w-24 text-center">
+            <SignImage id={id} className="mx-auto h-20 w-20" />
+            <figcaption className="mt-2 text-[11px] font-medium leading-tight text-muted-foreground">
+              {sign?.name ?? id}
+            </figcaption>
+          </figure>
+        );
+      })}
+    </div>
+  );
+}
+
+function SourceLink({ source }: { source?: LessonSource }) {
+  if (!source) return null;
+  return (
+    <a
+      href={source.url}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="mt-4 inline-flex items-center gap-1.5 text-xs font-semibold text-primary underline-offset-4 hover:underline"
+    >
+      <ExternalLink className="h-3.5 w-3.5" />
+      Läs källan: {source.label}
+    </a>
+  );
+}
+
+function SourceList({ sources }: { sources: LessonSource[] }) {
+  if (sources.length === 0) return null;
+  return (
+    <div className="rounded-2xl border border-border bg-card p-4 text-left">
+      <div className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
+        Officiella källor
+      </div>
+      <ul className="mt-2 space-y-1.5">
+        {sources.map((s) => (
+          <li key={s.url}>
+            <a
+              href={s.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-start gap-1.5 text-sm text-primary underline-offset-4 hover:underline"
+            >
+              <ExternalLink className="mt-0.5 h-3.5 w-3.5 shrink-0" />
+              <span>{s.label}</span>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
 
 export const Route = createFileRoute("/genomgangar")({
   head: () => ({
