@@ -24,17 +24,16 @@ export const Route = createFileRoute("/sitemap.xml")({
   server: {
     handlers: {
       GET: async () => {
-        const urls = PUBLIC_ROUTES.map(
-          (e) =>
-            [
-              `  <url>`,
-              `    <loc>${BASE_URL}${e.path}</loc>`,
-              e.changefreq ? `    <changefreq>${e.changefreq}</changefreq>` : null,
-              e.priority ? `    <priority>${e.priority}</priority>` : null,
-              `  </url>`,
-            ]
-              .filter(Boolean)
-              .join("\n"),
+        const urls = PUBLIC_ROUTES.map((e) =>
+          [
+            `  <url>`,
+            `    <loc>${BASE_URL}${e.path}</loc>`,
+            e.changefreq ? `    <changefreq>${e.changefreq}</changefreq>` : null,
+            e.priority ? `    <priority>${e.priority}</priority>` : null,
+            `  </url>`,
+          ]
+            .filter(Boolean)
+            .join("\n"),
         );
 
         const xml = [

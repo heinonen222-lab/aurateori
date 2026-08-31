@@ -65,7 +65,7 @@ function Dashboard() {
             Personbil · Behörighet B
           </div>
           <h1 className="mt-1 text-3xl font-black tracking-tight sm:text-4xl">
-            Hej, redo att köra?
+            Körkortsfrågor och teoriprov för B-körkort
           </h1>
           <p className="mt-1 text-sm text-muted-foreground">
             Följ din utveckling mot Trafikverkets teoriprov.
