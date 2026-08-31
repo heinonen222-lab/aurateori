@@ -260,11 +260,18 @@ function ExamPage() {
             index={idx}
             total={TOTAL}
             showExplanation={false}
-            onAnswer={(ok) => {
+            onAnswer={(ok, chosen) => {
               const src = exam[idx];
               setResults((r) => [
                 ...r,
-                { qid: src.id, category: src.category, correct: ok, q: src, trial: !!src.trial },
+                {
+                  qid: src.id,
+                  category: src.category,
+                  correct: ok,
+                  chosen,
+                  q: src,
+                  trial: !!src.trial,
+                },
               ]);
               store.recordAnswer(src.id, src.category, ok);
             }}
