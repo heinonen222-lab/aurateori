@@ -208,11 +208,7 @@ function numberQuestions(): Question[] {
         "Människan & Trafiken",
         `Du sänker farten från ${high} km/h till ${low} km/h. Hur påverkas rörelseenergin?`,
         "Den minskar till ungefär en fjärdedel",
-        [
-          "Den halveras",
-          "Den minskar med en tiondel",
-          "Den är i princip densamma",
-        ],
+        ["Den halveras", "Den minskar med en tiondel", "Den är i princip densamma"],
         "Rörelseenergin är proportionell mot hastigheten i kvadrat – halverad fart ger en fjärdedel av energin.",
         "Trafikverket – hastighet och krockvåld",
         i + 701,
