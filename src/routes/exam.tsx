@@ -384,10 +384,14 @@ function ExamResults({
           {results.map((r, i) => (
             <div
               key={i}
-              title={`Fråga ${i + 1}: ${r.correct ? "rätt" : "fel"}`}
+              title={`Fråga ${i + 1}: ${r.correct ? "rätt" : "fel"}${r.trial ? " (testfråga, räknas inte)" : ""}`}
               className={cn(
                 "flex h-8 items-center justify-center rounded-md text-[10px] font-bold",
-                r.correct ? "bg-success/20 text-success" : "bg-destructive/20 text-destructive",
+                r.trial
+                  ? "bg-muted text-muted-foreground"
+                  : r.correct
+                    ? "bg-success/20 text-success"
+                    : "bg-destructive/20 text-destructive",
               )}
             >
               {r.correct ? (
