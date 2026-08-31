@@ -315,7 +315,15 @@ function ExamResults({
         <p className="mt-1 text-muted-foreground">
           {correct} av {results.length} rätt · gränsen är {PASS}
         </p>
+        <p className="mt-3 inline-flex flex-wrap items-center justify-center gap-x-2 rounded-full bg-background/60 px-3 py-1 text-xs font-semibold text-muted-foreground">
+          <span>Prov nr {attemptNo} totalt</span>
+          <span>·</span>
+          <span>
+            {usedToday}/{limit} idag
+          </span>
+        </p>
       </div>
+
 
       <div className="rounded-3xl border border-border bg-card p-6">
         <h2 className="text-lg font-bold">Resultat per kategori</h2>
