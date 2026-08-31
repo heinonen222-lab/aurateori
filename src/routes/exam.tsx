@@ -8,6 +8,7 @@ import { AppShell } from "@/components/AppShell";
 import { QuestionCard } from "@/components/QuestionCard";
 import { QUESTIONS, type Question } from "@/data/questions";
 import { EXAM_QUESTIONS } from "@/data/exam-questions";
+import { EXTRA_QUESTIONS } from "@/data/extra-questions";
 import { bankQuestionsQuery } from "@/lib/ai-questions";
 import { seededShuffle } from "@/lib/shuffle";
 import { store, useStore, examUsage } from "@/lib/store";
@@ -73,7 +74,7 @@ function ExamPage() {
   const usage = examUsage(appState);
   const [attemptNo, setAttemptNo] = useState(0);
   const exam = useMemo(
-    () => buildExam(seed, [...EXAM_QUESTIONS, ...QUESTIONS, ...(bank ?? [])]),
+    () => buildExam(seed, [...EXAM_QUESTIONS, ...QUESTIONS, ...EXTRA_QUESTIONS, ...(bank ?? [])]),
     [seed, bank],
   );
 

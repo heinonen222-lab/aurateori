@@ -3,6 +3,10 @@ import { useMemo, useState } from "react";
 import { AppShell } from "@/components/AppShell";
 import { QuestionCard } from "@/components/QuestionCard";
 import { QUESTIONS } from "@/data/questions";
+import { EXAM_QUESTIONS } from "@/data/exam-questions";
+import { EXTRA_QUESTIONS } from "@/data/extra-questions";
+
+const ALL_QUESTIONS = [...QUESTIONS, ...EXAM_QUESTIONS, ...EXTRA_QUESTIONS];
 import { store, useStore, computeStats } from "@/lib/store";
 import { RotateCcw, Trash2 } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -55,7 +59,7 @@ function StatsPage() {
 
   const repeatQuestion =
     s.wrongQueue.length > 0
-      ? QUESTIONS.find((q) => q.id === s.wrongQueue[repeatIdx % s.wrongQueue.length])
+      ? ALL_QUESTIONS.find((q) => q.id === s.wrongQueue[repeatIdx % s.wrongQueue.length])
       : null;
 
   return (
