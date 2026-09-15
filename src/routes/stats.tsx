@@ -63,10 +63,16 @@ function StatsPage() {
 
   const maxTotal = Math.max(1, ...days.map((d) => d.total));
 
-  const repeatQuestion =
-    s.wrongQueue.length > 0
-      ? ALL_QUESTIONS.find((q) => q.id === s.wrongQueue[repeatIdx % s.wrongQueue.length])
-      : null;
+  // Bara frågor som finns i den lokala frågebanken kan repeteras här.
+  const repeatQueue = useMemo(
+    () =>
+      s.wrongQueue
+        .map((id) => ALL_QUESTIONS.find((q) => q.id === id))
+        .filter((q): q is NonNullable<typeof q> => Boolean(q)),
+    [s.wrongQueue],
+  );
+
+  const repeatQuestion = repeatQueue.length > 0 ? repeatQueue[repeatIdx % repeatQueue.length] : null;
 
   return (
     <AppShell>
