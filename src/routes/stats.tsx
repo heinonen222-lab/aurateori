@@ -5,8 +5,14 @@ import { QuestionCard } from "@/components/QuestionCard";
 import { QUESTIONS } from "@/data/questions";
 import { EXAM_QUESTIONS } from "@/data/exam-questions";
 import { EXTRA_QUESTIONS } from "@/data/extra-questions";
+import { TRIAL_QUESTIONS } from "@/data/trial-questions";
 
-const ALL_QUESTIONS = [...QUESTIONS, ...EXAM_QUESTIONS, ...EXTRA_QUESTIONS];
+const ALL_QUESTIONS = [
+  ...QUESTIONS,
+  ...EXAM_QUESTIONS,
+  ...EXTRA_QUESTIONS,
+  ...TRIAL_QUESTIONS,
+];
 import { store, useStore, computeStats } from "@/lib/store";
 import { RotateCcw, Trash2 } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -57,10 +63,16 @@ function StatsPage() {
 
   const maxTotal = Math.max(1, ...days.map((d) => d.total));
 
-  const repeatQuestion =
-    s.wrongQueue.length > 0
-      ? ALL_QUESTIONS.find((q) => q.id === s.wrongQueue[repeatIdx % s.wrongQueue.length])
-      : null;
+  // Bara frågor som finns i den lokala frågebanken kan repeteras här.
+  const repeatQueue = useMemo(
+    () =>
+      s.wrongQueue
+        .map((id) => ALL_QUESTIONS.find((q) => q.id === id))
+        .filter((q): q is NonNullable<typeof q> => Boolean(q)),
+    [s.wrongQueue],
+  );
+
+  const repeatQuestion = repeatQueue.length > 0 ? repeatQueue[repeatIdx % repeatQueue.length] : null;
 
   return (
     <AppShell>
@@ -159,7 +171,7 @@ function StatsPage() {
             <div>
               <h2 className="text-lg font-bold">Repetera felaktiga svar</h2>
               <p className="text-sm text-muted-foreground">
-                {s.wrongQueue.length} frågor i kön · spaced repetition
+                {repeatQueue.length} frågor i kön · spaced repetition
               </p>
             </div>
             <RotateCcw className="h-5 w-5 text-primary" />
