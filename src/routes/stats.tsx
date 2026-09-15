@@ -5,8 +5,14 @@ import { QuestionCard } from "@/components/QuestionCard";
 import { QUESTIONS } from "@/data/questions";
 import { EXAM_QUESTIONS } from "@/data/exam-questions";
 import { EXTRA_QUESTIONS } from "@/data/extra-questions";
+import { TRIAL_QUESTIONS } from "@/data/trial-questions";
 
-const ALL_QUESTIONS = [...QUESTIONS, ...EXAM_QUESTIONS, ...EXTRA_QUESTIONS];
+const ALL_QUESTIONS = [
+  ...QUESTIONS,
+  ...EXAM_QUESTIONS,
+  ...EXTRA_QUESTIONS,
+  ...TRIAL_QUESTIONS,
+];
 import { store, useStore, computeStats } from "@/lib/store";
 import { RotateCcw, Trash2 } from "lucide-react";
 import { cn } from "@/lib/utils";
