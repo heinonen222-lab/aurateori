@@ -171,7 +171,7 @@ function StatsPage() {
             <div>
               <h2 className="text-lg font-bold">Repetera felaktiga svar</h2>
               <p className="text-sm text-muted-foreground">
-                {s.wrongQueue.length} frågor i kön · spaced repetition
+                {repeatQueue.length} frågor i kön · spaced repetition
               </p>
             </div>
             <RotateCcw className="h-5 w-5 text-primary" />
