@@ -6,6 +6,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { lovable } from "@/integrations/lovable";
 import { useAuth } from "@/hooks/useAuth";
 import { authErrorMessage } from "@/lib/auth-errors";
+import "@lovable.dev/cloud-auth-js/styles.css";
 
 export const Route = createFileRoute("/auth")({
   head: () => ({
@@ -85,14 +86,14 @@ function AuthPage() {
     }
   };
 
-  const google = async () => {
+  const oauth = async (provider: "google" | "lovable") => {
     setError(null);
     setMessage(null);
     if (typeof window !== "undefined") {
       sessionStorage.setItem("aurateori:next", next);
     }
     try {
-      const result = await lovable.auth.signInWithOAuth("google", {
+      const result = await lovable.auth.signInWithOAuth(provider, {
         redirect_uri: window.location.origin,
       });
       if (result.error) throw result.error;
@@ -102,6 +103,9 @@ function AuthPage() {
       setError(authErrorMessage(err));
     }
   };
+
+  const google = () => oauth("google");
+  const lovableSignIn = () => oauth("lovable");
 
   return (
     <AppShell>
