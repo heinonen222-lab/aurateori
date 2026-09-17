@@ -11,6 +11,7 @@ import {
   Sun,
   GraduationCap,
   Crown,
+  Sparkles,
   Menu,
   X,
 } from "lucide-react";
