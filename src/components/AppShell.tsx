@@ -27,6 +27,7 @@ const NAV = [
   { to: "/signs", label: "Vägmärken", icon: Signpost },
   { to: "/flashcards", label: "Snabbplugg", icon: Layers },
   { to: "/genomgangar", label: "Genomgång", icon: GraduationCap },
+  { to: "/assistent", label: "Assistent", icon: Sparkles },
   { to: "/stats", label: "Statistik", icon: BarChart3 },
   { to: "/priser", label: "Premium", icon: Crown },
 ] as const;
