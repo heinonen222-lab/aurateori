@@ -121,10 +121,15 @@ export function computeStats(s: AppState) {
   const total = s.answers.length;
   const correct = s.answers.filter((a) => a.correct).length;
   const accuracy = total ? Math.round((correct / total) * 100) : 0;
-  // Readiness: weighted mix of accuracy, volume, and inverse of wrongQueue
+  // Readiness: weighted mix of accuracy, volume, and inverse of wrongQueue.
+  // Accuracy och felkön viktas med ett konfidensmått så att ett fåtal svar
+  // inte kan ge ett högt klarhetsvärde.
   const volumeScore = Math.min(100, (total / 130) * 100);
   const wrongPenalty = Math.max(0, 100 - s.wrongQueue.length * 4);
-  const readiness = Math.round(accuracy * 0.5 + volumeScore * 0.3 + wrongPenalty * 0.2);
+  const confidence = Math.min(1, total / 40);
+  const readiness = total
+    ? Math.round((accuracy * 0.55 + wrongPenalty * 0.15) * confidence + volumeScore * 0.3)
+    : 0;
   return { total, correct, accuracy, readiness: Math.min(100, readiness) };
 }
 
