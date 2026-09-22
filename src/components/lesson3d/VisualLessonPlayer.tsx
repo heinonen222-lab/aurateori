@@ -1,10 +1,10 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { ArrowLeft, ExternalLink, Pause, Play, RotateCcw, SkipBack, SkipForward } from "lucide-react";
 import type { Lesson, LessonStep } from "@/data/lessons";
 import { Button } from "@/components/ui/button";
 import { AutoFitText } from "@/components/AutoFitText";
 import { LessonScene } from "./LessonScene";
-import { LESSON_SCENE } from "./lesson-scenes";
+import { getLessonScene } from "./lesson-scenes";
 
 const STEP_SECONDS = 6;
 
@@ -17,15 +17,25 @@ export function VisualLessonPlayer({ lesson, onExit }: { lesson: Lesson; onExit:
   const [playing, setPlaying] = useState(true);
   const [elapsed, setElapsed] = useState(0);
   const [reducedMotion, setReducedMotion] = useState(false);
+  const mounted = useRef(false);
   const slide = slides[index] ?? slides[0];
 
   useEffect(() => {
+    mounted.current = true;
+    return () => {
+      mounted.current = false;
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!mounted.current) return;
     setReducedMotion(window.matchMedia("(prefers-reduced-motion: reduce)").matches);
   }, []);
 
   useEffect(() => {
     if (!playing || reducedMotion || slides.length === 0) return;
     const timer = window.setInterval(() => {
+      if (!mounted.current) return;
       setElapsed((current) => Math.min(STEP_SECONDS, current + 0.1));
     }, 100);
     return () => window.clearInterval(timer);
@@ -33,6 +43,7 @@ export function VisualLessonPlayer({ lesson, onExit }: { lesson: Lesson; onExit:
 
   useEffect(() => {
     if (elapsed < STEP_SECONDS) return;
+    if (!mounted.current) return;
     setIndex((value) => (value + 1) % slides.length);
     setElapsed(0);
   }, [elapsed, slides.length]);
@@ -43,7 +54,7 @@ export function VisualLessonPlayer({ lesson, onExit }: { lesson: Lesson; onExit:
   };
 
   if (!slide) return null;
-  const sceneKind = LESSON_SCENE[lesson.id] ?? "intersection";
+  const scene = getLessonScene(lesson.id, index);
 
   return (
     <div className="min-w-0 space-y-4">
@@ -59,10 +70,10 @@ export function VisualLessonPlayer({ lesson, onExit }: { lesson: Lesson; onExit:
 
       <section className="overflow-hidden rounded-2xl border border-border bg-card shadow-sm">
         <div className="relative aspect-[4/3] min-h-64 w-full bg-muted sm:aspect-video">
-          <LessonScene kind={sceneKind} playing={playing} step={index} reducedMotion={reducedMotion} />
+          <LessonScene scene={scene} playing={playing} reducedMotion={reducedMotion} />
           <div className="pointer-events-none absolute inset-x-3 top-3 flex items-center justify-between gap-2">
             <span className="rounded-md bg-background/90 px-2 py-1 text-[11px] font-bold backdrop-blur">
-              Scen {index + 1} av {slides.length}
+              {index + 1}/{slides.length}: {scene.label}
             </span>
             <span className="rounded-md bg-background/90 px-2 py-1 text-[11px] font-semibold backdrop-blur">
               {lesson.category}
