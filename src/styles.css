@@ -144,3 +144,10 @@
     -webkit-font-smoothing: antialiased;
   }
 }
+
+@utility no-scrollbar {
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
