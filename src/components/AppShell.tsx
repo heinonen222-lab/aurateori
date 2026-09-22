@@ -83,9 +83,11 @@ export function AppShell({ children }: { children: ReactNode }) {
       {/* Desktop sidebar */}
       <aside className="fixed inset-y-0 left-0 z-30 hidden w-64 flex-col border-r border-border bg-sidebar px-4 py-6 lg:flex">
         <Link to="/" className="mb-8 flex items-center gap-2 px-2">
-          <div className="grid h-9 w-9 place-items-center rounded-xl bg-primary text-primary-foreground font-black">
-            K
-          </div>
+          <img
+            src="/apple-touch-icon.png"
+            alt="Aurateori"
+            className="h-9 w-9 rounded-xl"
+          />
           <div>
             <div className="text-sm font-bold leading-tight">Aurateori</div>
             <div className="text-[11px] text-muted-foreground">B-behörighet</div>
@@ -126,9 +128,11 @@ export function AppShell({ children }: { children: ReactNode }) {
       {/* Mobile top bar */}
       <header className="sticky top-0 z-20 flex items-center justify-between border-b border-border bg-background/85 px-4 py-3 backdrop-blur lg:hidden">
         <Link to="/" className="flex items-center gap-2">
-          <div className="grid h-8 w-8 place-items-center rounded-lg bg-primary text-primary-foreground font-black text-sm">
-            K
-          </div>
+          <img
+            src="/apple-touch-icon.png"
+            alt="Aurateori"
+            className="h-8 w-8 rounded-lg"
+          />
           <span className="text-sm font-bold">Aurateori</span>
         </Link>
         <button
