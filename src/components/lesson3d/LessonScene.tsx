@@ -1,12 +1,13 @@
 import { Canvas, useFrame } from "@react-three/fiber";
 import { Environment, Lightformer, PerspectiveCamera, RoundedBox } from "@react-three/drei";
-import { useEffect, useMemo, useRef } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import * as THREE from "three";
 import type { LessonSceneConfig } from "./lesson-scenes";
 
 type SceneProps = { scene: LessonSceneConfig; playing: boolean; reducedMotion: boolean };
 type Vec3 = [number, number, number];
 type Motion = (time: number) => { x: number; z: number; yaw: number; visible?: boolean };
+type WebGLStatus = "checking" | "supported" | "unsupported";
 
 const COLORS = {
   asphalt: "#3c4248",
@@ -31,6 +32,16 @@ const COLORS = {
 
 function clamp01(value: number) {
   return Math.max(0, Math.min(1, value));
+}
+
+function browserSupportsWebGL() {
+  if (typeof window === "undefined" || typeof document === "undefined") return false;
+  try {
+    const canvas = document.createElement("canvas");
+    return Boolean(window.WebGLRenderingContext && (canvas.getContext("webgl") || canvas.getContext("experimental-webgl")));
+  } catch {
+    return false;
+  }
 }
 
 function cycle(time: number, length = 8) {
@@ -536,9 +547,40 @@ function SceneWorld(props: SceneProps) {
   );
 }
 
+function StaticSceneFallback({ scene }: { scene: LessonSceneConfig }) {
+  const winter = scene.weather === "winter";
+  const night = scene.weather === "night";
+  return (
+    <div className="grid h-full min-h-64 place-items-center overflow-hidden bg-muted p-5 text-center">
+      <div className="relative aspect-video w-full max-w-2xl overflow-hidden rounded-xl border border-border bg-background/70">
+        <div className={night ? "absolute inset-0 bg-slate-950" : winter ? "absolute inset-0 bg-sky-100" : "absolute inset-0 bg-emerald-100"} />
+        <div className="absolute left-1/2 top-0 h-full w-24 -translate-x-1/2 bg-muted-foreground/50" />
+        {(scene.layout === "cross" || scene.layout === "roundabout" || scene.layout === "parking") && <div className="absolute left-0 top-1/2 h-24 w-full -translate-y-1/2 bg-muted-foreground/50" />}
+        {scene.layout === "roundabout" && <div className="absolute left-1/2 top-1/2 h-24 w-24 -translate-x-1/2 -translate-y-1/2 rounded-full bg-card" />}
+        <div className="absolute left-[34%] top-[58%] h-8 w-16 rounded bg-primary shadow-sm" />
+        <div className="absolute left-[55%] top-[42%] h-8 w-16 rounded bg-destructive shadow-sm" />
+        <div className="absolute left-4 top-4 max-w-[calc(100%-2rem)] rounded-md bg-background/90 px-3 py-2 text-xs font-bold text-foreground shadow-sm">
+          {scene.label}
+        </div>
+        <div className="absolute inset-x-4 bottom-4 rounded-md bg-background/90 px-3 py-2 text-xs font-medium text-muted-foreground shadow-sm">
+          3D-vyn kan inte visas i den här webbläsaren.
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export function LessonScene(props: SceneProps) {
+  const [webGLStatus, setWebGLStatus] = useState<WebGLStatus>("checking");
   const night = props.scene.weather === "night";
   const winter = props.scene.weather === "winter";
+
+  useEffect(() => {
+    setWebGLStatus(browserSupportsWebGL() ? "supported" : "unsupported");
+  }, []);
+
+  if (webGLStatus !== "supported") return <StaticSceneFallback scene={props.scene} />;
+
   return (
     <Canvas shadows dpr={[1, 1.5]} gl={{ antialias: true }}>
       <PerspectiveCamera makeDefault position={props.scene.camera} fov={44} />
