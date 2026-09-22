@@ -56,7 +56,7 @@ function AccountPage() {
       await queryClient.cancelQueries();
       queryClient.clear();
       await supabase.auth.signOut();
-      void navigate({ to: "/auth", replace: true, search: { deleted: "1" } as never });
+      void navigate({ to: "/auth", replace: true });
     } catch (e) {
       setError(e instanceof Error ? e.message : "Kontot kunde inte tas bort. Försök igen.");
     } finally {
