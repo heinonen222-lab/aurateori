@@ -840,7 +840,7 @@ export const LESSONS: Lesson[] = [
   {
     id: "morker-belysning",
     title: "Mörkerkörning och belysning",
-    category: "Trafiksäkerhet" as QuestionCategory extends "Trafiksäkerhet" ? QuestionCategory : "Människan & Trafiken",
+    category: "Människan & Trafiken",
     summary: "Hel- och halvljus, mötande trafik och varför mörker kräver lägre fart.",
     minutes: 6,
     reference: "Trafikförordningen 3 kap. 66–77 §§",
@@ -906,7 +906,7 @@ export const LESSONS: Lesson[] = [
   {
     id: "halt-vaglag",
     title: "Halt väglag och vinterkörning",
-    category: "Trafiksäkerhet" as QuestionCategory extends "Trafiksäkerhet" ? QuestionCategory : "Människan & Trafiken",
+    category: "Fordonskännedom",
     summary: "Vinterdäck, avstånd, vattenplaning och hur du hanterar sladd.",
     minutes: 6,
     reference: "Trafikförordningen 4 kap. 18 a §",
