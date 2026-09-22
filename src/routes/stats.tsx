@@ -106,6 +106,11 @@ function StatsPage() {
           <h2 className="text-sm font-bold uppercase tracking-wider text-muted-foreground">
             Senaste 7 dagarna
           </h2>
+          {days.every((d) => d.total === 0) && (
+            <p className="mt-2 text-xs text-muted-foreground">
+              Inga svar den här veckan än – svara på några frågor så fylls diagrammet.
+            </p>
+          )}
           <div className="mt-5 flex h-40 items-end gap-2">
             {days.map((d, i) => {
               const h = (d.total / maxTotal) * 100;
