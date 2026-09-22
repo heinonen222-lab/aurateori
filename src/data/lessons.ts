@@ -109,6 +109,22 @@ const TS = {
     label: "Transportstyrelsen – Vinterdäck",
     url: "https://www.transportstyrelsen.se/sv/vagtrafik/fordon/fordonsregler/dack/vinterdack/",
   },
+  stannaParkera: {
+    label: "Transportstyrelsen – Stannande och parkering",
+    url: "https://www.transportstyrelsen.se/sv/vagtrafik/trafikregler-och-vagmarken/trafikregler/generella-trafikregler/stannande-och-parkering/",
+  },
+  omkorning: {
+    label: "Transportstyrelsen – Generella trafikregler",
+    url: "https://www.transportstyrelsen.se/sv/vagtrafik/trafikregler-och-vagmarken/trafikregler/generella-trafikregler/",
+  },
+  belysning: {
+    label: "Transportstyrelsen – Belysning på fordon",
+    url: "https://www.transportstyrelsen.se/sv/vagtrafik/fordon/fordonsregler/belysning/",
+  },
+  korkortB: {
+    label: "Transportstyrelsen – Ta körkort för personbil (B)",
+    url: "https://www.transportstyrelsen.se/sv/vagtrafik/Korkort/ta-korkort/personbil-b/",
+  },
 } satisfies Record<string, LessonSource>;
 
 export const LESSONS: Lesson[] = [
