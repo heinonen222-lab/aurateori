@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, useHydrated } from "@tanstack/react-router";
 import { useState } from "react";
 import { Check, Copy, Bot, RefreshCw } from "lucide-react";
 import { AppShell } from "@/components/AppShell";
@@ -55,7 +55,8 @@ function Steps({ title, steps }: { title: string; steps: React.ReactNode[] }) {
 }
 
 function ConnectPage() {
-  const mcpUrl = new URL("/mcp", window.location.origin).toString();
+  const hydrated = useHydrated();
+  const mcpUrl = hydrated ? new URL("/mcp", window.location.origin).toString() : "/mcp";
   const claudeAddUrl = `https://claude.ai/customize/connectors?modal=add-custom-connector&connectorName=${encodeURIComponent("Aurateori")}&connectorUrl=${encodeURIComponent(mcpUrl)}`;
   const claudeCodeCmd = `claude mcp add --scope user --transport http aurateori '${mcpUrl.replace(/'/g, "'\\''")}'`;
 
