@@ -550,10 +550,11 @@ function SceneWorld(props: SceneProps) {
 function StaticSceneFallback({ scene }: { scene: LessonSceneConfig }) {
   const winter = scene.weather === "winter";
   const night = scene.weather === "night";
+  const backgroundClass = night ? "absolute inset-0 bg-background" : winter ? "absolute inset-0 bg-secondary" : "absolute inset-0 bg-accent";
   return (
     <div className="grid h-full min-h-64 place-items-center overflow-hidden bg-muted p-5 text-center">
       <div className="relative aspect-video w-full max-w-2xl overflow-hidden rounded-xl border border-border bg-background/70">
-        <div className={night ? "absolute inset-0 bg-slate-950" : winter ? "absolute inset-0 bg-sky-100" : "absolute inset-0 bg-emerald-100"} />
+        <div className={backgroundClass} />
         <div className="absolute left-1/2 top-0 h-full w-24 -translate-x-1/2 bg-muted-foreground/50" />
         {(scene.layout === "cross" || scene.layout === "roundabout" || scene.layout === "parking") && <div className="absolute left-0 top-1/2 h-24 w-full -translate-y-1/2 bg-muted-foreground/50" />}
         {scene.layout === "roundabout" && <div className="absolute left-1/2 top-1/2 h-24 w-24 -translate-x-1/2 -translate-y-1/2 rounded-full bg-card" />}
