@@ -184,8 +184,8 @@ function StatsPage() {
               onNext={() => setRepeatIdx((i) => i + 1)}
             />
           ) : (
-            <div className="rounded-2xl bg-success/10 p-6 text-center text-sm text-success">
-              🎯 Kön är tom – bra jobbat!
+            <div className="rounded-2xl bg-success/10 p-6 text-center text-sm font-medium text-success">
+              Kön är tom – bra jobbat!
             </div>
           )}
         </div>

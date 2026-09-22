@@ -19,6 +19,7 @@ import { Route as QuizRouteImport } from './routes/quiz'
 import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as PriserRouteImport } from './routes/priser'
 import { Route as McpRouteImport } from './routes/mcp'
+import { Route as KontoRouteImport } from './routes/konto'
 import { Route as GenomgangarRouteImport } from './routes/genomgangar'
 import { Route as FlashcardsRouteImport } from './routes/flashcards'
 import { Route as ExamRouteImport } from './routes/exam'
@@ -81,6 +82,11 @@ const PriserRoute = PriserRouteImport.update({
 const McpRoute = McpRouteImport.update({
   id: '/mcp',
   path: '/mcp',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const KontoRoute = KontoRouteImport.update({
+  id: '/konto',
+  path: '/konto',
   getParentRoute: () => rootRouteImport,
 } as any)
 const GenomgangarRoute = GenomgangarRouteImport.update({
@@ -161,6 +167,7 @@ export interface FileRoutesByFullPath {
   '/exam': typeof ExamRoute
   '/flashcards': typeof FlashcardsRoute
   '/genomgangar': typeof GenomgangarRoute
+  '/konto': typeof KontoRoute
   '/mcp': typeof McpRoute
   '/priser': typeof PriserRoute
   '/privacy': typeof PrivacyRoute
@@ -186,6 +193,7 @@ export interface FileRoutesByTo {
   '/exam': typeof ExamRoute
   '/flashcards': typeof FlashcardsRoute
   '/genomgangar': typeof GenomgangarRoute
+  '/konto': typeof KontoRoute
   '/mcp': typeof McpRoute
   '/priser': typeof PriserRoute
   '/privacy': typeof PrivacyRoute
@@ -212,6 +220,7 @@ export interface FileRoutesById {
   '/exam': typeof ExamRoute
   '/flashcards': typeof FlashcardsRoute
   '/genomgangar': typeof GenomgangarRoute
+  '/konto': typeof KontoRoute
   '/mcp': typeof McpRoute
   '/priser': typeof PriserRoute
   '/privacy': typeof PrivacyRoute
@@ -239,6 +248,7 @@ export interface FileRouteTypes {
     | '/exam'
     | '/flashcards'
     | '/genomgangar'
+    | '/konto'
     | '/mcp'
     | '/priser'
     | '/privacy'
@@ -264,6 +274,7 @@ export interface FileRouteTypes {
     | '/exam'
     | '/flashcards'
     | '/genomgangar'
+    | '/konto'
     | '/mcp'
     | '/priser'
     | '/privacy'
@@ -289,6 +300,7 @@ export interface FileRouteTypes {
     | '/exam'
     | '/flashcards'
     | '/genomgangar'
+    | '/konto'
     | '/mcp'
     | '/priser'
     | '/privacy'
@@ -315,6 +327,7 @@ export interface RootRouteChildren {
   ExamRoute: typeof ExamRoute
   FlashcardsRoute: typeof FlashcardsRoute
   GenomgangarRoute: typeof GenomgangarRoute
+  KontoRoute: typeof KontoRoute
   McpRoute: typeof McpRoute
   PriserRoute: typeof PriserRoute
   PrivacyRoute: typeof PrivacyRoute
@@ -403,6 +416,13 @@ declare module '@tanstack/react-router' {
       path: '/mcp'
       fullPath: '/mcp'
       preLoaderRoute: typeof McpRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/konto': {
+      id: '/konto'
+      path: '/konto'
+      fullPath: '/konto'
+      preLoaderRoute: typeof KontoRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/genomgangar': {
@@ -507,6 +527,7 @@ const rootRouteChildren: RootRouteChildren = {
   ExamRoute: ExamRoute,
   FlashcardsRoute: FlashcardsRoute,
   GenomgangarRoute: GenomgangarRoute,
+  KontoRoute: KontoRoute,
   McpRoute: McpRoute,
   PriserRoute: PriserRoute,
   PrivacyRoute: PrivacyRoute,

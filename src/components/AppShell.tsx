@@ -142,16 +142,16 @@ export function AppShell({ children }: { children: ReactNode }) {
         </button>
       </header>
 
-      <main className="pb-20 lg:ml-64 lg:pb-8">
-        <div className="mx-auto max-w-5xl px-4 py-4 lg:px-8 lg:py-8">
+      <main className="pb-[calc(5.5rem+env(safe-area-inset-bottom))] lg:ml-64 lg:pb-8">
+        <div className="mx-auto max-w-5xl px-4 py-5 lg:px-8 lg:py-8">
           {children}
           <LegalFooter />
         </div>
       </main>
 
       {/* Mobile bottom nav */}
-      <nav className="fixed inset-x-0 bottom-0 z-30 border-t border-border bg-background/95 backdrop-blur lg:hidden">
-        <div className="mx-auto grid max-w-md grid-cols-5">
+      <nav className="fixed inset-x-0 bottom-0 z-30 border-t border-border bg-background/95 pb-[env(safe-area-inset-bottom)] backdrop-blur lg:hidden">
+        <div className="mx-auto grid max-w-md grid-cols-5 px-1">
           {PRIMARY_NAV.map((n) => {
             const active = n.to === "/" ? pathname === "/" : pathname.startsWith(n.to);
             return <NavLink key={n.to} item={n} active={active} />;
