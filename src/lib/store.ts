@@ -144,9 +144,9 @@ export function computeStats(s: AppState) {
 
   // Träningsmängd multiplicerar bara resultatet. Ett fel kan därför aldrig
   // höja klarheten genom att öka antalet besvarade frågor.
-  const confidence = Math.min(1, total / 100);
+  const confidence = Math.min(1, correct / 100);
   const baseReadiness = recentAccuracy * 0.5 + errorDebtScore * 0.25 + examScore * 0.25;
-  const readiness = Math.round(baseReadiness * confidence);
+  const readiness = Math.floor(baseReadiness * confidence);
 
   return { total, correct, accuracy, readiness: Math.min(100, Math.max(0, readiness)) };
 }

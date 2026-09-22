@@ -216,7 +216,7 @@ function Stat({ label, value }: { label: string; value: string }) {
 
 function Row({ label, value }: { label: string; value: string }) {
   return (
-    <div className="grid grid-cols-[minmax(0,1fr)_minmax(0,1.25fr)] items-baseline gap-2">
+    <div className="grid min-h-8 grid-cols-[minmax(0,1fr)_minmax(0,1.25fr)] items-start gap-2 leading-4">
       <span className="break-words">{label}</span>
       <span className="min-w-0 break-all text-right font-semibold text-foreground">{value}</span>
     </div>

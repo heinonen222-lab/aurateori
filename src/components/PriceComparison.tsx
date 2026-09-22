@@ -67,7 +67,7 @@ export function PriceComparison() {
                 : "rounded-2xl border border-border bg-background p-3"
             }
           >
-            <div className="grid grid-cols-[minmax(0,1fr)_minmax(0,1.35fr)] items-start gap-2">
+            <div className="grid min-h-10 grid-cols-[minmax(0,1fr)_minmax(0,1.35fr)] items-start gap-2">
               <span className="min-w-0 break-words text-sm font-bold">{r.name}</span>
               <span className="min-w-0 break-words text-right text-xs font-semibold">{r.price}</span>
             </div>
