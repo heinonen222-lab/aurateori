@@ -27,9 +27,6 @@ export function LegalFooter() {
                 {l.label}
               </Link>
             ))}
-            <Link to="/connect" className="hover:text-foreground hover:underline">
-              Anslut AI-assistent
-            </Link>
             <a href="mailto:support@aurateori.se" className="hover:text-foreground hover:underline">
               Kontakt
             </a>
