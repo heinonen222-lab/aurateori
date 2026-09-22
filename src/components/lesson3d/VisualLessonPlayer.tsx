@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { ArrowLeft, ExternalLink, Pause, Play, RotateCcw, SkipBack, SkipForward } from "lucide-react";
 import type { Lesson, LessonStep } from "@/data/lessons";
 import { Button } from "@/components/ui/button";
@@ -17,15 +17,25 @@ export function VisualLessonPlayer({ lesson, onExit }: { lesson: Lesson; onExit:
   const [playing, setPlaying] = useState(true);
   const [elapsed, setElapsed] = useState(0);
   const [reducedMotion, setReducedMotion] = useState(false);
+  const mounted = useRef(false);
   const slide = slides[index] ?? slides[0];
 
   useEffect(() => {
+    mounted.current = true;
+    return () => {
+      mounted.current = false;
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!mounted.current) return;
     setReducedMotion(window.matchMedia("(prefers-reduced-motion: reduce)").matches);
   }, []);
 
   useEffect(() => {
     if (!playing || reducedMotion || slides.length === 0) return;
     const timer = window.setInterval(() => {
+      if (!mounted.current) return;
       setElapsed((current) => Math.min(STEP_SECONDS, current + 0.1));
     }, 100);
     return () => window.clearInterval(timer);
@@ -33,6 +43,7 @@ export function VisualLessonPlayer({ lesson, onExit }: { lesson: Lesson; onExit:
 
   useEffect(() => {
     if (elapsed < STEP_SECONDS) return;
+    if (!mounted.current) return;
     setIndex((value) => (value + 1) % slides.length);
     setElapsed(0);
   }, [elapsed, slides.length]);
