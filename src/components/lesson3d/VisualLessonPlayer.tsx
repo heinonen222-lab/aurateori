@@ -26,14 +26,16 @@ export function VisualLessonPlayer({ lesson, onExit }: { lesson: Lesson; onExit:
   useEffect(() => {
     if (!playing || reducedMotion || slides.length === 0) return;
     const timer = window.setInterval(() => {
-      setElapsed((current) => {
-        if (current + 0.1 < STEP_SECONDS) return current + 0.1;
-        setIndex((value) => (value + 1) % slides.length);
-        return 0;
-      });
+      setElapsed((current) => Math.min(STEP_SECONDS, current + 0.1));
     }, 100);
     return () => window.clearInterval(timer);
   }, [playing, reducedMotion, slides.length]);
+
+  useEffect(() => {
+    if (elapsed < STEP_SECONDS) return;
+    setIndex((value) => (value + 1) % slides.length);
+    setElapsed(0);
+  }, [elapsed, slides.length]);
 
   const go = (next: number) => {
     setIndex((next + slides.length) % slides.length);
@@ -98,7 +100,7 @@ export function VisualLessonPlayer({ lesson, onExit }: { lesson: Lesson; onExit:
           {slide.source && (
             <a href={slide.source.url} target="_blank" rel="noopener noreferrer" className="mt-4 inline-flex max-w-full items-start gap-1.5 break-words text-xs font-semibold text-primary hover:underline">
               <ExternalLink className="mt-0.5 h-3.5 w-3.5 shrink-0" />
-              <span className="min-w-0 break-all sm:break-words">{slide.source.label}</span>
+              <span className="min-w-0 break-words">{slide.source.label}</span>
             </a>
           )}
         </div>
