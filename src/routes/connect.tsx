@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, useHydrated } from "@tanstack/react-router";
 import { useState } from "react";
 import { Check, Copy, Bot, RefreshCw } from "lucide-react";
 import { AppShell } from "@/components/AppShell";
