@@ -1,6 +1,6 @@
 # Roadmap
 
-- [ ] Gör all text box-säker och rader höjdstabila
-- [ ] Uppdatera och testa körkortsklarhet så fel alltid reducerar resultatet
-- [ ] Bygg 12 styrda 3D-genomgångar utan frågor
-- [ ] Verifiera mobil, desktop, teman, rörelse och felkonsol
+- [x] Gör all text box-säker och rader höjdstabila
+- [x] Uppdatera och testa körkortsklarhet så fel alltid reducerar resultatet
+- [x] Bygg 12 styrda 3D-genomgångar utan frågor
+- [x] Verifiera mobil, desktop, teman, rörelse och felkonsol
