@@ -97,12 +97,12 @@ function PricingPage() {
 
         <BillingStatus />
 
-        <div className="grid gap-4 sm:grid-cols-3">
+        <div className="grid items-stretch gap-4 sm:grid-cols-2">
           {PLANS.map((p) => (
             <div
               key={p.priceId}
               className={cn(
-                "flex flex-col rounded-3xl border bg-card p-5 shadow-sm",
+                "flex h-full min-w-0 flex-col overflow-hidden rounded-3xl border bg-card p-5 shadow-sm",
                 p.highlight ? "border-primary ring-1 ring-primary" : "border-border",
               )}
             >
@@ -111,16 +111,16 @@ function PricingPage() {
                   Bäst värde
                 </div>
               )}
-              <div className="text-sm font-bold">{p.name}</div>
+              <div className="min-h-5 break-words text-sm font-bold">{p.name}</div>
               <div className="mt-2">
                 <span className="text-3xl font-black">{p.price}</span>
                 <span className="text-sm text-muted-foreground">{p.per}</span>
               </div>
-              <div className="mt-1 text-xs text-muted-foreground">{p.note}</div>
+              <div className="mt-1 min-h-8 break-words text-xs leading-4 text-muted-foreground">{p.note}</div>
               <button
                 onClick={() => buy(p.priceId)}
                 disabled={loading}
-                className="mt-4 flex items-center justify-center gap-2 rounded-xl bg-primary py-2.5 text-sm font-bold text-primary-foreground transition hover:opacity-90 disabled:opacity-60"
+                className="mt-auto flex min-w-0 items-center justify-center gap-2 rounded-xl bg-primary px-3 py-2.5 text-sm font-bold text-primary-foreground transition hover:opacity-90 disabled:opacity-60"
               >
                 {loading && <Loader2 className="h-4 w-4 animate-spin" />}
                 {user ? "Köp" : "Logga in och köp"}
@@ -143,7 +143,7 @@ function PricingPage() {
           ].map((t) => (
             <div
               key={t}
-              className="flex items-start gap-2 rounded-2xl border border-border bg-background p-3 text-xs"
+              className="flex min-h-16 min-w-0 items-start gap-2 overflow-hidden rounded-2xl border border-border bg-background p-3 text-xs leading-4"
             >
               <Check className="mt-0.5 h-3.5 w-3.5 shrink-0 text-primary" />
               {t}

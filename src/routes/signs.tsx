@@ -5,6 +5,7 @@ import { AppShell } from "@/components/AppShell";
 import { ROAD_SIGNS, type RoadSign, type SignCategory } from "@/data/signs";
 import { SignImage } from "@/components/SignImage";
 import { cn } from "@/lib/utils";
+import { AutoFitText } from "@/components/AutoFitText";
 
 export const Route = createFileRoute("/signs")({
   head: () => ({
@@ -87,14 +88,12 @@ function SignsPage() {
             <button
               key={s.id}
               onClick={() => setActive(s)}
-              className="group flex flex-col items-center gap-3 rounded-2xl border border-border bg-card p-4 text-center transition hover:-translate-y-0.5 hover:shadow-md"
+              className="group flex h-full min-w-0 flex-col items-center gap-3 overflow-hidden rounded-2xl border border-border bg-card p-4 text-center transition hover:-translate-y-0.5 hover:shadow-md"
             >
               <SignImage id={s.id} className="h-20 w-20 transition group-hover:scale-105" />
-              <div>
-                <div className="text-xs font-bold leading-tight">{s.name}</div>
-                <div className="mt-1 text-[10px] uppercase tracking-wider text-muted-foreground">
-                  {s.category}
-                </div>
+              <div className="w-full min-w-0">
+                <AutoFitText maxSize={12} minSize={9} className="h-10 font-bold leading-5">{s.name}</AutoFitText>
+                <AutoFitText maxSize={10} minSize={8} className="mt-1 h-8 uppercase leading-4 tracking-wider text-muted-foreground">{s.category}</AutoFitText>
               </div>
             </button>
           ))}
