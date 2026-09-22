@@ -25,7 +25,6 @@ import { Route as FlashcardsRouteImport } from './routes/flashcards'
 import { Route as ExamRouteImport } from './routes/exam'
 import { Route as ConnectRouteImport } from './routes/connect'
 import { Route as AuthRouteImport } from './routes/auth'
-import { Route as AssistentRouteImport } from './routes/assistent'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as CheckoutSuccessRouteImport } from './routes/checkout.success'
 import { Route as Char91DotwellKnownChar93OauthProtectedResourceRouteImport } from './routes/[.well-known]/oauth-protected-resource'
@@ -114,11 +113,6 @@ const AuthRoute = AuthRouteImport.update({
   path: '/auth',
   getParentRoute: () => rootRouteImport,
 } as any)
-const AssistentRoute = AssistentRouteImport.update({
-  id: '/assistent',
-  path: '/assistent',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
@@ -161,7 +155,6 @@ const ApiPublicPaymentsWebhookRoute =
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/assistent': typeof AssistentRoute
   '/auth': typeof AuthRoute
   '/connect': typeof ConnectRoute
   '/exam': typeof ExamRoute
@@ -187,7 +180,6 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/assistent': typeof AssistentRoute
   '/auth': typeof AuthRoute
   '/connect': typeof ConnectRoute
   '/exam': typeof ExamRoute
@@ -214,7 +206,6 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/assistent': typeof AssistentRoute
   '/auth': typeof AuthRoute
   '/connect': typeof ConnectRoute
   '/exam': typeof ExamRoute
@@ -242,7 +233,6 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
-    | '/assistent'
     | '/auth'
     | '/connect'
     | '/exam'
@@ -268,7 +258,6 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
-    | '/assistent'
     | '/auth'
     | '/connect'
     | '/exam'
@@ -294,7 +283,6 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
-    | '/assistent'
     | '/auth'
     | '/connect'
     | '/exam'
@@ -321,7 +309,6 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  AssistentRoute: typeof AssistentRoute
   AuthRoute: typeof AuthRoute
   ConnectRoute: typeof ConnectRoute
   ExamRoute: typeof ExamRoute
@@ -460,13 +447,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/assistent': {
-      id: '/assistent'
-      path: '/assistent'
-      fullPath: '/assistent'
-      preLoaderRoute: typeof AssistentRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/': {
       id: '/'
       path: '/'
@@ -521,7 +501,6 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  AssistentRoute: AssistentRoute,
   AuthRoute: AuthRoute,
   ConnectRoute: ConnectRoute,
   ExamRoute: ExamRoute,
