@@ -1,6 +1,6 @@
 import { Link, useNavigate } from "@tanstack/react-router";
 import { useQueryClient } from "@tanstack/react-query";
-import { LogIn, LogOut, User as UserIcon } from "lucide-react";
+import { Crown, LogIn, LogOut, User as UserIcon } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { useSubscription } from "@/hooks/useSubscription";
@@ -63,12 +63,20 @@ export function AccountMenu({
         )}
       </div>
       <Link
-        to="/priser"
+        to="/konto"
         onClick={onNavigate}
         className={cn(base, "text-muted-foreground hover:bg-muted hover:text-foreground")}
       >
         <UserIcon className="h-4 w-4" />
-        Mitt konto & betalning
+        Mitt konto
+      </Link>
+      <Link
+        to="/priser"
+        onClick={onNavigate}
+        className={cn(base, "text-muted-foreground hover:bg-muted hover:text-foreground")}
+      >
+        <Crown className="h-4 w-4" />
+        Premium & betalning
       </Link>
       <button
         onClick={() => void signOut()}

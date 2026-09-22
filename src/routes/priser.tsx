@@ -107,7 +107,7 @@ function PricingPage() {
               )}
             >
               {p.highlight && (
-                <div className="mb-2 self-start rounded-full bg-primary px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-primary-foreground">
+                <div className="mb-3 inline-flex self-start rounded-full bg-primary px-3 py-1 text-[10px] font-bold uppercase leading-none tracking-wider text-primary-foreground">
                   Bäst värde
                 </div>
               )}
