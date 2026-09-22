@@ -16,6 +16,7 @@ const ALL_QUESTIONS = [
 import { store, useStore, computeStats } from "@/lib/store";
 import { RotateCcw, Trash2 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { AutoFitText } from "@/components/AutoFitText";
 
 export const Route = createFileRoute("/stats")({
   head: () => ({
@@ -150,9 +151,9 @@ function StatsPage() {
               const pct = Math.round((v.ok / v.total) * 100);
               return (
                 <div key={cat}>
-                  <div className="mb-1 flex justify-between text-sm">
-                    <span className="font-medium">{cat}</span>
-                    <span className="text-muted-foreground">
+                  <div className="mb-1 grid grid-cols-[minmax(0,1fr)_auto] items-end gap-2 text-sm">
+                    <span className="min-w-0 break-words font-medium">{cat}</span>
+                    <span className="shrink-0 text-muted-foreground">
                       {v.ok}/{v.total} · {pct}%
                     </span>
                   </div>
@@ -214,9 +215,9 @@ function MiniStat({
     primary: "text-primary",
   }[accent];
   return (
-    <div className="rounded-2xl border border-border bg-card p-4">
-      <div className={`text-2xl font-black ${clr}`}>{value}</div>
-      <div className="mt-1 text-[11px] uppercase tracking-wider text-muted-foreground">{label}</div>
+    <div className="min-w-0 overflow-hidden rounded-2xl border border-border bg-card p-3 sm:p-4">
+      <AutoFitText maxSize={24} minSize={15} className={`h-7 font-black leading-7 ${clr}`}>{value}</AutoFitText>
+      <AutoFitText maxSize={11} minSize={8} className="mt-1 h-8 uppercase leading-4 tracking-wider text-muted-foreground">{label}</AutoFitText>
     </div>
   );
 }

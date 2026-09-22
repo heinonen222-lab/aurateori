@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { Zap, Timer, Signpost, Flame, Target, CheckCircle2 } from "lucide-react";
 import { AppShell } from "@/components/AppShell";
+import { AutoFitText } from "@/components/AutoFitText";
 import { useStore, computeStats } from "@/lib/store";
 
 export const Route = createFileRoute("/")({
@@ -74,7 +75,7 @@ function Dashboard() {
 
         <div className="grid gap-4 rounded-3xl border border-border bg-card p-6 sm:grid-cols-[auto_1fr] sm:items-center sm:gap-8">
           <Gauge value={stats.readiness} />
-          <div className="grid grid-cols-3 gap-3">
+          <div className="grid min-w-0 grid-cols-3 gap-2 sm:gap-3">
             <Stat
               icon={<Target className="h-4 w-4" />}
               label="Frågor"
@@ -154,14 +155,14 @@ function Stat({
     warning: "bg-warning/20 text-warning-foreground",
   }[accent];
   return (
-    <div className="rounded-2xl border border-border bg-background p-3">
+    <div className="flex min-w-0 flex-col overflow-hidden rounded-2xl border border-border bg-background p-2.5 sm:p-3">
       <div
         className={`mb-2 inline-flex h-7 w-7 items-center justify-center rounded-lg ${accentBg}`}
       >
         {icon}
       </div>
-      <div className="text-xl font-black leading-none">{value}</div>
-      <div className="mt-1 text-[11px] uppercase tracking-wider text-muted-foreground">{label}</div>
+      <AutoFitText maxSize={20} minSize={14} className="h-6 font-black leading-6">{value}</AutoFitText>
+      <AutoFitText maxSize={11} minSize={8} className="mt-1 h-8 uppercase leading-4 tracking-wider text-muted-foreground">{label}</AutoFitText>
     </div>
   );
 }
@@ -182,7 +183,7 @@ function ActionCard({
   return (
     <Link
       to={to}
-      className={`group relative overflow-hidden rounded-2xl border p-5 transition-all hover:-translate-y-0.5 hover:shadow-lg ${
+      className={`group relative flex h-full min-w-0 flex-col overflow-hidden rounded-2xl border p-5 transition-all hover:-translate-y-0.5 hover:shadow-lg ${
         highlight ? "border-primary/30 bg-primary text-primary-foreground" : "border-border bg-card"
       }`}
     >
@@ -193,9 +194,9 @@ function ActionCard({
       >
         {icon}
       </div>
-      <div className="mt-4 text-base font-bold">{title}</div>
+      <AutoFitText maxSize={16} minSize={12} className="mt-4 h-12 font-bold leading-6">{title}</AutoFitText>
       <div
-        className={`mt-1 text-sm ${highlight ? "text-primary-foreground/80" : "text-muted-foreground"}`}
+        className={`mt-1 min-h-[3.75rem] flex-1 text-sm leading-5 ${highlight ? "text-primary-foreground/80" : "text-muted-foreground"}`}
       >
         {desc}
       </div>

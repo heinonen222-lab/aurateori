@@ -49,8 +49,8 @@ export function BillingStatus() {
 
   return (
     <section className="rounded-3xl border border-border bg-card p-5 shadow-sm">
-      <div className="mb-4 flex items-center justify-between gap-3">
-        <div>
+      <div className="mb-4 grid grid-cols-[minmax(0,1fr)_auto] items-start gap-3">
+        <div className="min-w-0">
           <h2 className="text-sm font-bold">Betalningsstatus</h2>
           <p className="text-xs text-muted-foreground">
             {environment === "live" ? "Skarpa betalningar" : "Testläge (sandbox)"} · direkt från
@@ -60,7 +60,7 @@ export function BillingStatus() {
         <button
           type="button"
           onClick={() => void query.refetch()}
-          className="flex items-center gap-1.5 rounded-xl border border-border px-2.5 py-1.5 text-xs font-semibold transition hover:bg-secondary"
+          className="flex shrink-0 items-center gap-1.5 rounded-xl border border-border px-2.5 py-1.5 text-xs font-semibold transition hover:bg-secondary"
         >
           <RefreshCw className={cn("h-3.5 w-3.5", query.isFetching && "animate-spin")} />
           Uppdatera
@@ -205,9 +205,9 @@ export function BillingStatus() {
 
 function Stat({ label, value }: { label: string; value: string }) {
   return (
-    <div className="rounded-2xl border border-border bg-secondary/40 p-3 text-center">
+    <div className="min-w-0 overflow-hidden rounded-2xl border border-border bg-secondary/40 p-2 text-center sm:p-3">
       <div className="text-xl font-black">{value}</div>
-      <div className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
+      <div className="min-h-8 break-words text-[9px] font-semibold uppercase leading-4 tracking-wider text-muted-foreground sm:text-[10px]">
         {label}
       </div>
     </div>
@@ -216,9 +216,9 @@ function Stat({ label, value }: { label: string; value: string }) {
 
 function Row({ label, value }: { label: string; value: string }) {
   return (
-    <div className="flex items-baseline justify-between gap-2">
-      <span>{label}</span>
-      <span className="truncate font-semibold text-foreground">{value}</span>
+    <div className="grid grid-cols-[minmax(0,1fr)_minmax(0,1.25fr)] items-baseline gap-2">
+      <span className="break-words">{label}</span>
+      <span className="min-w-0 break-all text-right font-semibold text-foreground">{value}</span>
     </div>
   );
 }

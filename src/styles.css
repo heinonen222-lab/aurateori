@@ -143,6 +143,29 @@
     font-family: var(--font-sans);
     -webkit-font-smoothing: antialiased;
   }
+  button,
+  a,
+  div,
+  span,
+  p,
+  li,
+  dt,
+  dd,
+  h1,
+  h2,
+  h3 {
+    min-width: 0;
+  }
+  p,
+  li,
+  dt,
+  dd,
+  h1,
+  h2,
+  h3 {
+    overflow-wrap: anywhere;
+    hyphens: auto;
+  }
 }
 
 @utility no-scrollbar {

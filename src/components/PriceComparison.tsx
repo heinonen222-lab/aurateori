@@ -67,9 +67,9 @@ export function PriceComparison() {
                 : "rounded-2xl border border-border bg-background p-3"
             }
           >
-            <div className="flex items-baseline justify-between gap-2">
-              <span className="text-sm font-bold">{r.name}</span>
-              <span className="text-right text-xs font-semibold">{r.price}</span>
+            <div className="grid grid-cols-[minmax(0,1fr)_minmax(0,1.35fr)] items-start gap-2">
+              <span className="min-w-0 break-words text-sm font-bold">{r.name}</span>
+              <span className="min-w-0 break-words text-right text-xs font-semibold">{r.price}</span>
             </div>
             <div className="mt-1.5 flex flex-wrap items-center gap-x-3 gap-y-1 text-[11px] text-muted-foreground">
               <span>{r.model}</span>

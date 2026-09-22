@@ -121,16 +121,34 @@ export function computeStats(s: AppState) {
   const total = s.answers.length;
   const correct = s.answers.filter((a) => a.correct).length;
   const accuracy = total ? Math.round((correct / total) * 100) : 0;
-  // Readiness: weighted mix of accuracy, volume, and inverse of wrongQueue.
-  // Accuracy och felkön viktas med ett konfidensmått så att ett fåtal svar
-  // inte kan ge ett högt klarhetsvärde.
-  const volumeScore = Math.min(100, (total / 130) * 100);
-  const wrongPenalty = Math.max(0, 100 - s.wrongQueue.length * 4);
-  const confidence = Math.min(1, total / 40);
-  const readiness = total
-    ? Math.round((accuracy * 0.55 + wrongPenalty * 0.15) * confidence + volumeScore * 0.3)
-    : 0;
-  return { total, correct, accuracy, readiness: Math.min(100, readiness) };
+  if (total === 0) return { total, correct, accuracy, readiness: 0 };
+
+  // De senaste svaren väger tyngst, så ett nytt fel märks direkt.
+  const recentAnswers = s.answers.slice(-50);
+  const recentCorrect = recentAnswers.filter((answer) => answer.correct).length;
+  const recentAccuracy = (recentCorrect / recentAnswers.length) * 100;
+
+  // Varje olöst fråga är en faktisk kunskapsskuld. 25 frågor i kön ger noll
+  // i denna del av modellen.
+  const errorDebtScore = Math.max(0, 100 - s.wrongQueue.length * 4);
+
+  // Fullständiga prov är den bästa mätningen av provberedskap. Utan prov används
+  // den aktuella träffsäkerheten, så nya användare aldrig får en gratis bonus.
+  const recentExams = (s.examAttempts ?? []).slice(-3);
+  const examScore = recentExams.length
+    ? recentExams.reduce(
+        (sum, attempt) => sum + (attempt.total > 0 ? (attempt.correct / attempt.total) * 100 : 0),
+        0,
+      ) / recentExams.length
+    : recentAccuracy;
+
+  // Träningsmängd multiplicerar bara resultatet. Ett fel kan därför aldrig
+  // höja klarheten genom att öka antalet besvarade frågor.
+  const confidence = Math.min(1, total / 100);
+  const baseReadiness = recentAccuracy * 0.5 + errorDebtScore * 0.25 + examScore * 0.25;
+  const readiness = Math.round(baseReadiness * confidence);
+
+  return { total, correct, accuracy, readiness: Math.min(100, Math.max(0, readiness)) };
 }
 
 export function examUsage(s: AppState) {
