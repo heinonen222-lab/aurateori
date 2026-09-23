@@ -52,12 +52,13 @@ function LessonsPage() {
     enabled: Boolean(user),
   });
 
-  const save = useMutation({
-    mutationFn: persistProgress,
-    onSuccess: () => {
-      void queryClient.invalidateQueries({ queryKey: ["lesson-progress", user?.id] });
-    },
-  });
+  // Refs håller callbacken stabil, så att ett sparat steg inte triggar en ny
+  // render → ny callback → nytt sparande.
+  const activeRef = useRef<Lesson | null>(null);
+  activeRef.current = active;
+  const saveRef = useRef(persistProgress);
+  saveRef.current = persistProgress;
+  const userId = user?.id ?? null;
 
   useEffect(() => {
     if (!lessonParam) return;
@@ -69,18 +70,26 @@ function LessonsPage() {
 
   const handleStepChange = useCallback(
     (step: number, totalSteps: number) => {
-      if (!user || !active) return;
-      save.mutate({
-        data: {
-          lessonId: active.id,
-          lastStep: step,
-          totalSteps,
-          completed: step >= totalSteps - 1,
-        },
-      });
+      const lesson = activeRef.current;
+      if (!userId || !lesson) return;
+      void saveRef
+        .current({
+          data: {
+            lessonId: lesson.id,
+            lastStep: step,
+            totalSteps,
+            completed: step >= totalSteps - 1,
+          },
+        })
+        .catch(() => undefined);
     },
-    [user, active, save],
+    [userId],
   );
+
+  const closePlayer = () => {
+    setActive(null);
+    void queryClient.invalidateQueries({ queryKey: ["lesson-progress", userId] });
+  };
 
   return (
     <AppShell>
@@ -90,7 +99,7 @@ function LessonsPage() {
           lesson={active}
           initialStep={progressFor(active.id)?.last_step ?? 0}
           onStepChange={handleStepChange}
-          onExit={() => setActive(null)}
+          onExit={closePlayer}
         />
       ) : (
         <div className="space-y-5">
