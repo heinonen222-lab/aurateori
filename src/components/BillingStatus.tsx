@@ -19,6 +19,16 @@ function fmtDate(value: string | null) {
   return Number.isNaN(d.getTime()) ? "–" : dateFmt.format(d);
 }
 
+const PLAN_LABEL: Record<string, string> = {
+  premium_monthly: "Premium Månad",
+  premium_yearly: "Premium År",
+};
+
+const PLAN_CYCLE: Record<string, string> = {
+  premium_monthly: "149 kr dras varje månad",
+  premium_yearly: "499 kr dras varje år",
+};
+
 const STATUS_LABEL: Record<string, string> = {
   active: "Aktiv",
   trialing: "Provperiod",
@@ -115,7 +125,8 @@ export function BillingStatus() {
                   {sub.isExpired && !sub.isPastDue && " · perioden har gått ut"}
                 </div>
                 <dl className="mt-3 grid gap-1.5 rounded-lg border border-border bg-background/50 p-3 text-xs text-muted-foreground sm:grid-cols-2">
-                  <Row label="Plan" value={sub.priceId} />
+                  <Row label="Plan" value={PLAN_LABEL[sub.priceId] ?? sub.priceId} />
+                  <Row label="Betalning" value={PLAN_CYCLE[sub.priceId] ?? "Löpande abonnemang"} />
                   <Row label="Period slutar" value={fmtDate(sub.currentPeriodEnd)} />
                   <Row
                     label={sub.cancelAtPeriodEnd ? "Avslutas" : "Nästa debitering"}

@@ -42,19 +42,21 @@ const FEATURES = [
 const PLANS = [
   {
     priceId: "premium_monthly",
-    name: "Premium 30 dagar",
+    name: "Premium Månad",
     price: "149 kr",
-    per: "/30 dagar",
-    note: "Avsluta när du vill",
+    per: "/mån",
+    note: "Förnyas automatiskt varje månad – avsluta när du vill",
     highlight: false,
+    cta: "Starta månadsabonnemang",
   },
   {
     priceId: "premium_yearly",
     name: "Premium År",
     price: "499 kr",
     per: "/år",
-    note: "≈ 42 kr/mån – spara ca 72 %",
+    note: "Förnyas automatiskt varje år – ≈ 42 kr/mån, spara ca 72 %",
     highlight: true,
+    cta: "Starta årsabonnemang",
   },
 ] as const;
 
@@ -126,7 +128,7 @@ function PricingPage() {
                   <span className="font-display text-4xl font-extrabold">{p.price}</span>
                 <span className="text-sm text-muted-foreground">{p.per}</span>
               </div>
-              <div className="mt-1 min-h-8 break-words text-xs leading-4 text-muted-foreground">{p.note}</div>
+              <div className="mt-1 min-h-10 break-words text-xs leading-4 text-muted-foreground">{p.note}</div>
               <Button
                 variant={p.highlight ? "premium" : "default"}
                 onClick={() => buy(p.priceId)}
@@ -134,7 +136,7 @@ function PricingPage() {
                 className="mt-auto w-full"
               >
                 {loading && <Loader2 className="h-4 w-4 animate-spin" />}
-                {user ? "Köp" : "Logga in och köp"}
+                {user ? p.cta : "Logga in och prenumerera"}
               </Button>
             </div>
           ))}
@@ -149,7 +151,8 @@ function PricingPage() {
         <div className="grid gap-2 sm:grid-cols-3">
           {[
             "Direkt tillgång – ingen ångerrätt på digital tjänst",
-            "Avsluta prenumerationen när du vill",
+            "Löpande abonnemang – betalningen dras automatiskt varje period",
+            "Avsluta prenumerationen när du vill, den gäller till periodens slut",
             "Säker betalning – Paddle är säljare (Merchant of Record)",
           ].map((t) => (
             <div
