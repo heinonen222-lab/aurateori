@@ -12,9 +12,8 @@ import { listLessonProgress, saveLessonProgress } from "@/utils/lessons.function
 
 export const Route = createFileRoute("/genomgangar")({
   ssr: false,
-  validateSearch: (search: Record<string, unknown>) => ({
-    lesson: typeof search.lesson === "string" ? search.lesson : undefined,
-  }),
+  validateSearch: (search: Record<string, unknown>): { lesson?: string } =>
+    typeof search.lesson === "string" ? { lesson: search.lesson } : {},
   head: () => ({
     meta: [
       { title: "Interaktiva genomgångar – Aurateori" },
