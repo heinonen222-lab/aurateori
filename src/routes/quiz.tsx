@@ -24,6 +24,8 @@ export const Route = createFileRoute("/quiz")({
       },
       { property: "og:title", content: "Övningsfrågor – Aurateori" },
       { property: "og:description", content: "Öva på svenska teorifrågor per kategori." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
   component: QuizPage,

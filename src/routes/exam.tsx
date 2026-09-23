@@ -27,6 +27,8 @@ export const Route = createFileRoute("/exam")({
       },
       { property: "og:title", content: "Examsimulator – Aurateori" },
       { property: "og:description", content: "Simulera Trafikverkets B-teoriprov." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
   component: ExamPage,

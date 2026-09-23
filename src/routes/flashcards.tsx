@@ -17,6 +17,8 @@ export const Route = createFileRoute("/flashcards")({
       },
       { property: "og:title", content: "Snabbplugg – Aurateori" },
       { property: "og:description", content: "Interaktiva flashcards för svenska vägmärken." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
   component: Flashcards,

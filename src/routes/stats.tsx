@@ -26,6 +26,8 @@ export const Route = createFileRoute("/stats")({
       { name: "description", content: "Följ din utveckling och repetera frågor du svarat fel på." },
       { property: "og:title", content: "Statistik & svaga punkter – Aurateori" },
       { property: "og:description", content: "Följ din utveckling och repetera fel svar." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
   component: StatsPage,

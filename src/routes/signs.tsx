@@ -20,6 +20,8 @@ export const Route = createFileRoute("/signs")({
       },
       { property: "og:title", content: "Vägmärkesarkiv – Aurateori" },
       { property: "og:description", content: "Sök och bläddra bland svenska vägmärken." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
   component: SignsPage,
