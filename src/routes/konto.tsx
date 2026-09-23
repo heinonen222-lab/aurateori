@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { useSubscription } from "@/hooks/useSubscription";
+import { SubscriptionCountdown } from "@/components/SubscriptionCountdown";
 import { deleteAccount } from "@/utils/account.functions";
 import { listLessonProgress } from "@/utils/lessons.functions";
 import { LESSONS } from "@/data/lessons";
@@ -164,6 +165,8 @@ function AccountPage() {
                 </Button>
               </div>
             </div>
+
+            <SubscriptionCountdown />
 
             <section className="aura-surface relative space-y-5 overflow-hidden rounded-xl border border-border p-5 shadow-lifted sm:p-6">
               <div className="flex items-start gap-3">

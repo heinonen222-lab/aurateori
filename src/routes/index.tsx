@@ -2,6 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { Zap, Timer, Signpost, Flame, Target, CheckCircle2, ArrowRight, RotateCcw } from "lucide-react";
 import { AppShell } from "@/components/AppShell";
 import { AutoFitText } from "@/components/AutoFitText";
+import { SubscriptionCountdown } from "@/components/SubscriptionCountdown";
 import { useStore, computeStats } from "@/lib/store";
 
 export const Route = createFileRoute("/")({
@@ -74,6 +75,8 @@ function Dashboard() {
             Träna smartare, se vad du behöver förbättra och följ din utveckling fram till provdagen.
           </p>
         </header>
+
+        <SubscriptionCountdown compact />
 
         <div className="aura-surface relative overflow-hidden rounded-xl border border-border p-5 shadow-lifted sm:grid sm:grid-cols-[auto_minmax(0,1fr)] sm:items-center sm:gap-10 sm:p-8">
           <div className="relative z-10 mx-auto w-fit sm:mx-0"><Gauge value={stats.readiness} /></div>
