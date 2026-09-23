@@ -14,6 +14,7 @@ import { bankQuestionsQuery } from "@/lib/ai-questions";
 import { seededShuffle } from "@/lib/shuffle";
 import { store, useStore, examUsage } from "@/lib/store";
 import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
 
 export const Route = createFileRoute("/exam")({
   head: () => ({
@@ -134,12 +135,12 @@ function ExamPage() {
   return (
     <AppShell>
       {phase === "intro" && (
-        <div className="mx-auto max-w-xl space-y-6 rounded-3xl border border-border bg-card p-8 text-center">
-          <div className="inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-primary/10 text-primary">
+        <div className="mx-auto max-w-xl space-y-6 rounded-xl border border-border bg-card p-6 text-center shadow-lifted sm:p-8">
+          <div className="inline-flex h-14 w-14 items-center justify-center rounded-lg bg-primary/10 text-primary">
             <Timer className="h-7 w-7" />
           </div>
           <div>
-            <h1 className="text-2xl font-black">Trafikverket-prov</h1>
+            <h1 className="font-display text-2xl font-extrabold">Teoriprov</h1>
             <p className="mt-2 text-sm text-muted-foreground">
               70 frågor · 50 minuter · minst 52 rätt för att klara provet.
             </p>
@@ -158,7 +159,7 @@ function ExamPage() {
             <div className="h-12 animate-pulse rounded-xl bg-muted" />
           ) : isActive ? (
             <>
-              <div className="inline-flex items-center gap-1.5 rounded-full bg-success/15 px-3 py-1 text-xs font-bold text-success">
+              <div className="inline-flex items-center gap-1.5 rounded-md bg-success/15 px-3 py-1 text-xs font-bold text-success">
                 <Crown className="h-3.5 w-3.5" />
                 Premium aktivt
               </div>
@@ -167,7 +168,7 @@ function ExamPage() {
                 {usage.remaining} kvar idag
               </p>
               {usage.limitReached ? (
-                <div className="rounded-2xl border border-warning/40 bg-warning/10 p-5 text-left">
+                <div className="rounded-lg border border-warning/40 bg-warning/10 p-5 text-left">
                   <div className="flex items-center gap-2 text-sm font-bold">
                     <Lock className="h-4 w-4" />
                     Dagsgränsen är nådd
@@ -192,7 +193,7 @@ function ExamPage() {
                   </div>
                 </div>
               ) : (
-                <button
+                <Button
                   onClick={() => {
                     setSeed((n) => n + 1);
                     setPhase("running");
@@ -200,14 +201,14 @@ function ExamPage() {
                     setResults([]);
                     setTime(SECONDS);
                   }}
-                  className="w-full rounded-xl bg-primary py-3 font-bold text-primary-foreground"
+                  className="w-full"
                 >
                   Starta provet
-                </button>
+                </Button>
               )}
             </>
           ) : (
-            <div className="rounded-2xl border border-warning/40 bg-warning/10 p-5 text-left">
+            <div className="rounded-lg border border-warning/40 bg-warning/10 p-5 text-left">
               <div className="flex items-center gap-2 text-sm font-bold">
                 <Lock className="h-4 w-4" />
                 Fullständigt prov kräver Premium
@@ -240,7 +241,7 @@ function ExamPage() {
 
       {phase === "running" && (
         <div className="space-y-4">
-          <div className="flex items-center justify-between rounded-2xl border border-border bg-card px-4 py-3">
+          <div className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3 rounded-lg border border-border bg-card px-4 py-3 shadow-soft">
             <div className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
               Fråga {idx + 1} / {TOTAL}
             </div>
@@ -333,13 +334,13 @@ function ExamResults({
     <div className="mx-auto max-w-2xl space-y-6">
       <div
         className={cn(
-          "rounded-3xl border p-8 text-center",
+          "rounded-xl border p-8 text-center shadow-soft",
           passed ? "border-success/40 bg-success/10" : "border-destructive/40 bg-destructive/10",
         )}
       >
         <div
           className={cn(
-            "mx-auto grid h-16 w-16 place-items-center rounded-2xl",
+            "mx-auto grid h-16 w-16 place-items-center rounded-lg",
             passed
               ? "bg-success text-success-foreground"
               : "bg-destructive text-destructive-foreground",
@@ -347,11 +348,11 @@ function ExamResults({
         >
           {passed ? <Trophy className="h-8 w-8" /> : <XCircle className="h-8 w-8" />}
         </div>
-        <h1 className="mt-4 text-3xl font-black">{passed ? "Godkänt!" : "Underkänt"}</h1>
+        <h1 className="mt-4 font-display text-3xl font-extrabold">{passed ? "Godkänt!" : "Underkänt"}</h1>
         <p className="mt-1 text-muted-foreground">
           {correct} av {scoredTotal} rätt · gränsen är {PASS}
         </p>
-        <p className="mt-3 inline-flex flex-wrap items-center justify-center gap-x-2 rounded-full bg-background/60 px-3 py-1 text-xs font-semibold text-muted-foreground">
+        <p className="mt-3 inline-flex flex-wrap items-center justify-center gap-x-2 rounded-md bg-background/60 px-3 py-1 text-xs font-semibold text-muted-foreground">
           <span>Prov nr {attemptNo} totalt</span>
           <span>·</span>
           <span>
@@ -360,7 +361,7 @@ function ExamResults({
         </p>
       </div>
 
-      <div className="rounded-3xl border border-border bg-card p-6">
+      <div className="rounded-lg border border-border bg-card p-5 shadow-soft sm:p-6">
         <h2 className="text-lg font-bold">Resultat per kategori</h2>
         <div className="mt-4 space-y-3">
           {Object.entries(byCat).map(([cat, v]) => {
@@ -388,7 +389,7 @@ function ExamResults({
         </div>
       </div>
 
-      <div className="rounded-3xl border border-border bg-card p-6">
+      <div className="rounded-lg border border-border bg-card p-5 shadow-soft sm:p-6">
         <h2 className="text-lg font-bold">Detaljerad genomgång</h2>
         <p className="mt-1 text-xs text-muted-foreground">
           Tryck på en ruta för att hoppa till frågan. Grå rutor är testfrågor som inte räknas.
@@ -418,15 +419,15 @@ function ExamResults({
         </div>
       </div>
 
-      <div className="rounded-3xl border border-border bg-card p-6">
-        <div className="flex flex-wrap items-center justify-between gap-3">
+      <div className="rounded-lg border border-border bg-card p-5 shadow-soft sm:p-6">
+        <div className="grid gap-3 sm:grid-cols-[minmax(0,1fr)_auto] sm:items-center">
           <div>
             <h2 className="text-lg font-bold">Alla frågor – svar, förklaring och källa</h2>
             <p className="mt-1 text-xs text-muted-foreground">
               Ditt svar, rätt svar och regelhänvisning för varje fråga i provet.
             </p>
           </div>
-          <div className="flex rounded-full border border-border p-0.5 text-xs font-semibold">
+          <div className="grid grid-cols-2 rounded-lg border border-border p-0.5 text-xs font-semibold">
             {(
               [
                 ["all", `Alla (${results.length})`],
@@ -437,7 +438,7 @@ function ExamResults({
                 key={key}
                 onClick={() => setFilter(key)}
                 className={cn(
-                  "rounded-full px-3 py-1.5 transition",
+                  "min-h-9 rounded-md px-3 py-1.5 transition focus-visible:ring-2 focus-visible:ring-ring",
                   filter === key
                     ? "bg-primary text-primary-foreground"
                     : "text-muted-foreground hover:text-foreground",
@@ -458,7 +459,7 @@ function ExamResults({
                 key={r.nr}
                 id={`fraga-${r.nr}`}
                 className={cn(
-                  "scroll-mt-24 rounded-2xl border p-4",
+                  "scroll-mt-24 rounded-lg border p-4",
                   r.correct
                     ? "border-success/30 bg-success/5"
                     : "border-destructive/30 bg-destructive/5",
@@ -516,12 +517,9 @@ function ExamResults({
       </div>
 
       {canRetry ? (
-        <button
-          onClick={onRestart}
-          className="w-full rounded-xl bg-primary py-3 font-bold text-primary-foreground"
-        >
+        <Button onClick={onRestart} className="w-full">
           Gör om provet
-        </button>
+        </Button>
       ) : (
         <div className="rounded-xl border border-border bg-secondary/40 p-4 text-center text-sm text-muted-foreground">
           Du har använt alla {limit} prov för idag. Nya prov låses upp imorgon.
