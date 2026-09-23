@@ -75,6 +75,8 @@ function Dashboard() {
           </p>
         </header>
 
+        <SubscriptionCountdown compact />
+
         <div className="aura-surface relative overflow-hidden rounded-xl border border-border p-5 shadow-lifted sm:grid sm:grid-cols-[auto_minmax(0,1fr)] sm:items-center sm:gap-10 sm:p-8">
           <div className="relative z-10 mx-auto w-fit sm:mx-0"><Gauge value={stats.readiness} /></div>
           <div className="relative z-10 mt-5 min-w-0 sm:mt-0">
