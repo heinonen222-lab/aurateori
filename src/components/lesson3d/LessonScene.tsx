@@ -189,21 +189,25 @@ function CarModel({ color = COLORS.blue, lights = false }: { color?: string; lig
 function MovingCar({ color, motion, playing, reducedMotion, sceneId, lights = false }: { color?: string; motion: Motion; playing: boolean; reducedMotion: boolean; sceneId: string; lights?: boolean }) {
   const group = useRef<THREE.Group>(null);
   const elapsed = useRef(0);
+  // Motion-funktionerna skapas om vid varje render. Håll dem i en ref så att
+  // bilen inte nollställs (och hoppar) när komponenten renderas om.
+  const motionRef = useRef(motion);
+  motionRef.current = motion;
 
   useEffect(() => {
     elapsed.current = 0;
-    const start = motion(0);
+    const start = motionRef.current(0);
     if (group.current) {
       group.current.position.set(start.x, 0, start.z);
       group.current.rotation.y = start.yaw;
       group.current.visible = start.visible !== false;
     }
-  }, [motion, sceneId]);
+  }, [sceneId]);
 
   useFrame((_, rawDelta) => {
     const delta = Math.min(rawDelta, 0.05);
     if (playing && !reducedMotion) elapsed.current += delta;
-    const state = motion(elapsed.current);
+    const state = motionRef.current(elapsed.current);
     if (!group.current) return;
     group.current.position.set(state.x, 0, state.z);
     group.current.rotation.y = state.yaw;

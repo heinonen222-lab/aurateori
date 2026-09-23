@@ -174,3 +174,14 @@
     display: none;
   }
 }
+
+/* Progressindikator för genomgångar – körs på kompositorn så 3D-scenen inte
+   behöver rendera om tio gånger per sekund. */
+@keyframes lesson-progress {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
