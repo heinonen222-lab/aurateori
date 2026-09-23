@@ -50,7 +50,7 @@ const ROWS: Row[] = [
 
 export function PriceComparison() {
   return (
-    <section className="rounded-3xl border border-border bg-secondary/40 p-5">
+    <section className="rounded-lg border border-border bg-secondary/40 p-5">
       <h2 className="text-sm font-bold">Så ligger vi mot andra teoriappar</h2>
       <p className="mt-1 text-xs text-muted-foreground">
         Priser hämtade från respektive leverantörs egna sidor. Kontrollera alltid aktuellt pris hos
@@ -63,8 +63,8 @@ export function PriceComparison() {
             key={r.name}
             className={
               r.us
-                ? "rounded-2xl border border-primary/50 bg-primary/10 p-3"
-                : "rounded-2xl border border-border bg-background p-3"
+                ? "rounded-lg border border-primary/50 bg-primary/10 p-3"
+                : "rounded-lg border border-border bg-background p-3"
             }
           >
             <div className="grid min-h-10 grid-cols-[minmax(0,1fr)_minmax(0,1.35fr)] items-start gap-2">

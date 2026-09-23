@@ -119,7 +119,7 @@ export function VisualLessonPlayer({
         </div>
       </header>
 
-      <section className="overflow-hidden rounded-2xl border border-border bg-card shadow-sm">
+      <section className="overflow-hidden rounded-xl border border-border bg-card shadow-lifted">
         <div className="relative aspect-[4/3] min-h-64 w-full bg-muted sm:aspect-video">
           <LessonScene scene={scene} playing={playing} reducedMotion={reducedMotion} drive={drive} />
           <div className="pointer-events-none absolute inset-x-3 top-3 grid grid-cols-[minmax(0,1fr)_auto] items-start gap-2">

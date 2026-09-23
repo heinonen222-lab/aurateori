@@ -17,6 +17,7 @@ import { store, useStore, computeStats } from "@/lib/store";
 import { RotateCcw, Trash2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { AutoFitText } from "@/components/AutoFitText";
+import { Button } from "@/components/ui/button";
 
 export const Route = createFileRoute("/stats")({
   head: () => ({
@@ -25,6 +26,8 @@ export const Route = createFileRoute("/stats")({
       { name: "description", content: "Följ din utveckling och repetera frågor du svarat fel på." },
       { property: "og:title", content: "Statistik & svaga punkter – Aurateori" },
       { property: "og:description", content: "Följ din utveckling och repetera fel svar." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
   component: StatsPage,
@@ -78,22 +81,24 @@ function StatsPage() {
   return (
     <AppShell>
       <div className="space-y-6">
-        <div className="flex items-start justify-between gap-4">
+        <div className="grid grid-cols-[minmax(0,1fr)_auto] items-start gap-4">
           <div>
-            <h1 className="text-2xl font-black sm:text-3xl">Statistik</h1>
+            <h1 className="font-display text-2xl font-extrabold sm:text-3xl">Statistik</h1>
             <p className="mt-1 text-sm text-muted-foreground">
               Din utveckling och områden att fokusera på.
             </p>
           </div>
           {s.answers.length > 0 && (
-            <button
+            <Button
+              variant="outline"
+              size="sm"
               onClick={() => {
                 if (confirm("Nollställ all statistik?")) store.reset();
               }}
-              className="flex items-center gap-1.5 rounded-lg border border-border bg-card px-3 py-2 text-xs font-medium text-muted-foreground hover:text-destructive"
+              className="text-muted-foreground hover:text-destructive"
             >
               <Trash2 className="h-3.5 w-3.5" /> Nollställ
-            </button>
+            </Button>
           )}
         </div>
 
@@ -103,7 +108,7 @@ function StatsPage() {
           <MiniStat label="Träffsäkerhet" value={`${stats.accuracy}%`} accent="primary" />
         </div>
 
-        <div className="rounded-3xl border border-border bg-card p-6">
+        <div className="rounded-lg border border-border bg-card p-5 shadow-soft sm:p-6">
           <h2 className="text-sm font-bold uppercase tracking-wider text-muted-foreground">
             Senaste 7 dagarna
           </h2>
@@ -137,7 +142,7 @@ function StatsPage() {
           </div>
         </div>
 
-        <div className="rounded-3xl border border-border bg-card p-6">
+        <div className="rounded-lg border border-border bg-card p-5 shadow-soft sm:p-6">
           <h2 className="text-sm font-bold uppercase tracking-wider text-muted-foreground">
             Per kategori
           </h2>
@@ -172,7 +177,7 @@ function StatsPage() {
           </div>
         </div>
 
-        <div className="rounded-3xl border border-border bg-card p-6">
+        <div className="rounded-lg border border-border bg-card p-5 shadow-soft sm:p-6">
           <div className="mb-4 flex items-center justify-between">
             <div>
               <h2 className="text-lg font-bold">Repetera felaktiga svar</h2>
@@ -190,7 +195,7 @@ function StatsPage() {
               onNext={() => setRepeatIdx((i) => i + 1)}
             />
           ) : (
-            <div className="rounded-2xl bg-success/10 p-6 text-center text-sm font-medium text-success">
+            <div className="rounded-lg border border-success/25 bg-success/10 p-6 text-center text-sm font-medium text-success">
               Kön är tom – bra jobbat!
             </div>
           )}
@@ -215,7 +220,7 @@ function MiniStat({
     primary: "text-primary",
   }[accent];
   return (
-    <div className="min-w-0 overflow-hidden rounded-2xl border border-border bg-card p-3 sm:p-4">
+    <div className="min-w-0 overflow-hidden rounded-lg border border-border bg-card p-3 shadow-soft sm:p-4">
       <AutoFitText maxSize={24} minSize={15} className={`h-7 font-black leading-7 ${clr}`}>{value}</AutoFitText>
       <AutoFitText maxSize={11} minSize={8} className="mt-1 h-8 uppercase leading-4 tracking-wider text-muted-foreground">{label}</AutoFitText>
     </div>

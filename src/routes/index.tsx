@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { Zap, Timer, Signpost, Flame, Target, CheckCircle2 } from "lucide-react";
+import { Zap, Timer, Signpost, Flame, Target, CheckCircle2, ArrowRight, RotateCcw } from "lucide-react";
 import { AppShell } from "@/components/AppShell";
 import { AutoFitText } from "@/components/AutoFitText";
 import { useStore, computeStats } from "@/lib/store";
@@ -18,6 +18,8 @@ export const Route = createFileRoute("/")({
         property: "og:description",
         content: "Träna inför Trafikverkets teoriprov för B-körkort på svenska.",
       },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
   component: Dashboard,
@@ -28,7 +30,7 @@ function Gauge({ value }: { value: number }) {
   const c = 2 * Math.PI * r;
   const offset = c - (value / 100) * c;
   return (
-    <div className="relative grid h-48 w-48 place-items-center">
+    <div className="relative grid h-44 w-44 shrink-0 place-items-center sm:h-48 sm:w-48">
       <svg viewBox="0 0 160 160" className="h-full w-full -rotate-90">
         <circle cx="80" cy="80" r={r} fill="none" stroke="var(--muted)" strokeWidth="14" />
         <circle
@@ -45,8 +47,8 @@ function Gauge({ value }: { value: number }) {
         />
       </svg>
       <div className="absolute text-center">
-        <div className="text-4xl font-black tracking-tight">{value}%</div>
-        <div className="text-xs font-medium uppercase tracking-wider text-muted-foreground">
+        <div className="font-display text-4xl font-extrabold">{value}%</div>
+        <div className="mt-1 text-[10px] font-semibold uppercase text-muted-foreground">
           Körkortsklarhet
         </div>
       </div>
@@ -60,22 +62,30 @@ function Dashboard() {
 
   return (
     <AppShell>
-      <section className="space-y-6">
-        <div>
-          <div className="text-xs font-semibold uppercase tracking-widest text-primary">
+      <section className="space-y-8">
+        <header className="max-w-3xl">
+          <div className="text-xs font-bold uppercase text-muted-foreground">
             Personbil · Behörighet B
           </div>
-          <h1 className="mt-1 text-3xl font-black tracking-tight sm:text-4xl">
-            Körkortsfrågor och teoriprov för B-körkort
+          <h1 className="mt-2 font-display text-3xl font-extrabold leading-tight sm:text-4xl">
+            Din väg till körkortet
           </h1>
-          <p className="mt-1 text-sm text-muted-foreground">
-            Följ din utveckling mot Trafikverkets teoriprov.
+          <p className="mt-2 max-w-xl text-sm leading-relaxed text-muted-foreground sm:text-base">
+            Träna smartare, se vad du behöver förbättra och följ din utveckling fram till provdagen.
           </p>
-        </div>
+        </header>
 
-        <div className="grid gap-4 rounded-3xl border border-border bg-card p-6 sm:grid-cols-[auto_1fr] sm:items-center sm:gap-8">
-          <Gauge value={stats.readiness} />
-          <div className="grid min-w-0 grid-cols-3 gap-2 sm:gap-3">
+        <div className="aura-surface relative overflow-hidden rounded-xl border border-border p-5 shadow-lifted sm:grid sm:grid-cols-[auto_minmax(0,1fr)] sm:items-center sm:gap-10 sm:p-8">
+          <div className="relative z-10 mx-auto w-fit sm:mx-0"><Gauge value={stats.readiness} /></div>
+          <div className="relative z-10 mt-5 min-w-0 sm:mt-0">
+            <div className="mb-4 flex items-end justify-between gap-4">
+              <div>
+                <h2 className="font-display text-xl font-bold">Dagens översikt</h2>
+                <p className="mt-1 text-sm text-muted-foreground">Målet är 80 % körkortsklarhet.</p>
+              </div>
+              <span className="hidden rounded-md bg-premium px-2.5 py-1 text-xs font-bold text-premium-foreground sm:inline-flex">Mål 80 %</span>
+            </div>
+            <div className="grid min-w-0 grid-cols-3 divide-x divide-border overflow-hidden rounded-lg border border-border bg-background/70 backdrop-blur">
             <Stat
               icon={<Target className="h-4 w-4" />}
               label="Frågor"
@@ -94,10 +104,18 @@ function Dashboard() {
               value={`${s.streak}d`}
               accent="warning"
             />
+            </div>
           </div>
         </div>
 
-        <div className="grid gap-4 sm:grid-cols-3">
+        <div>
+          <div className="mb-4 grid grid-cols-[minmax(0,1fr)_auto] items-end gap-4">
+            <div>
+              <h2 className="font-display text-xl font-bold">Fortsätt träna</h2>
+              <p className="mt-1 text-sm text-muted-foreground">Välj ett sätt att komma vidare.</p>
+            </div>
+          </div>
+          <div className="grid overflow-hidden rounded-lg border border-border bg-card shadow-soft sm:grid-cols-3 sm:divide-x sm:divide-border">
           <ActionCard
             to="/quiz"
             icon={<Zap className="h-5 w-5" />}
@@ -117,20 +135,22 @@ function Dashboard() {
             title="Vägmärken"
             desc="Bläddra bland alla svenska vägmärken."
           />
+          </div>
         </div>
 
         {s.wrongQueue.length > 0 && (
           <Link
             to="/stats"
-            className="flex items-center justify-between rounded-2xl border border-warning/40 bg-warning/10 p-4 transition hover:bg-warning/15"
+            className="group grid grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-3 rounded-lg border border-warning/40 bg-warning/10 p-4 transition-[background-color,transform] duration-200 hover:bg-warning/15 active:scale-[0.99] focus-visible:ring-2 focus-visible:ring-ring"
           >
-            <div>
+            <span className="grid h-10 w-10 shrink-0 place-items-center rounded-lg bg-warning/20 text-warning-foreground"><RotateCcw className="h-5 w-5" /></span>
+            <div className="min-w-0">
               <div className="text-sm font-bold">
                 Du har {s.wrongQueue.length} frågor att repetera
               </div>
-              <div className="text-xs text-muted-foreground">Gå till Statistik → Svaga punkter</div>
+              <div className="mt-0.5 text-xs text-muted-foreground">Träna på dina svaga områden</div>
             </div>
-            <span className="text-lg">→</span>
+            <ArrowRight className="h-5 w-5 transition-transform group-hover:translate-x-0.5" />
           </Link>
         )}
       </section>
@@ -155,9 +175,9 @@ function Stat({
     warning: "bg-warning/20 text-warning-foreground",
   }[accent];
   return (
-    <div className="flex min-w-0 flex-col overflow-hidden rounded-2xl border border-border bg-background p-2.5 sm:p-3">
+    <div className="flex min-w-0 flex-col overflow-hidden px-3 py-3 sm:px-4">
       <div
-        className={`mb-2 inline-flex h-7 w-7 items-center justify-center rounded-lg ${accentBg}`}
+        className={`mb-2 inline-flex h-7 w-7 items-center justify-center rounded-md ${accentBg}`}
       >
         {icon}
       </div>
@@ -183,12 +203,12 @@ function ActionCard({
   return (
     <Link
       to={to}
-      className={`group relative flex h-full min-w-0 flex-col overflow-hidden rounded-2xl border p-5 transition-all hover:-translate-y-0.5 hover:shadow-lg ${
-        highlight ? "border-primary/30 bg-primary text-primary-foreground" : "border-border bg-card"
+      className={`group relative flex h-full min-h-48 min-w-0 flex-col overflow-hidden border-b p-5 transition-colors duration-200 last:border-b-0 hover:bg-accent/40 focus-visible:z-10 focus-visible:ring-2 focus-visible:ring-ring sm:border-b-0 ${
+        highlight ? "bg-primary text-primary-foreground hover:bg-primary/95" : "border-border bg-card"
       }`}
     >
       <div
-        className={`inline-flex h-10 w-10 items-center justify-center rounded-xl ${
+        className={`inline-flex h-10 w-10 items-center justify-center rounded-lg ${
           highlight ? "bg-primary-foreground/15" : "bg-primary/10 text-primary"
         }`}
       >
@@ -200,8 +220,8 @@ function ActionCard({
       >
         {desc}
       </div>
-      <div className="mt-3 text-sm font-semibold opacity-70 transition group-hover:opacity-100">
-        Starta →
+      <div className="mt-3 inline-flex items-center gap-1 text-sm font-semibold opacity-70 transition group-hover:opacity-100">
+        Starta <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
       </div>
     </Link>
   );

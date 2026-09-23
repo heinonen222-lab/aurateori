@@ -3,6 +3,7 @@ import { Check, ExternalLink, X } from "lucide-react";
 import type { Question } from "@/data/questions";
 import { SignImage } from "@/components/SignImage";
 import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
 
 interface Props {
   question: Question;
@@ -36,21 +37,21 @@ export function QuestionCard({
   };
 
   return (
-    <div className="rounded-3xl border border-border bg-card p-5 shadow-sm sm:p-7">
+    <article className="rounded-lg border border-border bg-card p-4 shadow-soft sm:p-7">
       {typeof index === "number" && typeof total === "number" && (
         <div className="mb-4 flex items-center justify-between text-xs font-medium text-muted-foreground">
           <span>
             Fråga {index + 1} / {total}
           </span>
-          <span className="rounded-full bg-secondary px-2 py-0.5 text-secondary-foreground">
+          <span className="rounded-md bg-secondary px-2 py-1 text-secondary-foreground">
             {question.category}
           </span>
         </div>
       )}
 
       {question.image && (
-        <div className="mb-5 grid place-items-center rounded-2xl bg-muted p-6">
-          <SignImage id={question.image} className="h-40 w-40" />
+        <div className="mb-5 grid place-items-center rounded-lg bg-muted p-4 sm:p-6">
+          <SignImage id={question.image} className="aspect-square h-auto w-full max-w-40" />
         </div>
       )}
 
@@ -67,7 +68,7 @@ export function QuestionCard({
               onClick={() => pick(i)}
               disabled={answered}
               className={cn(
-                "flex w-full items-center gap-3 rounded-xl border px-4 py-3 text-left text-sm transition-all",
+                "flex min-h-12 w-full items-center gap-3 rounded-lg border px-3.5 py-3 text-left text-sm leading-relaxed transition-[background-color,border-color,transform,box-shadow] duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring active:scale-[0.99] sm:px-4",
                 state === "idle" &&
                   "border-border bg-background hover:border-primary/50 hover:bg-primary/5",
                 state === "correct" && "border-success bg-success/10 text-foreground",
@@ -99,7 +100,7 @@ export function QuestionCard({
       </div>
 
       {answered && showExplanation && (
-        <div className="mt-5 rounded-2xl border border-border bg-secondary/60 p-4">
+        <div className="mt-5 rounded-lg border border-border bg-secondary/60 p-4">
           <div className="mb-1 text-xs font-bold uppercase tracking-wider text-primary">
             Förklaring
           </div>
@@ -120,13 +121,10 @@ export function QuestionCard({
       )}
 
       {answered && (
-        <button
-          onClick={next}
-          className="mt-5 w-full rounded-xl bg-primary py-3 text-sm font-bold text-primary-foreground transition hover:opacity-90"
-        >
+        <Button onClick={next} className="mt-5 w-full">
           Nästa fråga →
-        </button>
+        </Button>
       )}
-    </div>
+    </article>
   );
 }
