@@ -9,4 +9,4 @@
 - [x] Visa genomgångsresultat, körkortsklarhet och mål på kontosidan
 - [x] Gör 3D-genomgångarna mobilspelbara med manuell H-växel 1–5 + R
 - [x] Visa ett tydligt svarsfönster efter varje kontrollfråga
-- [ ] Verifiera hela genomgångsflödet på mobil och dator
+- [x] Verifiera hela genomgångsflödet på mobil och dator
