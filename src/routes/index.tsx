@@ -2,6 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { Zap, Timer, Signpost, Flame, Target, CheckCircle2, ArrowRight, RotateCcw } from "lucide-react";
 import { AppShell } from "@/components/AppShell";
 import { AutoFitText } from "@/components/AutoFitText";
+import { SubscriptionCountdown } from "@/components/SubscriptionCountdown";
 import { useStore, computeStats } from "@/lib/store";
 
 export const Route = createFileRoute("/")({
