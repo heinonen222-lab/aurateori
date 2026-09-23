@@ -188,7 +188,7 @@ export function VisualLessonPlayer({
                   <div className="flex items-center gap-2 text-base font-bold">{isCorrect ? <CheckCircle2 className="text-success" /> : <XCircle className="text-destructive" />}{isCorrect ? "Rätt svar" : "Inte riktigt"}</div>
                   {!isCorrect && <p className="mt-2 text-sm"><span className="font-semibold">Rätt svar:</span> {unit.check.options[unit.check.correct]}</p>}
                   <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{unit.check.explanation}</p>
-                  <Button className="mt-4 w-full" onClick={() => changeScene(index + 1)}>{index === scenes.length - 1 ? "Slutför genomgången" : "Nästa scen"}<SkipForward /></Button>
+                  <Button className="mt-4 w-full" onClick={() => index === scenes.length - 1 ? onExit() : changeScene(index + 1)}>{index === scenes.length - 1 ? "Slutför genomgången" : "Nästa scen"}<SkipForward /></Button>
                 </div>
               )}
             </div>
