@@ -37,6 +37,13 @@ function AccountPage() {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const runDelete = useServerFn(deleteAccount);
+  const fetchLessonProgress = useServerFn(listLessonProgress);
+
+  const { data: lessonProgress, isLoading: lessonsLoading } = useQuery({
+    queryKey: ["lesson-progress", user?.id],
+    queryFn: () => fetchLessonProgress({}),
+    enabled: Boolean(user),
+  });
 
   const [confirm, setConfirm] = useState("");
   const [busy, setBusy] = useState(false);
