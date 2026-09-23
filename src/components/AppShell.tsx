@@ -51,6 +51,7 @@ function NavLink({
       key={item.to}
       to={item.to}
       onClick={onClick}
+      aria-current={active ? "page" : undefined}
       className={cn(
         "flex min-h-11 items-center gap-3 rounded-lg transition-[background-color,color,transform] duration-200 active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
         variant === "bottom"
@@ -80,7 +81,13 @@ export function AppShell({ children }: { children: ReactNode }) {
   );
 
   return (
-    <div className="min-h-screen bg-background text-foreground">
+    <div className="min-h-dvh bg-background text-foreground">
+      <a
+        href="#innehall"
+        className="sr-only focus-visible:not-sr-only focus-visible:fixed focus-visible:left-4 focus-visible:top-4 focus-visible:z-50 focus-visible:rounded-lg focus-visible:border focus-visible:border-border focus-visible:bg-card focus-visible:px-4 focus-visible:py-2 focus-visible:text-sm focus-visible:font-semibold"
+      >
+        Hoppa till innehållet
+      </a>
       {/* Desktop sidebar */}
       <aside className="fixed inset-y-0 left-0 z-30 hidden w-60 flex-col border-r border-sidebar-border bg-sidebar px-4 py-5 text-sidebar-foreground lg:flex">
         <Link to="/" className="mb-8 flex min-h-11 items-center gap-3 rounded-lg px-2 focus-visible:ring-sidebar-ring">
