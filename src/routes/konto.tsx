@@ -120,12 +120,9 @@ function AccountPage() {
             <p className="text-sm text-muted-foreground">
               Du är inte inloggad. Logga in för att hantera ditt konto.
             </p>
-            <Link
-              to="/auth"
-              className="inline-flex items-center justify-center rounded-xl bg-primary px-4 py-2.5 text-sm font-bold text-primary-foreground"
-            >
-              Logga in
-            </Link>
+            <Button asChild>
+              <Link to="/auth">Logga in</Link>
+            </Button>
           </div>
         ) : (
           <>

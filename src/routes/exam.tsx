@@ -180,18 +180,12 @@ function ExamPage() {
                     övningsfrågor eller genomgångar under tiden.
                   </p>
                   <div className="mt-4 flex flex-col gap-2 sm:flex-row">
-                    <Link
-                      to="/quiz"
-                      className="rounded-xl bg-primary px-5 py-3 text-center text-sm font-bold text-primary-foreground transition hover:opacity-90"
-                    >
-                      Öva frågor →
-                    </Link>
-                    <Link
-                      to="/genomgangar"
-                      className="rounded-xl border border-border px-5 py-3 text-center text-sm font-semibold transition hover:border-primary/60"
-                    >
-                      Genomgångar
-                    </Link>
+                    <Button asChild className="sm:flex-1">
+                      <Link to="/quiz">Öva frågor</Link>
+                    </Button>
+                    <Button asChild variant="outline" className="sm:flex-1">
+                      <Link to="/genomgangar">Genomgångar</Link>
+                    </Button>
                   </div>
                 </div>
               ) : (
@@ -221,19 +215,13 @@ function ExamPage() {
                   : "Logga in och aktivera Premium för att köra hela provet. Övningsfrågor och genomgångar är fortsatt gratis."}
               </p>
               <div className="mt-4 flex flex-col gap-2 sm:flex-row">
-                <Link
-                  to="/priser"
-                  className="rounded-xl bg-primary px-5 py-3 text-center text-sm font-bold text-primary-foreground transition hover:opacity-90"
-                >
-                  Se priser →
-                </Link>
+                <Button asChild className="sm:flex-1">
+                  <Link to="/priser">Se priser</Link>
+                </Button>
                 {!user && (
-                  <Link
-                    to="/auth"
-                    className="rounded-xl border border-border px-5 py-3 text-center text-sm font-semibold transition hover:border-primary/60"
-                  >
-                    Logga in
-                  </Link>
+                  <Button asChild variant="outline" className="sm:flex-1">
+                    <Link to="/auth">Logga in</Link>
+                  </Button>
                 )}
               </div>
             </div>
