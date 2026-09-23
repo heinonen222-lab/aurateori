@@ -19,6 +19,16 @@ function fmtDate(value: string | null) {
   return Number.isNaN(d.getTime()) ? "–" : dateFmt.format(d);
 }
 
+const PLAN_LABEL: Record<string, string> = {
+  premium_monthly: "Premium Månad",
+  premium_yearly: "Premium År",
+};
+
+const PLAN_CYCLE: Record<string, string> = {
+  premium_monthly: "149 kr dras varje månad",
+  premium_yearly: "499 kr dras varje år",
+};
+
 const STATUS_LABEL: Record<string, string> = {
   active: "Aktiv",
   trialing: "Provperiod",
