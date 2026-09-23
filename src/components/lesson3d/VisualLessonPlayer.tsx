@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { ArrowLeft, ExternalLink, Pause, Play, RotateCcw, SkipBack, SkipForward } from "lucide-react";
 import type { Lesson, LessonStep } from "@/data/lessons";
 import { Button } from "@/components/ui/button";
@@ -8,49 +8,39 @@ import { getLessonScene } from "./lesson-scenes";
 
 const STEP_SECONDS = 6;
 
-export function VisualLessonPlayer({ lesson, onExit }: { lesson: Lesson; onExit: () => void }) {
+export function VisualLessonPlayer({
+  lesson,
+  onExit,
+  initialStep = 0,
+  onStepChange,
+}: {
+  lesson: Lesson;
+  onExit: () => void;
+  initialStep?: number;
+  onStepChange?: (step: number, totalSteps: number) => void;
+}) {
   const slides = useMemo(
     () => lesson.steps.filter((step): step is Extract<LessonStep, { kind: "info" }> => step.kind === "info"),
     [lesson.steps],
   );
-  const [index, setIndex] = useState(0);
+  const [index, setIndex] = useState(() => Math.min(Math.max(0, initialStep), Math.max(0, slides.length - 1)));
   const [playing, setPlaying] = useState(true);
-  const [elapsed, setElapsed] = useState(0);
+  const [cycleKey, setCycleKey] = useState(0);
   const [reducedMotion, setReducedMotion] = useState(false);
-  const mounted = useRef(false);
   const slide = slides[index] ?? slides[0];
 
   useEffect(() => {
-    mounted.current = true;
-    return () => {
-      mounted.current = false;
-    };
-  }, []);
-
-  useEffect(() => {
-    if (!mounted.current) return;
     setReducedMotion(window.matchMedia("(prefers-reduced-motion: reduce)").matches);
   }, []);
 
   useEffect(() => {
-    if (!playing || reducedMotion || slides.length === 0) return;
-    const timer = window.setInterval(() => {
-      if (!mounted.current) return;
-      setElapsed((current) => Math.min(STEP_SECONDS, current + 0.1));
-    }, 100);
-    return () => window.clearInterval(timer);
-  }, [playing, reducedMotion, slides.length]);
-
-  useEffect(() => {
-    if (elapsed < STEP_SECONDS) return;
-    if (!mounted.current) return;
-    setIndex((value) => (value + 1) % slides.length);
-    setElapsed(0);
-  }, [elapsed, slides.length]);
+    if (slides.length === 0) return;
+    onStepChange?.(index, slides.length);
+  }, [index, slides.length, onStepChange]);
 
   const go = (next: number) => {
     setIndex((next + slides.length) % slides.length);
-    setElapsed(0);
+    setCycleKey((value) => value + 1);
   };
 
   if (!slide) return null;
@@ -95,12 +85,22 @@ export function VisualLessonPlayer({ lesson, onExit }: { lesson: Lesson; onExit:
           )}
 
           <div className="mt-4 h-1.5 overflow-hidden rounded-full bg-muted">
-            <div className="h-full bg-primary transition-[width] duration-100" style={{ width: `${reducedMotion ? 0 : (elapsed / STEP_SECONDS) * 100}%` }} />
+            {!reducedMotion && (
+              <div
+                key={`${index}-${cycleKey}`}
+                className="h-full origin-left bg-primary"
+                style={{
+                  animation: `lesson-progress ${STEP_SECONDS}s linear forwards`,
+                  animationPlayState: playing ? "running" : "paused",
+                }}
+                onAnimationEnd={() => go(index + 1)}
+              />
+            )}
           </div>
 
           <div className="mt-4 grid grid-cols-[auto_auto_minmax(0,1fr)_auto] items-center gap-2">
             <Button variant="outline" size="icon" onClick={() => go(index - 1)} aria-label="Föregående scen"><SkipBack /></Button>
-            <Button variant="outline" size="icon" onClick={() => { setElapsed(0); setPlaying(true); }} aria-label="Starta om scenen"><RotateCcw /></Button>
+            <Button variant="outline" size="icon" onClick={() => { setCycleKey((value) => value + 1); setPlaying(true); }} aria-label="Starta om scenen"><RotateCcw /></Button>
             <Button onClick={() => setPlaying((value) => !value)} className="min-w-0">
               {playing ? <Pause /> : <Play />}
               <span className="truncate">{playing ? "Pausa" : "Spela"}</span>
