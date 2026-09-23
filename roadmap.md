@@ -6,4 +6,4 @@
 - [x] Förfina vägmärken, snabbplugg, genomgångar och statistik
 - [x] Förfina konto, priser, autentisering och juridiska sidor
 - [x] Verifiera mobil, dator, mörkt läge och kärnflöden
-- [ ] Anpassa genomgångar, sparade resultat, priser och betalningsstatus till mörka Aura-rymden
+- [x] Anpassa genomgångar, sparade resultat, priser och betalningsstatus till mörka Aura-rymden

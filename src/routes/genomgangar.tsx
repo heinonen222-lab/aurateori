@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { ArrowRight, CheckCircle2, Clock, ExternalLink, Gauge, GraduationCap, Play, Sparkles } from "lucide-react";
+import { ArrowRight, CheckCircle2, Clock, ExternalLink, GraduationCap, Play, Sparkles } from "lucide-react";
 import { AppShell } from "@/components/AppShell";
 import { AutoFitText } from "@/components/AutoFitText";
 import { VisualLessonPlayer } from "@/components/lesson3d/VisualLessonPlayer";
