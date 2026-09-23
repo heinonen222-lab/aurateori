@@ -112,7 +112,6 @@ export function SubscriptionCountdown({ compact = false }: { compact?: boolean }
           {daysLeft === 1 ? "dag kvar" : "dagar kvar"}
         </div>
       </div>
-      {!compact && null}
     </div>
   );
 }
