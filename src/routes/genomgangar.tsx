@@ -1,13 +1,20 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useState } from "react";
-import { Clock, ExternalLink, GraduationCap, Play } from "lucide-react";
+import { useCallback, useEffect, useState } from "react";
+import { useServerFn } from "@tanstack/react-start";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { CheckCircle2, Clock, ExternalLink, GraduationCap, Play } from "lucide-react";
 import { AppShell } from "@/components/AppShell";
 import { AutoFitText } from "@/components/AutoFitText";
 import { VisualLessonPlayer } from "@/components/lesson3d/VisualLessonPlayer";
 import { LESSONS, type Lesson } from "@/data/lessons";
+import { useAuth } from "@/hooks/useAuth";
+import { listLessonProgress, saveLessonProgress } from "@/utils/lessons.functions";
 
 export const Route = createFileRoute("/genomgangar")({
   ssr: false,
+  validateSearch: (search: Record<string, unknown>) => ({
+    lesson: typeof search.lesson === "string" ? search.lesson : undefined,
+  }),
   head: () => ({
     meta: [
       { title: "Interaktiva genomgångar – Aurateori" },
@@ -28,53 +35,122 @@ export const Route = createFileRoute("/genomgangar")({
   component: LessonsPage,
 });
 
+function infoSteps(lesson: Lesson) {
+  return lesson.steps.filter((step) => step.kind === "info").length;
+}
+
 function LessonsPage() {
+  const { lesson: lessonParam } = Route.useSearch();
+  const { user } = useAuth();
+  const queryClient = useQueryClient();
+  const fetchProgress = useServerFn(listLessonProgress);
+  const persistProgress = useServerFn(saveLessonProgress);
   const [active, setActive] = useState<Lesson | null>(null);
+
+  const { data: progress } = useQuery({
+    queryKey: ["lesson-progress", user?.id],
+    queryFn: () => fetchProgress({}),
+    enabled: Boolean(user),
+  });
+
+  const save = useMutation({
+    mutationFn: persistProgress,
+    onSuccess: () => {
+      void queryClient.invalidateQueries({ queryKey: ["lesson-progress", user?.id] });
+    },
+  });
+
+  useEffect(() => {
+    if (!lessonParam) return;
+    const match = LESSONS.find((l) => l.id === lessonParam);
+    if (match) setActive(match);
+  }, [lessonParam]);
+
+  const progressFor = (lessonId: string) => progress?.find((row) => row.lesson_id === lessonId);
+
+  const handleStepChange = useCallback(
+    (step: number, totalSteps: number) => {
+      if (!user || !active) return;
+      save.mutate({
+        data: {
+          lessonId: active.id,
+          lastStep: step,
+          totalSteps,
+          completed: step >= totalSteps - 1,
+        },
+      });
+    },
+    [user, active, save],
+  );
 
   return (
     <AppShell>
       {active ? (
-        <VisualLessonPlayer lesson={active} onExit={() => setActive(null)} />
+        <VisualLessonPlayer
+          key={active.id}
+          lesson={active}
+          initialStep={progressFor(active.id)?.last_step ?? 0}
+          onStepChange={handleStepChange}
+          onExit={() => setActive(null)}
+        />
       ) : (
         <div className="space-y-5">
           <div>
             <h1 className="text-2xl font-black sm:text-3xl">Visuella 3D-genomgångar</h1>
             <p className="mt-1 text-sm text-muted-foreground">
               Se trafikregler och risksituationer spelas upp steg för steg i tydliga 3D-scener.
+              {user
+                ? " Ditt läge sparas på kontot så du kan återkomma senare."
+                : " Logga in för att spara var du slutade."}
             </p>
           </div>
 
           <div className="grid gap-3 sm:grid-cols-2">
-            {LESSONS.map((l) => (
-              <button
-                key={l.id}
-                onClick={() => setActive(l)}
-                className="group flex h-full min-w-0 flex-col overflow-hidden rounded-2xl border border-border bg-card p-5 text-left shadow-sm transition hover:border-primary/60"
-              >
-                <div className="flex items-start justify-between gap-3">
-                  <div className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-primary/10 text-primary">
-                    <GraduationCap className="h-5 w-5" />
+            {LESSONS.map((l) => {
+              const saved = progressFor(l.id);
+              const total = infoSteps(l);
+              return (
+                <button
+                  key={l.id}
+                  onClick={() => setActive(l)}
+                  className="group flex h-full min-w-0 flex-col overflow-hidden rounded-2xl border border-border bg-card p-5 text-left shadow-sm transition hover:border-primary/60"
+                >
+                  <div className="flex items-start justify-between gap-3">
+                    <div className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-primary/10 text-primary">
+                      <GraduationCap className="h-5 w-5" />
+                    </div>
+                    <span className="max-w-[60%] rounded-full bg-secondary px-2.5 py-0.5 text-right text-[11px] font-semibold text-secondary-foreground break-words">{l.category}</span>
                   </div>
-                  <span className="max-w-[60%] rounded-full bg-secondary px-2.5 py-0.5 text-right text-[11px] font-semibold text-secondary-foreground break-words">{l.category}</span>
-                </div>
-                <AutoFitText maxSize={16} minSize={12} className="mt-3 h-12 font-bold leading-6">{l.title}</AutoFitText>
-                <p className="mt-1 line-clamp-3 min-h-[3.75rem] text-sm leading-5 text-muted-foreground">{l.summary}</p>
-                <div className="mt-auto flex flex-wrap items-center gap-4 pt-3 text-[11px] font-medium text-muted-foreground">
-                  <span className="inline-flex items-center gap-1">
-                    <Clock className="h-3.5 w-3.5" />
-                    {l.minutes} min
-                  </span>
-                  <span className="inline-flex items-center gap-1">
-                    <Play className="h-3.5 w-3.5" />
-                    {l.steps.filter((step) => step.kind === "info").length} scener
-                  </span>
-                  <span className="inline-flex items-center gap-1">
-                    <ExternalLink className="h-3.5 w-3.5" />
-                    {l.sources.length} källor
-                  </span>
-                </div>
-              </button>
-            ))}
+                  <AutoFitText maxSize={16} minSize={12} className="mt-3 h-12 font-bold leading-6">{l.title}</AutoFitText>
+                  <p className="mt-1 line-clamp-3 min-h-[3.75rem] text-sm leading-5 text-muted-foreground">{l.summary}</p>
+                  {saved && (
+                    <span className="mt-2 inline-flex items-center gap-1.5 self-start rounded-full bg-primary/10 px-2.5 py-0.5 text-[11px] font-bold text-primary">
+                      {saved.completed ? (
+                        <>
+                          <CheckCircle2 className="h-3.5 w-3.5" /> Klar
+                        </>
+                      ) : (
+                        <>Fortsätt scen {Math.min(saved.last_step + 1, total)}/{total}</>
+                      )}
+                    </span>
+                  )}
+                  <div className="mt-auto flex flex-wrap items-center gap-4 pt-3 text-[11px] font-medium text-muted-foreground">
+                    <span className="inline-flex items-center gap-1">
+                      <Clock className="h-3.5 w-3.5" />
+                      {l.minutes} min
+                    </span>
+                    <span className="inline-flex items-center gap-1">
+                      <Play className="h-3.5 w-3.5" />
+                      {total} scener
+                    </span>
+                    <span className="inline-flex items-center gap-1">
+                      <ExternalLink className="h-3.5 w-3.5" />
+                      {l.sources.length} källor
+                    </span>
+                  </div>
+                </button>
+              );
+            })}
           </div>
         </div>
       )}
