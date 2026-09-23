@@ -56,7 +56,8 @@ function QuizPage() {
   }, [cat, seed, bank]);
 
   const q = pool[idx];
-  const done = !q;
+  const empty = pool.length === 0;
+  const done = !q && !empty;
 
   return (
     <AppShell>
