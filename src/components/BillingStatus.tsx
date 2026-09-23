@@ -49,10 +49,11 @@ export function BillingStatus() {
   const data = query.data;
 
   return (
-    <section className="rounded-xl border border-border bg-card p-5 shadow-soft">
+    <section className="aura-surface overflow-hidden rounded-lg border border-border p-5 shadow-soft">
       <div className="mb-4 grid grid-cols-[minmax(0,1fr)_auto] items-start gap-3">
         <div className="min-w-0">
-          <h2 className="text-sm font-bold">Betalningsstatus</h2>
+          <div className="mb-1 inline-flex items-center gap-2 text-[10px] font-bold uppercase text-premium"><CreditCard className="h-3.5 w-3.5" /> Ditt abonnemang</div>
+          <h2 className="font-display text-lg font-bold">Betalningsstatus</h2>
           <p className="text-xs text-muted-foreground">
             {environment === "live" ? "Skarpa betalningar" : "Testläge (sandbox)"} · direkt från
             Paddle
@@ -113,7 +114,7 @@ export function BillingStatus() {
                   {STATUS_LABEL[sub.status] ?? sub.status}
                   {sub.isExpired && !sub.isPastDue && " · perioden har gått ut"}
                 </div>
-                <dl className="mt-2 grid gap-1 text-xs text-muted-foreground sm:grid-cols-2">
+                <dl className="mt-3 grid gap-1.5 rounded-lg border border-border bg-background/50 p-3 text-xs text-muted-foreground sm:grid-cols-2">
                   <Row label="Plan" value={sub.priceId} />
                   <Row label="Period slutar" value={fmtDate(sub.currentPeriodEnd)} />
                   <Row
@@ -129,7 +130,7 @@ export function BillingStatus() {
                         href={sub.updatePaymentMethodUrl}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="rounded-xl border border-border bg-background px-3 py-1.5 text-xs font-semibold hover:border-primary/60"
+                        className="inline-flex min-h-11 items-center rounded-lg border border-border bg-background px-3 py-2 text-xs font-semibold transition-colors hover:border-primary/60"
                       >
                         Uppdatera betalkort
                       </a>
@@ -139,7 +140,7 @@ export function BillingStatus() {
                         href={sub.cancelUrl}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="rounded-xl border border-border bg-background px-3 py-1.5 text-xs font-semibold hover:border-destructive/60"
+                        className="inline-flex min-h-11 items-center rounded-lg border border-border bg-background px-3 py-2 text-xs font-semibold transition-colors hover:border-destructive/60"
                       >
                         Avsluta prenumeration
                       </a>
@@ -208,7 +209,7 @@ export function BillingStatus() {
 
 function Stat({ label, value }: { label: string; value: string }) {
   return (
-    <div className="min-w-0 overflow-hidden rounded-lg border border-border bg-secondary/40 p-2 text-center sm:p-3">
+    <div className="min-w-0 overflow-hidden rounded-lg border border-border bg-background/55 p-2 text-center backdrop-blur sm:p-3">
       <div className="text-xl font-black">{value}</div>
       <div className="min-h-8 break-words text-[9px] font-semibold uppercase leading-4 tracking-wider text-muted-foreground sm:text-[10px]">
         {label}

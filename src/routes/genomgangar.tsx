@@ -2,13 +2,14 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { CheckCircle2, Clock, ExternalLink, GraduationCap, Play } from "lucide-react";
+import { ArrowRight, CheckCircle2, Clock, ExternalLink, Gauge, GraduationCap, Play, Sparkles } from "lucide-react";
 import { AppShell } from "@/components/AppShell";
 import { AutoFitText } from "@/components/AutoFitText";
 import { VisualLessonPlayer } from "@/components/lesson3d/VisualLessonPlayer";
 import { LESSONS, type Lesson } from "@/data/lessons";
 import { useAuth } from "@/hooks/useAuth";
 import { listLessonProgress, saveLessonProgress } from "@/utils/lessons.functions";
+import { Button } from "@/components/ui/button";
 
 export const Route = createFileRoute("/genomgangar")({
   ssr: false,
@@ -108,15 +109,30 @@ function LessonsPage() {
           onExit={closePlayer}
         />
       ) : (
-        <div className="space-y-5">
-          <div>
-            <h1 className="font-display text-2xl font-extrabold sm:text-3xl">Visuella 3D-genomgångar</h1>
-            <p className="mt-1 text-sm text-muted-foreground">
-              Se trafikregler och risksituationer spelas upp steg för steg i tydliga 3D-scener.
-              {user
-                ? " Ditt läge sparas på kontot så du kan återkomma senare."
-                : " Logga in för att spara var du slutade."}
-            </p>
+        <div className="space-y-7">
+          <header className="aura-surface relative overflow-hidden rounded-xl border border-border p-5 shadow-lifted sm:p-7">
+            <div className="relative z-10 max-w-2xl">
+              <div className="inline-flex items-center gap-2 text-xs font-bold uppercase text-premium">
+                <Sparkles className="h-4 w-4" /> Interaktiv teori
+              </div>
+              <h1 className="mt-3 font-display text-2xl font-extrabold sm:text-3xl">Se trafiken innan du möter den</h1>
+              <p className="mt-2 text-sm leading-relaxed text-muted-foreground sm:text-base">
+                Utforska svenska trafikregler i spelbara 3D-scener med bil, växling och korta kunskapskontroller.
+                {user ? " Dina resultat och din plats sparas automatiskt." : " Logga in för att spara dina resultat."}
+              </p>
+            </div>
+            <div className="relative z-10 mt-5 grid grid-cols-3 divide-x divide-border rounded-lg border border-border bg-background/65 backdrop-blur">
+              <LessonMetric value={LESSONS.length} label="Genomgångar" />
+              <LessonMetric value={LESSONS.reduce((sum, lesson) => sum + infoSteps(lesson), 0)} label="3D-scener" />
+              <LessonMetric value="Sparas" label="Dina framsteg" />
+            </div>
+          </header>
+
+          <div className="flex items-end justify-between gap-4">
+            <div>
+              <h2 className="font-display text-xl font-bold">Välj genomgång</h2>
+              <p className="mt-1 text-sm text-muted-foreground">Fortsätt där du slutade eller börja med ett nytt område.</p>
+            </div>
           </div>
 
           <div className="grid gap-3 sm:grid-cols-2">
@@ -124,21 +140,28 @@ function LessonsPage() {
               const saved = progressFor(l.id);
               const total = infoSteps(l);
               return (
-                <button
+                <Button
+                  variant="ghost"
                   key={l.id}
                   onClick={() => setActive(l)}
-                  className="group flex min-h-60 h-full min-w-0 flex-col overflow-hidden rounded-lg border border-border bg-card p-5 text-left shadow-soft transition-[border-color,transform,box-shadow] duration-200 hover:-translate-y-0.5 hover:border-ring hover:shadow-lifted focus-visible:ring-2 focus-visible:ring-ring"
+                  className="group h-full min-h-64 min-w-0 flex-col items-stretch justify-start overflow-hidden rounded-lg border border-border bg-card p-0 text-left shadow-soft transition-[border-color,transform,box-shadow] duration-200 hover:-translate-y-0.5 hover:border-premium/60 hover:bg-card hover:shadow-lifted"
                 >
-                  <div className="flex items-start justify-between gap-3">
-                    <div className="grid h-10 w-10 shrink-0 place-items-center rounded-lg bg-primary/10 text-primary">
-                      <GraduationCap className="h-5 w-5" />
+                  <div className="relative h-24 overflow-hidden border-b border-border bg-secondary/40">
+                    <div className="absolute inset-x-0 bottom-0 h-px bg-premium/50" />
+                    <div className="absolute left-[18%] top-1/2 h-20 w-px -translate-y-1/2 rotate-[58deg] bg-border" />
+                    <div className="absolute right-[18%] top-1/2 h-20 w-px -translate-y-1/2 -rotate-[58deg] bg-border" />
+                    <div className="absolute inset-0 grid place-items-center">
+                      <div className="grid h-11 w-11 place-items-center rounded-lg border border-premium/35 bg-background/80 text-premium shadow-soft backdrop-blur">
+                        <GraduationCap className="h-5 w-5" />
+                      </div>
                     </div>
-                    <span className="max-w-[60%] rounded-md bg-secondary px-2.5 py-1 text-right text-[11px] font-semibold text-secondary-foreground break-words">{l.category}</span>
+                    <span className="absolute right-3 top-3 max-w-[60%] rounded-md border border-border bg-background/80 px-2 py-1 text-right text-[10px] font-bold text-muted-foreground backdrop-blur">{l.category}</span>
                   </div>
-                  <AutoFitText maxSize={16} minSize={12} className="mt-3 h-12 font-bold leading-6">{l.title}</AutoFitText>
-                  <p className="mt-1 line-clamp-3 min-h-[3.75rem] text-sm leading-5 text-muted-foreground">{l.summary}</p>
-                  {saved && (
-                    <span className="mt-2 inline-flex items-center gap-1.5 self-start rounded-md bg-primary/10 px-2.5 py-1 text-[11px] font-bold text-primary">
+                  <div className="flex flex-1 flex-col p-4">
+                    <AutoFitText maxSize={16} minSize={12} className="h-12 font-bold leading-6">{l.title}</AutoFitText>
+                    <p className="mt-1 line-clamp-2 min-h-10 whitespace-normal text-sm leading-5 text-muted-foreground">{l.summary}</p>
+                    {saved && (
+                    <span className="mt-3 inline-flex items-center gap-1.5 self-start rounded-md bg-primary/10 px-2.5 py-1 text-[11px] font-bold text-primary">
                       {saved.completed ? (
                         <>
                           <CheckCircle2 className="h-3.5 w-3.5" /> Klar
@@ -147,8 +170,8 @@ function LessonsPage() {
                         <>Fortsätt scen {Math.min(saved.last_step + 1, total)}/{total}</>
                       )}
                     </span>
-                  )}
-                  <div className="mt-auto flex flex-wrap items-center gap-4 pt-3 text-[11px] font-medium text-muted-foreground">
+                    )}
+                    <div className="mt-auto flex flex-wrap items-center gap-3 pt-4 text-[11px] font-medium text-muted-foreground">
                     <span className="inline-flex items-center gap-1">
                       <Clock className="h-3.5 w-3.5" />
                       {l.minutes} min
@@ -161,13 +184,24 @@ function LessonsPage() {
                       <ExternalLink className="h-3.5 w-3.5" />
                       {l.sources.length} källor
                     </span>
+                    <ArrowRight className="ml-auto h-4 w-4 text-premium transition-transform group-hover:translate-x-0.5" />
+                    </div>
                   </div>
-                </button>
+                </Button>
               );
             })}
           </div>
         </div>
       )}
     </AppShell>
+  );
+}
+
+function LessonMetric({ value, label }: { value: React.ReactNode; label: string }) {
+  return (
+    <div className="min-w-0 px-2 py-3 text-center sm:px-4">
+      <div className="font-display text-lg font-extrabold text-foreground">{value}</div>
+      <AutoFitText maxSize={10} minSize={8} className="mt-1 h-4 uppercase leading-4 text-muted-foreground">{label}</AutoFitText>
+    </div>
   );
 }

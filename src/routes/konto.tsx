@@ -165,10 +165,10 @@ function AccountPage() {
               </div>
             </div>
 
-            <section className="space-y-4 rounded-xl border border-border bg-card p-5 shadow-soft sm:p-6">
+            <section className="aura-surface relative space-y-5 overflow-hidden rounded-xl border border-border p-5 shadow-lifted sm:p-6">
               <div className="flex items-start gap-3">
-                <span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-primary/10">
-                  <GraduationCap className="h-5 w-5 text-primary" />
+                <span className="grid h-10 w-10 shrink-0 place-items-center rounded-lg border border-premium/30 bg-background/65">
+                  <GraduationCap className="h-5 w-5 text-premium" />
                 </span>
                 <div className="min-w-0">
                   <h2 className="text-base font-bold">Mina genomgångar</h2>
@@ -182,10 +182,10 @@ function AccountPage() {
                 <p className="text-sm text-muted-foreground">Laddar dina genomgångar…</p>
               ) : (
                 <>
-                  <div className="grid gap-4 rounded-lg bg-secondary/45 p-4 sm:grid-cols-[auto_minmax(0,1fr)] sm:items-center">
+                  <div className="grid gap-4 rounded-lg border border-border bg-background/60 p-4 backdrop-blur sm:grid-cols-[auto_minmax(0,1fr)] sm:items-center">
                     <div className="mx-auto"><LessonReadinessGauge value={lessonReadiness} /></div>
                     <div className="min-w-0">
-                      <div className="flex items-center gap-2 text-sm font-bold"><Target className="h-4 w-4 text-primary" /> Mål: {LESSON_READINESS_TARGET}%</div>
+                      <div className="flex items-center gap-2 text-sm font-bold"><Target className="h-4 w-4 text-premium" /> Mål: {LESSON_READINESS_TARGET}%</div>
                       <p className="mt-1 text-sm text-muted-foreground">{remainingToTarget === 0 ? "Målet är nått. Fortsätt repetera för att behålla kunskapen." : `${remainingToTarget} procentenheter kvar till målet.`}</p>
                       <div className="mt-3 grid grid-cols-3 gap-2">
                         <ResultStat value={`${totalCorrectChecks}/${totalAvailableChecks}`} label="Poäng" />
@@ -208,7 +208,7 @@ function AccountPage() {
                         <Link
                           to="/genomgangar"
                           search={{ lesson: lesson.id }}
-                          className="block min-w-0 rounded-lg border border-border p-4 transition-colors hover:bg-muted focus-visible:ring-2 focus-visible:ring-ring"
+                          className="group block min-w-0 rounded-lg border border-border bg-background/45 p-4 transition-[background-color,border-color,transform] hover:-translate-y-0.5 hover:border-premium/45 hover:bg-background/75 focus-visible:ring-2 focus-visible:ring-ring"
                         >
                           <div className="grid grid-cols-[minmax(0,1fr)_auto] items-start gap-3">
                             <AutoFitText maxSize={14} minSize={11} className="h-10 min-w-0 font-bold leading-5">{lesson.title}</AutoFitText>
@@ -217,7 +217,7 @@ function AccountPage() {
                             </span>
                           </div>
                           <div className="mt-2 grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3 text-xs">
-                            <div className="h-1.5 overflow-hidden rounded-full bg-muted"><div className="h-full rounded-full bg-primary" style={{ width: `${progressPercent}%` }} /></div>
+                            <div className="h-1.5 overflow-hidden rounded-full bg-muted"><div className="h-full rounded-full bg-premium transition-[width] duration-700" style={{ width: `${progressPercent}%` }} /></div>
                             <span className="shrink-0 font-bold">{row ? `${row.correct_checks}/${totalChecks} poäng` : `0/${totalChecks} poäng`}</span>
                           </div>
                           <p className="mt-2 text-[11px] font-medium text-muted-foreground">
