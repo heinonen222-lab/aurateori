@@ -128,7 +128,7 @@ function PricingPage() {
                   <span className="font-display text-4xl font-extrabold">{p.price}</span>
                 <span className="text-sm text-muted-foreground">{p.per}</span>
               </div>
-              <div className="mt-1 min-h-8 break-words text-xs leading-4 text-muted-foreground">{p.note}</div>
+              <div className="mt-1 min-h-10 break-words text-xs leading-4 text-muted-foreground">{p.note}</div>
               <Button
                 variant={p.highlight ? "premium" : "default"}
                 onClick={() => buy(p.priceId)}
@@ -136,7 +136,7 @@ function PricingPage() {
                 className="mt-auto w-full"
               >
                 {loading && <Loader2 className="h-4 w-4 animate-spin" />}
-                {user ? "Köp" : "Logga in och köp"}
+                {user ? p.cta : "Logga in och prenumerera"}
               </Button>
             </div>
           ))}
