@@ -1,13 +1,15 @@
 import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
 import { useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
-import { useQueryClient } from "@tanstack/react-query";
-import { AlertTriangle, Crown, Loader2, LogOut, Mail, Trash2, User as UserIcon } from "lucide-react";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { AlertTriangle, CheckCircle2, Crown, GraduationCap, Loader2, LogOut, Mail, Play, Trash2, User as UserIcon } from "lucide-react";
 import { AppShell } from "@/components/AppShell";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { useSubscription } from "@/hooks/useSubscription";
 import { deleteAccount } from "@/utils/account.functions";
+import { listLessonProgress } from "@/utils/lessons.functions";
+import { LESSONS } from "@/data/lessons";
 import { store } from "@/lib/store";
 
 export const Route = createFileRoute("/konto")({
