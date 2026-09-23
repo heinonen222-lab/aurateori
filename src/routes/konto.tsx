@@ -145,18 +145,13 @@ function AccountPage() {
               </div>
 
               <div className="flex flex-wrap gap-2">
-                <Link
-                  to="/priser"
-                  className="inline-flex items-center gap-2 rounded-xl border border-border px-4 py-2.5 text-sm font-semibold transition-colors hover:bg-muted"
-                >
-                  <Crown className="h-4 w-4" />
-                  Premium & betalning
-                </Link>
-                <Button
-                  variant="outline"
-                  onClick={() => void signOut()}
-                  className="h-auto rounded-xl px-4 py-2.5 text-muted-foreground"
-                >
+                <Button asChild variant="outline">
+                  <Link to="/priser">
+                    <Crown className="h-4 w-4" />
+                    Premium & betalning
+                  </Link>
+                </Button>
+                <Button variant="outline" onClick={() => void signOut()}>
                   <LogOut className="h-4 w-4" />
                   Logga ut
                 </Button>
