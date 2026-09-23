@@ -206,15 +206,28 @@ export function VisualLessonPlayer({
             <div className="space-y-4" aria-live="polite">
               {phase === "question" ? (
                 <>
-                  <div><p className="text-xs font-bold uppercase text-primary">Kontrollfråga</p><h2 className="mt-1 text-lg font-bold leading-snug">{unit.check.question}</h2></div>
-                  <div className="grid gap-2">{unit.check.options.map((option, optionIndex) => <Button key={option} variant="outline" className="h-auto min-h-12 justify-start whitespace-normal px-4 py-3 text-left leading-snug" onClick={() => answer(optionIndex)}><span className="grid h-6 w-6 shrink-0 place-items-center rounded-full bg-secondary text-xs font-bold">{String.fromCharCode(65 + optionIndex)}</span><span>{option}</span></Button>)}</div>
+                  <div><p className="text-xs font-bold uppercase tracking-wide text-primary">Kontrollfråga</p><h2 className="mt-1 text-lg font-bold leading-snug break-words hyphens-auto">{unit.check.question}</h2></div>
+                  <div className="grid gap-2">{unit.check.options.map((option, optionIndex) => <Button key={option} variant="outline" className="h-auto min-h-14 items-start justify-start gap-3 whitespace-normal px-4 py-3 text-left leading-snug" onClick={() => answer(optionIndex)}><span className="mt-0.5 grid h-6 w-6 shrink-0 place-items-center rounded-full bg-secondary text-xs font-bold">{String.fromCharCode(65 + optionIndex)}</span><span className="min-w-0 break-words hyphens-auto">{option}</span></Button>)}</div>
                 </>
               ) : (
-                <div className={cn("rounded-lg border p-4", isCorrect ? "border-success/40 bg-success/10" : "border-destructive/40 bg-destructive/10")}>
-                  <div className="flex items-center gap-2 text-base font-bold">{isCorrect ? <CheckCircle2 className="text-success" /> : <XCircle className="text-destructive" />}{isCorrect ? "Rätt svar" : "Inte riktigt"}</div>
-                  {!isCorrect && <p className="mt-2 text-sm"><span className="font-semibold">Rätt svar:</span> {unit.check.options[unit.check.correct]}</p>}
-                  <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{unit.check.explanation}</p>
-                  <Button className="mt-4 w-full" onClick={() => index === scenes.length - 1 ? onExit() : changeScene(index + 1)}>{index === scenes.length - 1 ? "Slutför genomgången" : "Nästa scen"}<SkipForward /></Button>
+                <div className={cn("animate-scale-in rounded-lg border p-4", isCorrect ? "border-success/45 bg-success/10" : "border-destructive/45 bg-destructive/10")}>
+                  <div className="grid grid-cols-[auto_minmax(0,1fr)] items-center gap-3">
+                    <span className={cn("grid h-11 w-11 shrink-0 place-items-center rounded-full", isCorrect ? "bg-success/20 text-success" : "bg-destructive/20 text-destructive")}>
+                      {isCorrect ? <CheckCircle2 className="h-6 w-6" /> : <XCircle className="h-6 w-6" />}
+                    </span>
+                    <div className="min-w-0">
+                      <p className="font-display text-lg font-bold leading-tight">{isCorrect ? "Rätt svar" : "Inte riktigt"}</p>
+                      <p className="truncate text-xs font-semibold uppercase tracking-wide text-muted-foreground">Kontrollfråga {index + 1} av {scenes.length}</p>
+                    </div>
+                  </div>
+                  <div className="mt-3 grid gap-2">
+                    {selectedAnswer !== null && !isCorrect && (
+                      <p className="rounded-md border border-destructive/30 bg-background/70 px-3 py-2 text-sm break-words hyphens-auto"><span className="font-semibold">Ditt svar:</span> {unit.check.options[selectedAnswer]}</p>
+                    )}
+                    <p className="rounded-md border border-success/30 bg-background/70 px-3 py-2 text-sm break-words hyphens-auto"><span className="font-semibold">Rätt svar:</span> {unit.check.options[unit.check.correct]}</p>
+                  </div>
+                  <p className="mt-3 text-sm leading-relaxed text-muted-foreground break-words hyphens-auto">{unit.check.explanation}</p>
+                  <Button className="mt-4 h-12 w-full" onClick={() => index === scenes.length - 1 ? onExit() : changeScene(index + 1)}>{index === scenes.length - 1 ? "Slutför genomgången" : "Nästa scen"}<SkipForward /></Button>
                 </div>
               )}
             </div>
