@@ -17,7 +17,7 @@ export function LegalPage({
           Senast uppdaterad {updated} · Aurateori
         </p>
       </header>
-      <div className="space-y-6 rounded-3xl border border-border bg-card p-5 shadow-sm sm:p-7">
+      <div className="space-y-7 border-t border-border pt-6">
         {children}
       </div>
     </article>

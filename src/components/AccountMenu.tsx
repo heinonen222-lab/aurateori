@@ -27,8 +27,8 @@ export function AccountMenu({
   };
 
   const base = cn(
-    "flex w-full items-center gap-2 rounded-xl text-sm font-medium transition-colors",
-    variant === "sidebar" ? "px-3 py-2" : "justify-center border border-border py-3",
+    "flex min-h-11 w-full items-center gap-2 rounded-lg text-sm font-semibold transition-colors focus-visible:ring-2 focus-visible:ring-ring",
+    variant === "sidebar" ? "px-3 py-2 focus-visible:ring-sidebar-ring" : "justify-center border border-border py-3",
   );
 
   if (loading) return null;
@@ -38,7 +38,7 @@ export function AccountMenu({
       <Link
         to="/auth"
         onClick={onNavigate}
-        className={cn(base, "text-muted-foreground hover:bg-muted hover:text-foreground")}
+        className={cn(base, variant === "sidebar" ? "text-sidebar-foreground/70 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground" : "text-muted-foreground hover:bg-muted hover:text-foreground")}
       >
         <LogIn className="h-4 w-4" />
         Logga in
@@ -50,14 +50,14 @@ export function AccountMenu({
     <div className={cn("space-y-1", variant === "sheet" && "space-y-2")}>
       <div
         className={cn(
-          "flex items-center gap-2 rounded-xl bg-secondary/50 px-3 py-2 text-xs",
+          "flex min-h-11 items-center gap-2 rounded-lg bg-sidebar-accent px-3 py-2 text-xs text-sidebar-accent-foreground",
           variant === "sheet" && "justify-center",
         )}
       >
         <UserIcon className="h-4 w-4 shrink-0 text-primary" />
         <span className="min-w-0 truncate font-semibold">{user.email}</span>
         {isActive && (
-          <span className="shrink-0 rounded-full bg-primary/15 px-2 py-0.5 text-[10px] font-bold uppercase text-primary">
+          <span className="shrink-0 rounded-md bg-premium px-2 py-0.5 text-[10px] font-bold uppercase text-premium-foreground">
             Premium
           </span>
         )}
