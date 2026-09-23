@@ -120,41 +120,67 @@ export function VisualLessonPlayer({
       </header>
 
       <section className="aura-surface overflow-hidden rounded-xl border border-border shadow-lifted">
-        <div className="relative aspect-[4/3] min-h-64 w-full bg-muted sm:aspect-video">
+        <div className="relative aspect-[4/3] min-h-56 w-full bg-muted sm:aspect-video">
           <LessonScene scene={scene} playing={playing} reducedMotion={reducedMotion} drive={drive} />
-          <div className="pointer-events-none absolute inset-x-3 top-3 grid grid-cols-[minmax(0,1fr)_auto] items-start gap-2">
-            <span className="min-w-0 rounded-md border border-border bg-background/90 px-2 py-1 text-[11px] font-bold shadow-soft backdrop-blur">{index + 1}/{scenes.length}: {scene.label}</span>
-            <span className="rounded-md border border-premium/30 bg-background/90 px-2 py-1 text-[11px] font-semibold text-premium shadow-soft backdrop-blur">{lesson.category}</span>
+          <div className="pointer-events-none absolute inset-x-2 top-2 grid grid-cols-[minmax(0,1fr)_auto] items-start gap-2 sm:inset-x-3 sm:top-3">
+            <span className="min-w-0 truncate rounded-md border border-border/60 bg-background/85 px-2 py-1 text-[10px] font-bold shadow-soft backdrop-blur sm:text-[11px]">{index + 1}/{scenes.length} · {scene.label}</span>
+            <span className="shrink-0 rounded-md border border-premium/30 bg-background/85 px-2 py-1 text-[10px] font-semibold text-premium shadow-soft backdrop-blur sm:text-[11px]">{lesson.category}</span>
           </div>
         </div>
 
-        <div className="grid gap-3 border-y border-border bg-background/55 p-3 backdrop-blur sm:grid-cols-[1fr_auto] sm:items-center">
-          <div className="grid grid-cols-2 gap-2">
-            <Button
-              variant={drive.throttle ? "default" : "outline"}
-              className="h-12"
-              onPointerDown={() => setDrive((value) => ({ ...value, throttle: true, braking: false }))}
-              onPointerUp={() => setDrive((value) => ({ ...value, throttle: false }))}
-              onPointerLeave={() => setDrive((value) => ({ ...value, throttle: false }))}
-            >Gas</Button>
-            <Button
-              variant={drive.braking ? "destructive" : "outline"}
-              className="h-12"
-              onPointerDown={() => setDrive((value) => ({ ...value, braking: true, throttle: false }))}
-              onPointerUp={() => setDrive((value) => ({ ...value, braking: false }))}
-              onPointerLeave={() => setDrive((value) => ({ ...value, braking: false }))}
-            >Broms</Button>
-          </div>
-          <div className="grid grid-cols-[auto_8rem] items-center gap-3">
-            <div className="text-right">
-              <div className="text-[10px] font-bold uppercase text-muted-foreground">Manuell växel</div>
-              <div className="text-xs font-semibold">{drive.gear === 0 ? "Friläge" : drive.gear === -1 ? "Back" : `Växel ${drive.gear}`}</div>
+        <div className="aura-cockpit grid gap-3 border-y border-border/40 p-3 sm:grid-cols-[minmax(0,1fr)_auto] sm:items-center sm:gap-4 sm:p-4">
+          <div className="grid min-w-0 gap-2">
+            <div className="flex min-w-0 items-center justify-between gap-2 text-[10px] font-bold uppercase tracking-wide text-white/60">
+              <span className="truncate">Körreglage</span>
+              <span className="shrink-0 rounded-full bg-white/10 px-2 py-0.5 text-[10px] font-semibold normal-case tracking-normal text-white">
+                {drive.gear === 0 ? "Friläge" : drive.gear === -1 ? "Backväxel" : `Växel ${drive.gear}`}
+                {drive.braking ? " · bromsar" : drive.throttle ? " · gas" : " · rullar"}
+              </span>
             </div>
-            <div className="grid grid-cols-3 gap-1 rounded-lg border border-border bg-card p-1 shadow-inner" aria-label="H-växel">
+            <div className="grid grid-cols-2 gap-2">
+              <button
+                type="button"
+                className={cn(
+                  "h-14 rounded-lg border text-sm font-bold uppercase tracking-wide transition-transform duration-150 active:scale-[0.98]",
+                  drive.throttle ? "border-premium bg-premium text-premium-foreground" : "border-white/20 bg-white/10 text-white",
+                )}
+                aria-pressed={drive.throttle}
+                onPointerDown={() => setDrive((value) => ({ ...value, throttle: true, braking: false }))}
+                onPointerUp={() => setDrive((value) => ({ ...value, throttle: false }))}
+                onPointerLeave={() => setDrive((value) => ({ ...value, throttle: false }))}
+                onPointerCancel={() => setDrive((value) => ({ ...value, throttle: false }))}
+              >Gas</button>
+              <button
+                type="button"
+                className={cn(
+                  "h-14 rounded-lg border text-sm font-bold uppercase tracking-wide transition-transform duration-150 active:scale-[0.98]",
+                  drive.braking ? "border-destructive bg-destructive text-destructive-foreground" : "border-white/20 bg-white/10 text-white",
+                )}
+                aria-pressed={drive.braking}
+                onPointerDown={() => setDrive((value) => ({ ...value, braking: true, throttle: false }))}
+                onPointerUp={() => setDrive((value) => ({ ...value, braking: false }))}
+                onPointerLeave={() => setDrive((value) => ({ ...value, braking: false }))}
+                onPointerCancel={() => setDrive((value) => ({ ...value, braking: false }))}
+              >Broms</button>
+            </div>
+          </div>
+          <div className="grid gap-1.5 justify-self-stretch sm:justify-self-end">
+            <span className="text-[10px] font-bold uppercase tracking-wide text-white/60">H-växel</span>
+            <div className="grid grid-cols-3 gap-1.5 rounded-lg border border-white/15 bg-black/25 p-1.5" role="group" aria-label="Manuell växellåda">
               {gears.map((gear) => (
-                <Button key={gear} type="button" size="sm" variant={drive.gear === gear ? "default" : "ghost"} className="h-8 px-0" onClick={() => setDrive((value) => ({ ...value, gear: value.gear === gear ? 0 : gear }))} aria-label={gear === -1 ? "Backväxel" : `Växel ${gear}`}>
+                <button
+                  key={gear}
+                  type="button"
+                  aria-pressed={drive.gear === gear}
+                  className={cn(
+                    "h-10 min-w-11 rounded-md text-sm font-bold transition-colors duration-150",
+                    drive.gear === gear ? "bg-premium text-premium-foreground" : "bg-white/10 text-white hover:bg-white/20",
+                  )}
+                  onClick={() => setDrive((value) => ({ ...value, gear: value.gear === gear ? 0 : gear }))}
+                  aria-label={gear === -1 ? "Backväxel" : `Växel ${gear}`}
+                >
                   {gear === -1 ? "R" : gear}
-                </Button>
+                </button>
               ))}
             </div>
           </div>
