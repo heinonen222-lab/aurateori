@@ -10,6 +10,8 @@ import { bankQuestionsQuery } from "@/lib/ai-questions";
 import { seededShuffle } from "@/lib/shuffle";
 import { store } from "@/lib/store";
 import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
+import { Progress } from "@/components/ui/progress";
 
 export const Route = createFileRoute("/quiz")({
   head: () => ({
@@ -56,9 +58,9 @@ function QuizPage() {
 
   return (
     <AppShell>
-      <div className="space-y-5">
+      <div className="space-y-6">
         <div>
-          <h1 className="text-2xl font-black sm:text-3xl">Övningsfrågor</h1>
+          <h1 className="font-display text-2xl font-extrabold sm:text-3xl">Övningsfrågor</h1>
           <p className="mt-1 text-sm text-muted-foreground">
             Filtrera på kategori och öva i din takt.
           </p>
@@ -74,7 +76,7 @@ function QuizPage() {
                 setCorrectCount(0);
               }}
               className={cn(
-                "shrink-0 rounded-full border px-4 py-1.5 text-xs font-semibold transition",
+                "min-h-11 shrink-0 rounded-lg border px-4 py-2 text-xs font-semibold transition-[background-color,border-color,color] focus-visible:ring-2 focus-visible:ring-ring",
                 cat === c
                   ? "border-primary bg-primary text-primary-foreground"
                   : "border-border bg-card hover:border-primary/40",
@@ -87,12 +89,7 @@ function QuizPage() {
 
         {!done && (
           <>
-            <div className="h-1.5 overflow-hidden rounded-full bg-muted">
-              <div
-                className="h-full bg-primary transition-all"
-                style={{ width: `${(idx / pool.length) * 100}%` }}
-              />
-            </div>
+            <Progress value={(idx / pool.length) * 100} aria-label="Framsteg i övningen" />
             <QuestionCard
               key={q.id}
               question={q}
@@ -108,23 +105,23 @@ function QuizPage() {
         )}
 
         {done && (
-          <div className="rounded-3xl border border-border bg-card p-8 text-center">
+          <div className="rounded-lg border border-border bg-card p-8 text-center shadow-soft">
             <div className="text-5xl">🎉</div>
             <h2 className="mt-3 text-2xl font-black">Klart!</h2>
             <p className="mt-1 text-muted-foreground">
               Du fick {correctCount} av {pool.length} rätt (
               {Math.round((correctCount / pool.length) * 100)}%).
             </p>
-            <button
+            <Button
               onClick={() => {
                 setIdx(0);
                 setCorrectCount(0);
                 setSeed((n) => n + 1);
               }}
-              className="mt-6 rounded-xl bg-primary px-6 py-3 text-sm font-bold text-primary-foreground"
+              className="mt-6"
             >
               Kör en runda till
-            </button>
+            </Button>
           </div>
         )}
       </div>

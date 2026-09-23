@@ -110,7 +110,7 @@ function LessonsPage() {
       ) : (
         <div className="space-y-5">
           <div>
-            <h1 className="text-2xl font-black sm:text-3xl">Visuella 3D-genomgångar</h1>
+            <h1 className="font-display text-2xl font-extrabold sm:text-3xl">Visuella 3D-genomgångar</h1>
             <p className="mt-1 text-sm text-muted-foreground">
               Se trafikregler och risksituationer spelas upp steg för steg i tydliga 3D-scener.
               {user
@@ -127,18 +127,18 @@ function LessonsPage() {
                 <button
                   key={l.id}
                   onClick={() => setActive(l)}
-                  className="group flex h-full min-w-0 flex-col overflow-hidden rounded-2xl border border-border bg-card p-5 text-left shadow-sm transition hover:border-primary/60"
+                  className="group flex min-h-60 h-full min-w-0 flex-col overflow-hidden rounded-lg border border-border bg-card p-5 text-left shadow-soft transition-[border-color,transform,box-shadow] duration-200 hover:-translate-y-0.5 hover:border-ring hover:shadow-lifted focus-visible:ring-2 focus-visible:ring-ring"
                 >
                   <div className="flex items-start justify-between gap-3">
-                    <div className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-primary/10 text-primary">
+                    <div className="grid h-10 w-10 shrink-0 place-items-center rounded-lg bg-primary/10 text-primary">
                       <GraduationCap className="h-5 w-5" />
                     </div>
-                    <span className="max-w-[60%] rounded-full bg-secondary px-2.5 py-0.5 text-right text-[11px] font-semibold text-secondary-foreground break-words">{l.category}</span>
+                    <span className="max-w-[60%] rounded-md bg-secondary px-2.5 py-1 text-right text-[11px] font-semibold text-secondary-foreground break-words">{l.category}</span>
                   </div>
                   <AutoFitText maxSize={16} minSize={12} className="mt-3 h-12 font-bold leading-6">{l.title}</AutoFitText>
                   <p className="mt-1 line-clamp-3 min-h-[3.75rem] text-sm leading-5 text-muted-foreground">{l.summary}</p>
                   {saved && (
-                    <span className="mt-2 inline-flex items-center gap-1.5 self-start rounded-full bg-primary/10 px-2.5 py-0.5 text-[11px] font-bold text-primary">
+                    <span className="mt-2 inline-flex items-center gap-1.5 self-start rounded-md bg-primary/10 px-2.5 py-1 text-[11px] font-bold text-primary">
                       {saved.completed ? (
                         <>
                           <CheckCircle2 className="h-3.5 w-3.5" /> Klar
