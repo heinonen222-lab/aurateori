@@ -137,6 +137,76 @@ function AccountPage() {
               </div>
             </div>
 
+            <div className="space-y-4 rounded-3xl border border-border bg-card p-6">
+              <div className="flex items-start gap-3">
+                <span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-primary/10">
+                  <GraduationCap className="h-5 w-5 text-primary" />
+                </span>
+                <div className="min-w-0">
+                  <h2 className="text-base font-bold">Mina genomgångar</h2>
+                  <p className="mt-1 text-sm text-muted-foreground">
+                    Dina sparade genomgångar. Fortsätt där du slutade.
+                  </p>
+                </div>
+              </div>
+
+              {lessonsLoading ? (
+                <p className="text-sm text-muted-foreground">Laddar dina genomgångar…</p>
+              ) : !lessonProgress || lessonProgress.length === 0 ? (
+                <div className="space-y-3">
+                  <p className="text-sm text-muted-foreground">
+                    Du har inte börjat på någon genomgång än. De sparas automatiskt när du tittar.
+                  </p>
+                  <Link
+                    to="/genomgangar"
+                    className="inline-flex items-center gap-2 rounded-xl bg-primary px-4 py-2.5 text-sm font-bold text-primary-foreground"
+                  >
+                    <Play className="h-4 w-4" />
+                    Börja en genomgång
+                  </Link>
+                </div>
+              ) : (
+                <ul className="space-y-2">
+                  {lessonProgress.map((row) => {
+                    const lesson = LESSONS.find((l) => l.id === row.lesson_id);
+                    if (!lesson) return null;
+                    const total = row.total_steps || lesson.steps.filter((s) => s.kind === "info").length;
+                    const step = Math.min(row.last_step + 1, total);
+                    const percent = total ? Math.round((row.completed ? total : step) / total * 100) : 0;
+                    return (
+                      <li key={row.lesson_id}>
+                        <Link
+                          to="/genomgangar"
+                          search={{ lesson: row.lesson_id }}
+                          className="block min-w-0 rounded-2xl border border-border p-4 transition-colors hover:bg-muted"
+                        >
+                          <div className="flex items-start justify-between gap-3">
+                            <span className="min-w-0 text-sm font-bold">{lesson.title}</span>
+                            <span className="inline-flex shrink-0 items-center gap-1.5 rounded-full bg-secondary px-2.5 py-0.5 text-[11px] font-bold">
+                              {row.completed ? (
+                                <>
+                                  <CheckCircle2 className="h-3.5 w-3.5 text-primary" /> Klar
+                                </>
+                              ) : (
+                                <>Scen {step}/{total}</>
+                              )}
+                            </span>
+                          </div>
+                          <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-muted">
+                            <div className="h-full rounded-full bg-primary" style={{ width: `${percent}%` }} />
+                          </div>
+                          <p className="mt-2 text-[11px] font-medium text-muted-foreground">
+                            Senast: {new Date(row.updated_at).toLocaleDateString("sv-SE")} · Fortsätt genomgången
+                          </p>
+                        </Link>
+                      </li>
+                    );
+                  })}
+                </ul>
+              )}
+            </div>
+
+
             <div className="space-y-4 rounded-3xl border border-destructive/40 bg-destructive/5 p-6">
               <div className="flex items-start gap-3">
                 <AlertTriangle className="mt-0.5 h-5 w-5 shrink-0 text-destructive" />
