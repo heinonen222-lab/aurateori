@@ -13,7 +13,7 @@ type Row = {
 const ROWS: Row[] = [
   {
     name: "Aurateori",
-    price: "149 kr/30 dagar · 499 kr/år",
+    price: "149 kr/mån · 499 kr/år",
     model: "Avsluta när du vill",
     unlimitedExams: true,
     moneyBack: "–",
