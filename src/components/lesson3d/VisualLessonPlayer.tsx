@@ -164,7 +164,7 @@ export function VisualLessonPlayer({
               >Broms</button>
             </div>
           </div>
-          <div className="grid gap-1.5 justify-self-stretch sm:justify-self-end">
+          <div className="grid w-full max-w-xs gap-1.5 justify-self-stretch sm:max-w-none sm:justify-self-end">
             <span className="text-[10px] font-bold uppercase tracking-wide text-white/60">H-växel</span>
             <div className="grid grid-cols-3 gap-1.5 rounded-lg border border-white/15 bg-black/25 p-1.5" role="group" aria-label="Manuell växellåda">
               {gears.map((gear) => (
