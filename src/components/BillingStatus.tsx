@@ -115,7 +115,8 @@ export function BillingStatus() {
                   {sub.isExpired && !sub.isPastDue && " · perioden har gått ut"}
                 </div>
                 <dl className="mt-3 grid gap-1.5 rounded-lg border border-border bg-background/50 p-3 text-xs text-muted-foreground sm:grid-cols-2">
-                  <Row label="Plan" value={sub.priceId} />
+                  <Row label="Plan" value={PLAN_LABEL[sub.priceId] ?? sub.priceId} />
+                  <Row label="Betalning" value={PLAN_CYCLE[sub.priceId] ?? "Löpande abonnemang"} />
                   <Row label="Period slutar" value={fmtDate(sub.currentPeriodEnd)} />
                   <Row
                     label={sub.cancelAtPeriodEnd ? "Avslutas" : "Nästa debitering"}
