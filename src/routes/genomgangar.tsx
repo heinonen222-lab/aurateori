@@ -69,16 +69,19 @@ function LessonsPage() {
   const progressFor = (lessonId: string) => progress?.find((row) => row.lesson_id === lessonId);
 
   const handleStepChange = useCallback(
-    (step: number, totalSteps: number) => {
+    (result: { step: number; totalSteps: number; answeredChecks: number; correctChecks: number; bestCorrectChecks: number; completed: boolean }) => {
       const lesson = activeRef.current;
       if (!userId || !lesson) return;
       void saveRef
         .current({
           data: {
             lessonId: lesson.id,
-            lastStep: step,
-            totalSteps,
-            completed: step >= totalSteps - 1,
+            lastStep: result.step,
+            totalSteps: result.totalSteps,
+            completed: result.completed,
+            answeredChecks: result.answeredChecks,
+            correctChecks: result.correctChecks,
+            bestCorrectChecks: result.bestCorrectChecks,
           },
         })
         .catch(() => undefined);
@@ -98,6 +101,9 @@ function LessonsPage() {
           key={active.id}
           lesson={active}
           initialStep={progressFor(active.id)?.last_step ?? 0}
+          initialAnsweredChecks={progressFor(active.id)?.answered_checks ?? 0}
+          initialCorrectChecks={progressFor(active.id)?.correct_checks ?? 0}
+          initialBestCorrectChecks={progressFor(active.id)?.best_correct_checks ?? 0}
           onStepChange={handleStepChange}
           onExit={closePlayer}
         />

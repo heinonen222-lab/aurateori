@@ -7,6 +7,9 @@ export interface LessonProgressRow {
   last_step: number;
   total_steps: number;
   completed: boolean;
+  answered_checks: number;
+  correct_checks: number;
+  best_correct_checks: number;
   updated_at: string;
 }
 
@@ -16,7 +19,7 @@ export const listLessonProgress = createServerFn({ method: "GET" })
   .handler(async ({ context }): Promise<LessonProgressRow[]> => {
     const { data, error } = await context.supabase
       .from("lesson_progress")
-      .select("lesson_id, last_step, total_steps, completed, updated_at")
+      .select("lesson_id, last_step, total_steps, completed, answered_checks, correct_checks, best_correct_checks, updated_at")
       .eq("user_id", context.userId)
       .order("updated_at", { ascending: false });
     if (error) throw new Error(error.message);
@@ -28,6 +31,9 @@ const saveSchema = z.object({
   lastStep: z.number().int().min(0).max(500),
   totalSteps: z.number().int().min(1).max(500),
   completed: z.boolean(),
+  answeredChecks: z.number().int().min(0).max(500),
+  correctChecks: z.number().int().min(0).max(500),
+  bestCorrectChecks: z.number().int().min(0).max(500),
 });
 
 /** Sparar var användaren är i en genomgång. Alltid kopplat till context.userId. */
@@ -42,6 +48,9 @@ export const saveLessonProgress = createServerFn({ method: "POST" })
         last_step: data.lastStep,
         total_steps: data.totalSteps,
         completed: data.completed,
+        answered_checks: data.answeredChecks,
+        correct_checks: data.correctChecks,
+        best_correct_checks: data.bestCorrectChecks,
         updated_at: new Date().toISOString(),
       },
       { onConflict: "user_id,lesson_id" },

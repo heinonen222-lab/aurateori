@@ -4,7 +4,13 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import * as THREE from "three";
 import type { LessonSceneConfig } from "./lesson-scenes";
 
-type SceneProps = { scene: LessonSceneConfig; playing: boolean; reducedMotion: boolean };
+export type DriveControl = {
+  gear: -1 | 0 | 1 | 2 | 3 | 4 | 5;
+  throttle: boolean;
+  braking: boolean;
+};
+
+type SceneProps = { scene: LessonSceneConfig; playing: boolean; reducedMotion: boolean; drive: DriveControl };
 type Vec3 = [number, number, number];
 type Motion = (time: number) => { x: number; z: number; yaw: number; visible?: boolean };
 type WebGLStatus = "checking" | "supported" | "unsupported";
@@ -186,9 +192,10 @@ function CarModel({ color = COLORS.blue, lights = false }: { color?: string; lig
   );
 }
 
-function MovingCar({ color, motion, playing, reducedMotion, sceneId, lights = false }: { color?: string; motion: Motion; playing: boolean; reducedMotion: boolean; sceneId: string; lights?: boolean }) {
+function MovingCar({ color, motion, playing, reducedMotion, sceneId, lights = false, drive }: { color?: string; motion: Motion; playing: boolean; reducedMotion: boolean; sceneId: string; lights?: boolean; drive?: DriveControl }) {
   const group = useRef<THREE.Group>(null);
   const elapsed = useRef(0);
+  const speed = useRef(0);
   // Motion-funktionerna skapas om vid varje render. Håll dem i en ref så att
   // bilen inte nollställs (och hoppar) när komponenten renderas om.
   const motionRef = useRef(motion);
@@ -206,7 +213,15 @@ function MovingCar({ color, motion, playing, reducedMotion, sceneId, lights = fa
 
   useFrame((_, rawDelta) => {
     const delta = Math.min(rawDelta, 0.05);
-    if (playing && !reducedMotion) elapsed.current += delta;
+    if (drive) {
+      const direction = drive.gear === -1 ? -1 : drive.gear === 0 ? 0 : 1;
+      const gearSpeed = drive.gear > 0 ? 0.55 + drive.gear * 0.18 : drive.gear === -1 ? 0.5 : 0;
+      const targetSpeed = playing && !reducedMotion && drive.throttle && !drive.braking ? direction * gearSpeed : 0;
+      speed.current = THREE.MathUtils.damp(speed.current, targetSpeed, drive.braking ? 12 : 5, delta);
+      elapsed.current = Math.max(0, elapsed.current + delta * speed.current);
+    } else if (playing && !reducedMotion) {
+      elapsed.current += delta;
+    }
     const state = motionRef.current(elapsed.current);
     if (!group.current) return;
     group.current.position.set(state.x, 0, state.z);
@@ -465,13 +480,13 @@ function defaultMotion(id: string, laneX = -1.55, speed = 1.8): Motion {
   };
 }
 
-function SceneSpecifics({ scene, playing, reducedMotion }: SceneProps) {
+function SceneSpecifics({ scene, playing, reducedMotion, drive }: SceneProps) {
   const id = scene.id;
   const sceneMotions = motions[id] ?? [defaultMotion(id)];
   return (
     <group>
       {sceneMotions.map((motion, index) => (
-        <MovingCar key={`${id}-${index}`} sceneId={id} playing={playing} reducedMotion={reducedMotion} motion={motion} color={index === 0 ? COLORS.blue : COLORS.red} lights={scene.weather === "night"} />
+        <MovingCar key={`${id}-${index}`} sceneId={id} playing={playing} reducedMotion={reducedMotion} motion={motion} color={index === 0 ? COLORS.blue : COLORS.red} lights={scene.weather === "night"} drive={index === 0 ? drive : undefined} />
       ))}
 
       {id === "right-hand-rule" && <><PriorityRing position={[1.5, 0.1, 1.5]} /><DirectionArrow position={[3.4, 0.1, 1.5]} rotation={Math.PI / 2} /></>}
