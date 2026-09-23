@@ -108,6 +108,7 @@ export function AppShell({ children }: { children: ReactNode }) {
               <Link
                 key={n.to}
                 to={n.to}
+                aria-current={active ? "page" : undefined}
                 className={cn(
                   "relative flex min-h-11 items-center gap-3 rounded-lg px-3 py-2 text-sm font-semibold transition-[background-color,color,transform] duration-200 active:scale-[0.98] focus-visible:ring-sidebar-ring",
                   active
@@ -154,7 +155,7 @@ export function AppShell({ children }: { children: ReactNode }) {
         </button>
       </header>
 
-      <main className="pb-[calc(5rem+env(safe-area-inset-bottom))] lg:ml-60 lg:pb-10">
+      <main id="innehall" className="pb-[calc(5rem+env(safe-area-inset-bottom))] lg:ml-60 lg:pb-10">
         <div className="mx-auto max-w-6xl px-4 py-6 sm:px-6 lg:px-10 lg:py-10">
           {children}
           <LegalFooter />
