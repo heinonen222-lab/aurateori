@@ -151,7 +151,8 @@ function PricingPage() {
         <div className="grid gap-2 sm:grid-cols-3">
           {[
             "Direkt tillgång – ingen ångerrätt på digital tjänst",
-            "Avsluta prenumerationen när du vill",
+            "Löpande abonnemang – betalningen dras automatiskt varje period",
+            "Avsluta prenumerationen när du vill, den gäller till periodens slut",
             "Säker betalning – Paddle är säljare (Merchant of Record)",
           ].map((t) => (
             <div
