@@ -55,7 +55,10 @@ export type Database = {
       }
       lesson_progress: {
         Row: {
+          answered_checks: number
+          best_correct_checks: number
           completed: boolean
+          correct_checks: number
           created_at: string
           id: string
           last_step: number
@@ -65,7 +68,10 @@ export type Database = {
           user_id: string
         }
         Insert: {
+          answered_checks?: number
+          best_correct_checks?: number
           completed?: boolean
+          correct_checks?: number
           created_at?: string
           id?: string
           last_step?: number
@@ -75,7 +81,10 @@ export type Database = {
           user_id: string
         }
         Update: {
+          answered_checks?: number
+          best_correct_checks?: number
           completed?: boolean
+          correct_checks?: number
           created_at?: string
           id?: string
           last_step?: number
