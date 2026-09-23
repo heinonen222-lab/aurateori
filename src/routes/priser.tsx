@@ -8,6 +8,7 @@ import { usePaddleCheckout } from "@/hooks/usePaddleCheckout";
 import { useAuth } from "@/hooks/useAuth";
 import { useSubscription } from "@/hooks/useSubscription";
 import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
 
 export const Route = createFileRoute("/priser")({
   head: () => ({
@@ -81,7 +82,7 @@ function PricingPage() {
       <PaymentTestModeBanner />
       <div className="space-y-6">
         <div className="text-center">
-          <h1 className="text-2xl font-black sm:text-3xl">Aurateori Premium</h1>
+          <h1 className="font-display text-3xl font-extrabold sm:text-4xl">Aurateori Premium</h1>
           <p className="mx-auto mt-2 max-w-xl text-sm text-muted-foreground">
             Full tillgång till hela frågebanken, provsimulatorn och alla interaktiva genomgångar mot
             gällande svenska trafikregler.
@@ -89,7 +90,7 @@ function PricingPage() {
         </div>
 
         {isActive && (
-          <div className="flex items-center justify-center gap-2 rounded-2xl border border-primary/40 bg-primary/10 p-4 text-sm font-semibold">
+          <div className="flex items-center justify-center gap-2 rounded-lg border border-primary/40 bg-primary/10 p-4 text-sm font-semibold">
             <Crown className="h-4 w-4 text-primary" />
             Du har redan premium – tack!
           </div>
@@ -102,29 +103,30 @@ function PricingPage() {
             <div
               key={p.priceId}
               className={cn(
-                "flex h-full min-w-0 flex-col overflow-hidden rounded-3xl border bg-card p-5 shadow-sm",
-                p.highlight ? "border-primary ring-1 ring-primary" : "border-border",
+                "relative flex h-full min-w-0 flex-col overflow-hidden rounded-xl border bg-card p-5 shadow-soft",
+                p.highlight ? "border-premium ring-1 ring-premium shadow-lifted" : "border-border",
               )}
             >
               {p.highlight && (
-                <div className="mb-3 inline-flex self-start rounded-full bg-primary px-3 py-1 text-[10px] font-bold uppercase leading-none tracking-wider text-primary-foreground">
+                <div className="mb-3 inline-flex self-start rounded-md bg-premium px-3 py-1 text-[10px] font-bold uppercase leading-none text-premium-foreground">
                   Bäst värde
                 </div>
               )}
               <div className="min-h-5 break-words text-sm font-bold">{p.name}</div>
               <div className="mt-2">
-                <span className="text-3xl font-black">{p.price}</span>
+                 <span className="font-display text-3xl font-extrabold">{p.price}</span>
                 <span className="text-sm text-muted-foreground">{p.per}</span>
               </div>
               <div className="mt-1 min-h-8 break-words text-xs leading-4 text-muted-foreground">{p.note}</div>
-              <button
+              <Button
+                variant={p.highlight ? "premium" : "default"}
                 onClick={() => buy(p.priceId)}
                 disabled={loading}
-                className="mt-auto flex min-w-0 items-center justify-center gap-2 rounded-xl bg-primary px-3 py-2.5 text-sm font-bold text-primary-foreground transition hover:opacity-90 disabled:opacity-60"
+                className="mt-auto w-full"
               >
                 {loading && <Loader2 className="h-4 w-4 animate-spin" />}
                 {user ? "Köp" : "Logga in och köp"}
-              </button>
+              </Button>
             </div>
           ))}
         </div>
@@ -143,7 +145,7 @@ function PricingPage() {
           ].map((t) => (
             <div
               key={t}
-              className="flex min-h-16 min-w-0 items-start gap-2 overflow-hidden rounded-2xl border border-border bg-background p-3 text-xs leading-4"
+               className="flex min-h-16 min-w-0 items-start gap-2 overflow-hidden border-t border-border bg-background p-3 text-xs leading-4 first:border-t-0 sm:rounded-lg sm:border"
             >
               <Check className="mt-0.5 h-3.5 w-3.5 shrink-0 text-primary" />
               {t}
@@ -153,7 +155,7 @@ function PricingPage() {
 
         <PriceComparison />
 
-        <div className="rounded-3xl border border-border bg-secondary/40 p-5">
+        <div className="rounded-lg border border-border bg-secondary/40 p-5">
           <div className="mb-3 text-xs font-bold uppercase tracking-wider text-muted-foreground">
             Detta ingår
           </div>

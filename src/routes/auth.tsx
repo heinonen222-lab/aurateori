@@ -7,6 +7,8 @@ import { lovable } from "@/integrations/lovable";
 import { useAuth } from "@/hooks/useAuth";
 import { authErrorMessage } from "@/lib/auth-errors";
 import "@lovable.dev/cloud-auth-js/styles.css";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 
 export const Route = createFileRoute("/auth")({
   head: () => ({
@@ -111,7 +113,7 @@ function AuthPage() {
     <AppShell>
       <div className="mx-auto max-w-md space-y-5">
         <div>
-          <h1 className="text-2xl font-black sm:text-3xl">
+          <h1 className="font-display text-2xl font-extrabold sm:text-3xl">
             {mode === "signin" ? "Logga in" : mode === "signup" ? "Skapa konto" : "Glömt lösenord"}
           </h1>
           <p className="mt-1 text-sm text-muted-foreground">
@@ -121,14 +123,15 @@ function AuthPage() {
           </p>
         </div>
 
-        <div className="rounded-3xl border border-border bg-card p-5 shadow-sm sm:p-6">
+        <div className="rounded-xl border border-border bg-card p-5 shadow-lifted sm:p-6">
           <div className="space-y-2">
-            <button
+            <Button
+              variant="outline"
               onClick={google}
-              className="w-full rounded-xl border border-border py-3 text-sm font-semibold transition hover:border-primary/60"
+              className="w-full"
             >
               Fortsätt med Google
-            </button>
+            </Button>
             <button type="button" className="lovable-auth-button" onClick={lovableSignIn}>
               Fortsätt med Lovable
             </button>
@@ -148,13 +151,12 @@ function AuthPage() {
               >
                 E-post
               </label>
-              <input
+              <Input
                 id="email"
                 type="email"
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="w-full rounded-xl border border-border bg-background px-3 py-2.5 text-sm outline-none focus:border-primary"
               />
             </div>
             {mode !== "forgot" && (
@@ -165,7 +167,7 @@ function AuthPage() {
                 >
                   Lösenord
                 </label>
-                <input
+                <Input
                   id="password"
                   type="password"
                   required
@@ -173,15 +175,14 @@ function AuthPage() {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   autoComplete={mode === "signup" ? "new-password" : "current-password"}
-                  className="w-full rounded-xl border border-border bg-background px-3 py-2.5 text-sm outline-none focus:border-primary"
                 />
               </div>
             )}
 
-            <button
+            <Button
               type="submit"
               disabled={busy}
-              className="flex w-full items-center justify-center gap-2 rounded-xl bg-primary py-3 text-sm font-bold text-primary-foreground transition hover:opacity-90 disabled:opacity-60"
+              className="w-full"
             >
               {busy && <Loader2 className="h-4 w-4 animate-spin" />}
               {mode === "signin"
@@ -189,16 +190,16 @@ function AuthPage() {
                 : mode === "signup"
                   ? "Skapa konto"
                   : "Skicka återställningslänk"}
-            </button>
+            </Button>
           </form>
 
           {error && (
-            <p className="mt-3 rounded-xl border border-destructive/40 bg-destructive/10 p-3 text-xs">
+            <p role="alert" className="mt-3 rounded-lg border border-destructive/40 bg-destructive/10 p-3 text-xs">
               {error}
             </p>
           )}
           {message && (
-            <p className="mt-3 rounded-xl border border-primary/40 bg-primary/10 p-3 text-xs">
+            <p aria-live="polite" className="mt-3 rounded-lg border border-primary/40 bg-primary/10 p-3 text-xs">
               {message}
             </p>
           )}
@@ -211,7 +212,7 @@ function AuthPage() {
                 setMessage(null);
                 setMode(mode === "signup" ? "signin" : "signup");
               }}
-              className="w-full hover:text-foreground"
+              className="min-h-11 w-full rounded-lg px-2 hover:bg-muted hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring"
             >
               {mode === "signup"
                 ? "Har du redan ett konto? Logga in"
@@ -224,7 +225,7 @@ function AuthPage() {
                 setMessage(null);
                 setMode(mode === "forgot" ? "signin" : "forgot");
               }}
-              className="w-full hover:text-foreground"
+              className="min-h-11 w-full rounded-lg px-2 hover:bg-muted hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring"
             >
               {mode === "forgot" ? "Tillbaka till inloggning" : "Glömt lösenordet?"}
             </button>

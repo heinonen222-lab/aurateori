@@ -4,6 +4,8 @@ import { Loader2, KeyRound } from "lucide-react";
 import { AppShell } from "@/components/AppShell";
 import { supabase } from "@/integrations/supabase/client";
 import { authErrorMessage } from "@/lib/auth-errors";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 
 export const Route = createFileRoute("/reset-password")({
   head: () => ({
@@ -66,7 +68,7 @@ function ResetPasswordPage() {
     <AppShell>
       <div className="mx-auto max-w-md space-y-5">
         <div>
-          <h1 className="flex items-center gap-2 text-2xl font-black sm:text-3xl">
+          <h1 className="flex items-center gap-2 font-display text-2xl font-extrabold sm:text-3xl">
             <KeyRound className="h-6 w-6 text-primary" />
             Nytt lösenord
           </h1>
@@ -75,7 +77,7 @@ function ResetPasswordPage() {
           </p>
         </div>
 
-        <div className="rounded-3xl border border-border bg-card p-5 shadow-sm sm:p-6">
+        <div className="rounded-xl border border-border bg-card p-5 shadow-lifted sm:p-6">
           {done ? (
             <p className="rounded-xl border border-primary/40 bg-primary/10 p-3 text-sm font-semibold">
               Lösenordet är uppdaterat. Skickar dig vidare…
@@ -96,7 +98,7 @@ function ResetPasswordPage() {
                   >
                     Nytt lösenord
                   </label>
-                  <input
+                   <Input
                     id="new-password"
                     type="password"
                     required
@@ -104,7 +106,6 @@ function ResetPasswordPage() {
                     autoComplete="new-password"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    className="w-full rounded-xl border border-border bg-background px-3 py-2.5 text-sm outline-none focus:border-primary"
                   />
                 </div>
                 <div>
@@ -114,7 +115,7 @@ function ResetPasswordPage() {
                   >
                     Upprepa lösenord
                   </label>
-                  <input
+                   <Input
                     id="confirm-password"
                     type="password"
                     required
@@ -122,23 +123,22 @@ function ResetPasswordPage() {
                     autoComplete="new-password"
                     value={confirm}
                     onChange={(e) => setConfirm(e.target.value)}
-                    className="w-full rounded-xl border border-border bg-background px-3 py-2.5 text-sm outline-none focus:border-primary"
                   />
                 </div>
-                <button
+                <Button
                   type="submit"
                   disabled={busy || !ready}
-                  className="flex w-full items-center justify-center gap-2 rounded-xl bg-primary py-3 text-sm font-bold text-primary-foreground transition hover:opacity-90 disabled:opacity-60"
+                  className="w-full"
                 >
                   {busy && <Loader2 className="h-4 w-4 animate-spin" />}
                   Spara nytt lösenord
-                </button>
+                </Button>
               </form>
             </>
           )}
 
           {error && (
-            <p className="mt-3 rounded-xl border border-destructive/40 bg-destructive/10 p-3 text-xs">
+            <p role="alert" className="mt-3 rounded-lg border border-destructive/40 bg-destructive/10 p-3 text-xs">
               {error}
             </p>
           )}

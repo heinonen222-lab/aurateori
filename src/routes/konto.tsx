@@ -13,6 +13,7 @@ import { deleteAccount } from "@/utils/account.functions";
 import { listLessonProgress } from "@/utils/lessons.functions";
 import { LESSONS } from "@/data/lessons";
 import { store } from "@/lib/store";
+import { Input } from "@/components/ui/input";
 
 export const Route = createFileRoute("/konto")({
   head: () => ({
@@ -103,18 +104,18 @@ function AccountPage() {
     <AppShell>
       <div className="mx-auto max-w-2xl space-y-6">
         <div>
-          <h1 className="text-2xl font-black sm:text-3xl">Mitt konto</h1>
+          <h1 className="font-display text-2xl font-extrabold sm:text-3xl">Mitt konto</h1>
           <p className="mt-1 text-sm text-muted-foreground">
             Se dina kontouppgifter, hantera premium eller ta bort kontot permanent.
           </p>
         </div>
 
         {loading ? (
-          <div className="rounded-3xl border border-border bg-card p-6 text-sm text-muted-foreground">
+          <div className="rounded-lg border border-border bg-card p-6 text-sm text-muted-foreground shadow-soft">
             Laddar kontouppgifter…
           </div>
         ) : !user ? (
-          <div className="space-y-4 rounded-3xl border border-border bg-card p-6">
+          <div className="space-y-4 rounded-lg border border-border bg-card p-6 shadow-soft">
             <p className="text-sm text-muted-foreground">
               Du är inte inloggad. Logga in för att hantera ditt konto.
             </p>
@@ -127,9 +128,9 @@ function AccountPage() {
           </div>
         ) : (
           <>
-            <div className="space-y-4 rounded-3xl border border-border bg-card p-6">
+            <div className="space-y-4 rounded-lg border border-border bg-card p-6 shadow-soft">
               <div className="flex flex-wrap items-center gap-3">
-                <span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-secondary">
+                  <span className="grid h-10 w-10 shrink-0 place-items-center rounded-lg bg-secondary">
                   <UserIcon className="h-5 w-5 text-primary" />
                 </span>
                 <div className="min-w-0 flex-1">
@@ -139,7 +140,7 @@ function AccountPage() {
                   <div className="truncate text-sm font-semibold">{user.email}</div>
                 </div>
                 {isActive && (
-                  <span className="inline-flex shrink-0 items-center gap-1.5 rounded-full bg-primary/15 px-3 py-1 text-[11px] font-bold uppercase tracking-wider text-primary">
+                  <span className="inline-flex shrink-0 items-center gap-1.5 rounded-md bg-premium px-3 py-1 text-[11px] font-bold uppercase text-premium-foreground">
                     <Crown className="h-3.5 w-3.5" /> Premium
                   </span>
                 )}
@@ -164,7 +165,7 @@ function AccountPage() {
               </div>
             </div>
 
-            <section className="space-y-4 rounded-3xl border border-border bg-card p-5 sm:p-6">
+            <section className="space-y-4 rounded-xl border border-border bg-card p-5 shadow-soft sm:p-6">
               <div className="flex items-start gap-3">
                 <span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-primary/10">
                   <GraduationCap className="h-5 w-5 text-primary" />
@@ -181,7 +182,7 @@ function AccountPage() {
                 <p className="text-sm text-muted-foreground">Laddar dina genomgångar…</p>
               ) : (
                 <>
-                  <div className="grid gap-4 rounded-2xl bg-secondary/45 p-4 sm:grid-cols-[auto_minmax(0,1fr)] sm:items-center">
+                  <div className="grid gap-4 rounded-lg bg-secondary/45 p-4 sm:grid-cols-[auto_minmax(0,1fr)] sm:items-center">
                     <div className="mx-auto"><LessonReadinessGauge value={lessonReadiness} /></div>
                     <div className="min-w-0">
                       <div className="flex items-center gap-2 text-sm font-bold"><Target className="h-4 w-4 text-primary" /> Mål: {LESSON_READINESS_TARGET}%</div>
@@ -207,7 +208,7 @@ function AccountPage() {
                         <Link
                           to="/genomgangar"
                           search={{ lesson: lesson.id }}
-                          className="block min-w-0 rounded-2xl border border-border p-4 transition-colors hover:bg-muted"
+                          className="block min-w-0 rounded-lg border border-border p-4 transition-colors hover:bg-muted focus-visible:ring-2 focus-visible:ring-ring"
                         >
                           <div className="grid grid-cols-[minmax(0,1fr)_auto] items-start gap-3">
                             <AutoFitText maxSize={14} minSize={11} className="h-10 min-w-0 font-bold leading-5">{lesson.title}</AutoFitText>
@@ -232,7 +233,7 @@ function AccountPage() {
             </section>
 
 
-            <div className="space-y-4 rounded-3xl border border-destructive/40 bg-destructive/5 p-6">
+            <div className="space-y-4 rounded-lg border border-destructive/40 bg-destructive/5 p-6">
               <div className="flex items-start gap-3">
                 <AlertTriangle className="mt-0.5 h-5 w-5 shrink-0 text-destructive" />
                 <div>
@@ -249,13 +250,13 @@ function AccountPage() {
                 <label htmlFor="confirm" className="block text-xs font-semibold">
                   Skriv <span className="font-black">{CONFIRM_WORD}</span> för att bekräfta
                 </label>
-                <input
+                <Input
                   id="confirm"
                   value={confirm}
                   onChange={(e) => setConfirm(e.target.value)}
                   autoComplete="off"
                   placeholder={CONFIRM_WORD}
-                  className="w-full rounded-xl border border-border bg-background px-4 py-2.5 text-sm outline-none focus:border-destructive"
+                  className="focus-visible:border-destructive focus-visible:ring-destructive/25"
                 />
               </div>
 

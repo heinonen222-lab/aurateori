@@ -5,6 +5,7 @@ import { getBillingStatus } from "@/utils/billing.functions";
 import { getPaddleEnvironment } from "@/lib/paddle";
 import { useAuth } from "@/hooks/useAuth";
 import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
 
 const dateFmt = new Intl.DateTimeFormat("sv-SE", {
   day: "numeric",
@@ -48,7 +49,7 @@ export function BillingStatus() {
   const data = query.data;
 
   return (
-    <section className="rounded-3xl border border-border bg-card p-5 shadow-sm">
+    <section className="rounded-xl border border-border bg-card p-5 shadow-soft">
       <div className="mb-4 grid grid-cols-[minmax(0,1fr)_auto] items-start gap-3">
         <div className="min-w-0">
           <h2 className="text-sm font-bold">Betalningsstatus</h2>
@@ -57,14 +58,16 @@ export function BillingStatus() {
             Paddle
           </p>
         </div>
-        <button
+        <Button
+          variant="outline"
+          size="sm"
           type="button"
           onClick={() => void query.refetch()}
-          className="flex shrink-0 items-center gap-1.5 rounded-xl border border-border px-2.5 py-1.5 text-xs font-semibold transition hover:bg-secondary"
+          className="shrink-0"
         >
           <RefreshCw className={cn("h-3.5 w-3.5", query.isFetching && "animate-spin")} />
           Uppdatera
-        </button>
+        </Button>
       </div>
 
       {query.isLoading && (
@@ -104,7 +107,7 @@ export function BillingStatus() {
                 : "border-primary/40 bg-primary/10";
             const Icon = sub.isPastDue ? AlertTriangle : sub.isExpired ? Clock : CheckCircle2;
             return (
-              <div key={sub.id} className={cn("rounded-2xl border p-4", tone)}>
+              <div key={sub.id} className={cn("rounded-lg border p-4", tone)}>
                 <div className="flex items-center gap-2 text-sm font-bold">
                   <Icon className="h-4 w-4" />
                   {STATUS_LABEL[sub.status] ?? sub.status}
@@ -164,7 +167,7 @@ export function BillingStatus() {
                 <CreditCard className="h-3.5 w-3.5" />
                 Transaktioner
               </div>
-              <ul className="divide-y divide-border overflow-hidden rounded-2xl border border-border">
+              <ul className="divide-y divide-border overflow-hidden rounded-lg border border-border">
                 {data.transactions.map((t) => (
                   <li
                     key={t.id}
@@ -205,7 +208,7 @@ export function BillingStatus() {
 
 function Stat({ label, value }: { label: string; value: string }) {
   return (
-    <div className="min-w-0 overflow-hidden rounded-2xl border border-border bg-secondary/40 p-2 text-center sm:p-3">
+    <div className="min-w-0 overflow-hidden rounded-lg border border-border bg-secondary/40 p-2 text-center sm:p-3">
       <div className="text-xl font-black">{value}</div>
       <div className="min-h-8 break-words text-[9px] font-semibold uppercase leading-4 tracking-wider text-muted-foreground sm:text-[10px]">
         {label}
