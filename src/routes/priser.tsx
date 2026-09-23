@@ -42,19 +42,21 @@ const FEATURES = [
 const PLANS = [
   {
     priceId: "premium_monthly",
-    name: "Premium 30 dagar",
+    name: "Premium Månad",
     price: "149 kr",
-    per: "/30 dagar",
-    note: "Avsluta när du vill",
+    per: "/mån",
+    note: "Förnyas automatiskt varje månad – avsluta när du vill",
     highlight: false,
+    cta: "Starta månadsabonnemang",
   },
   {
     priceId: "premium_yearly",
     name: "Premium År",
     price: "499 kr",
     per: "/år",
-    note: "≈ 42 kr/mån – spara ca 72 %",
+    note: "Förnyas automatiskt varje år – ≈ 42 kr/mån, spara ca 72 %",
     highlight: true,
+    cta: "Starta årsabonnemang",
   },
 ] as const;
 
