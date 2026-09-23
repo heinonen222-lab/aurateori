@@ -110,7 +110,7 @@ export function VisualLessonPlayer({
   const gears: DriveControl["gear"][] = [1, 3, 5, 2, 4, -1];
 
   return (
-    <div className="min-w-0 space-y-3">
+    <div className="min-w-0 space-y-4">
       <header className="grid grid-cols-[auto_minmax(0,1fr)] items-center gap-3">
         <Button variant="outline" size="icon" onClick={onExit} aria-label="Tillbaka till genomgångar"><ArrowLeft /></Button>
         <div className="min-w-0">
@@ -119,16 +119,16 @@ export function VisualLessonPlayer({
         </div>
       </header>
 
-      <section className="overflow-hidden rounded-xl border border-border bg-card shadow-lifted">
+      <section className="aura-surface overflow-hidden rounded-xl border border-border shadow-lifted">
         <div className="relative aspect-[4/3] min-h-64 w-full bg-muted sm:aspect-video">
           <LessonScene scene={scene} playing={playing} reducedMotion={reducedMotion} drive={drive} />
           <div className="pointer-events-none absolute inset-x-3 top-3 grid grid-cols-[minmax(0,1fr)_auto] items-start gap-2">
-            <span className="min-w-0 rounded-md bg-background/90 px-2 py-1 text-[11px] font-bold backdrop-blur">{index + 1}/{scenes.length}: {scene.label}</span>
-            <span className="rounded-md bg-background/90 px-2 py-1 text-[11px] font-semibold backdrop-blur">{lesson.category}</span>
+            <span className="min-w-0 rounded-md border border-border bg-background/90 px-2 py-1 text-[11px] font-bold shadow-soft backdrop-blur">{index + 1}/{scenes.length}: {scene.label}</span>
+            <span className="rounded-md border border-premium/30 bg-background/90 px-2 py-1 text-[11px] font-semibold text-premium shadow-soft backdrop-blur">{lesson.category}</span>
           </div>
         </div>
 
-        <div className="grid gap-3 border-y border-border bg-secondary/35 p-3 sm:grid-cols-[1fr_auto] sm:items-center">
+        <div className="grid gap-3 border-y border-border bg-background/55 p-3 backdrop-blur sm:grid-cols-[1fr_auto] sm:items-center">
           <div className="grid grid-cols-2 gap-2">
             <Button
               variant={drive.throttle ? "default" : "outline"}
@@ -150,7 +150,7 @@ export function VisualLessonPlayer({
               <div className="text-[10px] font-bold uppercase text-muted-foreground">Manuell växel</div>
               <div className="text-xs font-semibold">{drive.gear === 0 ? "Friläge" : drive.gear === -1 ? "Back" : `Växel ${drive.gear}`}</div>
             </div>
-            <div className="grid grid-cols-3 gap-1 rounded-lg border border-border bg-background p-1" aria-label="H-växel">
+            <div className="grid grid-cols-3 gap-1 rounded-lg border border-border bg-card p-1 shadow-inner" aria-label="H-växel">
               {gears.map((gear) => (
                 <Button key={gear} type="button" size="sm" variant={drive.gear === gear ? "default" : "ghost"} className="h-8 px-0" onClick={() => setDrive((value) => ({ ...value, gear: value.gear === gear ? 0 : gear }))} aria-label={gear === -1 ? "Backväxel" : `Växel ${gear}`}>
                   {gear === -1 ? "R" : gear}
@@ -160,7 +160,7 @@ export function VisualLessonPlayer({
           </div>
         </div>
 
-        <div className="min-w-0 p-4 sm:p-5">
+          <div className="min-w-0 bg-card/70 p-4 backdrop-blur sm:p-5">
           {phase === "scene" ? (
             <>
               <AutoFitText maxSize={20} minSize={14} className="h-14 font-bold leading-7">{unit.info.title}</AutoFitText>
