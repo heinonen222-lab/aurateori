@@ -120,7 +120,20 @@ function QuizPage() {
               if (isError) void refetch();
               else setCat("Alla");
             }}
-          />
+          >
+            {!isError && (
+              <div className="mt-5 w-full max-w-sm rounded-lg border border-sidebar-border bg-sidebar/55 p-4 text-left backdrop-blur" role="note">
+                <p className="text-xs font-bold uppercase text-premium">Exempel i frågebanken</p>
+                <ul className="mt-3 grid gap-2 text-sm text-sidebar-foreground/80 sm:grid-cols-2">
+                  <li className="rounded-md border border-sidebar-border bg-sidebar-accent/55 px-3 py-2">Högerregeln och väjningsplikt</li>
+                  <li className="rounded-md border border-sidebar-border bg-sidebar-accent/55 px-3 py-2">Hastighet och parkering</li>
+                  <li className="rounded-md border border-sidebar-border bg-sidebar-accent/55 px-3 py-2">Däck och belysning</li>
+                  <li className="rounded-md border border-sidebar-border bg-sidebar-accent/55 px-3 py-2">Risker och säker körning</li>
+                </ul>
+                <p className="mt-3 text-xs leading-5 text-sidebar-foreground/65">Tryck på <strong className="text-sidebar-foreground">Visa alla frågor</strong> eller välj en annan kategori ovan.</p>
+              </div>
+            )}
+          </AuraState>
         )}
 
         {!done && !empty && q && (
@@ -146,7 +159,7 @@ function QuizPage() {
             <h2 className="mt-3 text-2xl font-black">Klart!</h2>
             <p className="mt-1 text-muted-foreground">
               Du fick {correctCount} av {pool.length} rätt (
-              {Math.round((correctCount / pool.length) * 100)}%).
+              {pool.length > 0 ? Math.round((correctCount / pool.length) * 100) : 0}%).
             </p>
             <Button
               onClick={() => {

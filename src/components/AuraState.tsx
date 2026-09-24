@@ -1,3 +1,4 @@
+import type { ReactNode } from "react";
 import type { LucideIcon } from "lucide-react";
 import { AlertTriangle, LoaderCircle } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -12,6 +13,7 @@ type AuraStateProps = {
   tone?: "default" | "success" | "danger";
   compact?: boolean;
   className?: string;
+  children?: ReactNode;
 };
 
 export function AuraState({
@@ -23,6 +25,7 @@ export function AuraState({
   tone = "default",
   compact = false,
   className,
+  children,
 }: AuraStateProps) {
   return (
     <section
@@ -50,6 +53,7 @@ export function AuraState({
         </div>
         <h2 className="font-display text-xl font-bold text-sidebar-foreground">{title}</h2>
         <p className="mt-2 max-w-sm text-sm leading-6 text-sidebar-foreground/70">{description}</p>
+        {children}
         {actionLabel && onAction && (
           <Button
             variant={tone === "danger" ? "outline" : "premium"}
