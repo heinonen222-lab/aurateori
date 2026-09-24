@@ -187,33 +187,33 @@ function StatsPage() {
           </>
         )}
 
-        <div className="rounded-lg border border-border bg-card p-5 shadow-soft sm:p-6">
-          <div className="mb-4 flex items-center justify-between">
-            <div>
-              <h2 className="text-lg font-bold">Repetera felaktiga svar</h2>
-              <p className="text-sm text-muted-foreground">
-                {repeatQueue.length} frågor att repetera
-              </p>
+        {repeatQuestion ? (
+          <div className="rounded-lg border border-border bg-card p-5 shadow-soft sm:p-6">
+            <div className="mb-4 flex items-center justify-between">
+              <div>
+                <h2 className="text-lg font-bold">Repetera felaktiga svar</h2>
+                <p className="text-sm text-muted-foreground">
+                  {repeatQueue.length} frågor att repetera
+                </p>
+              </div>
+              <RotateCcw className="h-5 w-5 text-primary" />
             </div>
-            <RotateCcw className="h-5 w-5 text-primary" />
-          </div>
-          {repeatQuestion ? (
             <QuestionCard
               key={`${repeatQuestion.id}-${repeatIdx}`}
               question={repeatQuestion}
               onAnswer={(ok) => store.recordAnswer(repeatQuestion.id, repeatQuestion.category, ok)}
               onNext={() => setRepeatIdx((i) => i + 1)}
             />
-          ) : (
-            <AuraState
-              icon={CheckCircle2}
-              title="Inget att repetera"
-              description="Bra jobbat. Frågor du svarar fel på samlas automatiskt här."
-              tone="success"
-              compact
-            />
-          )}
-        </div>
+          </div>
+        ) : (
+          <AuraState
+            icon={CheckCircle2}
+            title="Inget att repetera"
+            description="Bra jobbat. Frågor du svarar fel på samlas automatiskt här."
+            tone="success"
+            compact
+          />
+        )}
       </div>
     </AppShell>
   );

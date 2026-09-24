@@ -37,7 +37,7 @@ export function AuraState({
       <div className="mx-auto flex h-full max-w-md flex-col items-center justify-center">
         <div
           className={cn(
-            "relative mb-5 grid h-16 w-16 place-items-center rounded-lg border bg-background/65 shadow-soft backdrop-blur-xl",
+            "relative mb-5 grid h-16 w-16 place-items-center rounded-lg border bg-sidebar/75 shadow-soft backdrop-blur-xl",
             tone === "danger"
               ? "border-destructive/30 text-destructive"
               : tone === "success"
@@ -48,8 +48,8 @@ export function AuraState({
           <div className="absolute inset-2 rounded-full bg-current opacity-10 blur-md" aria-hidden="true" />
           <Icon className="relative h-8 w-8" strokeWidth={1.5} aria-hidden="true" />
         </div>
-        <h2 className="font-display text-xl font-bold text-foreground">{title}</h2>
-        <p className="mt-2 max-w-sm text-sm leading-6 text-muted-foreground">{description}</p>
+        <h2 className="font-display text-xl font-bold text-sidebar-foreground">{title}</h2>
+        <p className="mt-2 max-w-sm text-sm leading-6 text-sidebar-foreground/70">{description}</p>
         {actionLabel && onAction && (
           <Button
             variant={tone === "danger" ? "outline" : "premium"}
@@ -82,14 +82,14 @@ export function AuraLoading({ label = "Laddar innehåll…", compact = false }: 
             <LoaderCircle className="h-5 w-5 animate-spin" />
           </div>
           <div className="flex-1 space-y-2">
-            <div className="h-3 w-32 animate-pulse rounded-md bg-foreground/10" />
-            <div className="h-2.5 w-20 animate-pulse rounded-md bg-foreground/5" />
+            <div className="h-3 w-32 animate-pulse rounded-md bg-sidebar-foreground/15" />
+            <div className="h-2.5 w-20 animate-pulse rounded-md bg-sidebar-foreground/10" />
           </div>
         </div>
         <div className="h-20 animate-pulse rounded-lg border border-border bg-background/30" />
         <div className="space-y-2">
-          <div className="h-2.5 w-full animate-pulse rounded-md bg-foreground/10" />
-          <div className="h-2.5 w-4/5 animate-pulse rounded-md bg-foreground/5" />
+          <div className="h-2.5 w-full animate-pulse rounded-md bg-sidebar-foreground/15" />
+          <div className="h-2.5 w-4/5 animate-pulse rounded-md bg-sidebar-foreground/10" />
         </div>
       </div>
     </section>
