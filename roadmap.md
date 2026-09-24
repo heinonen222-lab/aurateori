@@ -7,3 +7,4 @@
 - [x] Förfina konto, priser, autentisering och juridiska sidor
 - [x] Verifiera mobil, dator, mörkt läge och kärnflöden
 - [x] Anpassa genomgångar, sparade resultat, priser och betalningsstatus till mörka Aura-rymden
+- [x] Polera tom-, laddnings- och felvyer för statistik, genomgångar och övningar

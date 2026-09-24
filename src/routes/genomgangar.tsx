@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { ArrowRight, CheckCircle2, Clock, ExternalLink, GraduationCap, Play, Sparkles } from "lucide-react";
+import { ArrowRight, CheckCircle2, Clock, ExternalLink, GraduationCap, Play, Sparkles, TriangleAlert } from "lucide-react";
 import { AppShell } from "@/components/AppShell";
 import { AutoFitText } from "@/components/AutoFitText";
 import { VisualLessonPlayer } from "@/components/lesson3d/VisualLessonPlayer";
@@ -10,6 +10,7 @@ import { LESSONS, type Lesson } from "@/data/lessons";
 import { useAuth } from "@/hooks/useAuth";
 import { listLessonProgress, saveLessonProgress } from "@/utils/lessons.functions";
 import { Button } from "@/components/ui/button";
+import { AuraLoading, AuraState } from "@/components/AuraState";
 
 export const Route = createFileRoute("/genomgangar")({
   ssr: false,
@@ -47,7 +48,7 @@ function LessonsPage() {
   const persistProgress = useServerFn(saveLessonProgress);
   const [active, setActive] = useState<Lesson | null>(null);
 
-  const { data: progress } = useQuery({
+  const { data: progress, isPending: progressPending, isError: progressError, refetch: refetchProgress } = useQuery({
     queryKey: ["lesson-progress", user?.id],
     queryFn: () => fetchProgress({}),
     enabled: Boolean(user),
@@ -134,6 +135,20 @@ function LessonsPage() {
               <p className="mt-1 text-sm text-muted-foreground">Fortsätt där du slutade eller börja med ett nytt område.</p>
             </div>
           </div>
+
+          {user && progressPending && <AuraLoading label="Laddar dina sparade genomgångar…" compact />}
+
+          {user && progressError && (
+            <AuraState
+              icon={TriangleAlert}
+              title="Sparade resultat kunde inte hämtas"
+              description="Du kan fortfarande starta alla genomgångar. Försök igen för att visa var du slutade senast."
+              actionLabel="Försök igen"
+              onAction={() => void refetchProgress()}
+              tone="danger"
+              compact
+            />
+          )}
 
           <div className="grid gap-3 sm:grid-cols-2">
             {LESSONS.map((l) => {
