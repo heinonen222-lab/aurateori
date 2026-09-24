@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 import { AppShell } from "@/components/AppShell";
 import { QuestionCard } from "@/components/QuestionCard";
@@ -18,7 +18,6 @@ import { RotateCcw, Trash2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { AutoFitText } from "@/components/AutoFitText";
 import { Button } from "@/components/ui/button";
-import { Link } from "@tanstack/react-router";
 import { BarChart3, CheckCircle2 } from "lucide-react";
 import { AuraState } from "@/components/AuraState";
 
@@ -37,6 +36,7 @@ export const Route = createFileRoute("/stats")({
 });
 
 function StatsPage() {
+  const navigate = useNavigate();
   const s = useStore();
   const stats = computeStats(s);
   const [repeatIdx, setRepeatIdx] = useState(0);
@@ -111,7 +111,7 @@ function StatsPage() {
             title="Ingen statistik än"
             description="Gör din första övning. Därefter ser du träffsäkerhet, utveckling och vilka områden du behöver repetera."
             actionLabel="Starta en övning"
-            onAction={() => { window.location.href = "/quiz"; }}
+            onAction={() => void navigate({ to: "/quiz" })}
           />
         ) : (
           <>
