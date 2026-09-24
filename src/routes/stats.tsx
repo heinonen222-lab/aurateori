@@ -18,6 +18,9 @@ import { RotateCcw, Trash2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { AutoFitText } from "@/components/AutoFitText";
 import { Button } from "@/components/ui/button";
+import { Link } from "@tanstack/react-router";
+import { BarChart3, CheckCircle2 } from "lucide-react";
+import { AuraState } from "@/components/AuraState";
 
 export const Route = createFileRoute("/stats")({
   head: () => ({
@@ -102,6 +105,16 @@ function StatsPage() {
           )}
         </div>
 
+        {s.answers.length === 0 ? (
+          <AuraState
+            icon={BarChart3}
+            title="Ingen statistik än"
+            description="Gör din första övning. Därefter ser du träffsäkerhet, utveckling och vilka områden du behöver repetera."
+            actionLabel="Starta en övning"
+            onAction={() => { window.location.href = "/quiz"; }}
+          />
+        ) : (
+          <>
         <div className="grid grid-cols-3 gap-3">
           <MiniStat label="Totalt" value={stats.total} />
           <MiniStat label="Rätt" value={stats.correct} accent="success" />
@@ -147,11 +160,6 @@ function StatsPage() {
             Per kategori
           </h2>
           <div className="mt-4 space-y-3">
-            {Object.keys(catStats).length === 0 && (
-              <div className="text-sm text-muted-foreground">
-                Inga svar än – börja med Övningsfrågor.
-              </div>
-            )}
             {Object.entries(catStats).map(([cat, v]) => {
               const pct = Math.round((v.ok / v.total) * 100);
               return (
@@ -176,13 +184,15 @@ function StatsPage() {
             })}
           </div>
         </div>
+          </>
+        )}
 
         <div className="rounded-lg border border-border bg-card p-5 shadow-soft sm:p-6">
           <div className="mb-4 flex items-center justify-between">
             <div>
               <h2 className="text-lg font-bold">Repetera felaktiga svar</h2>
               <p className="text-sm text-muted-foreground">
-                {repeatQueue.length} frågor i kön · spaced repetition
+                {repeatQueue.length} frågor att repetera
               </p>
             </div>
             <RotateCcw className="h-5 w-5 text-primary" />
@@ -195,9 +205,13 @@ function StatsPage() {
               onNext={() => setRepeatIdx((i) => i + 1)}
             />
           ) : (
-            <div className="rounded-lg border border-success/25 bg-success/10 p-6 text-center text-sm font-medium text-success">
-              Kön är tom – bra jobbat!
-            </div>
+            <AuraState
+              icon={CheckCircle2}
+              title="Inget att repetera"
+              description="Bra jobbat. Frågor du svarar fel på samlas automatiskt här."
+              tone="success"
+              compact
+            />
           )}
         </div>
       </div>

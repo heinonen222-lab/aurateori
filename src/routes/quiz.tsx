@@ -12,6 +12,8 @@ import { store } from "@/lib/store";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
+import { BookOpenCheck, RefreshCcw, TriangleAlert } from "lucide-react";
+import { AuraState } from "@/components/AuraState";
 
 export const Route = createFileRoute("/quiz")({
   head: () => ({
@@ -47,7 +49,7 @@ function QuizPage() {
 
   const [seed, setSeed] = useState(0);
 
-  const { data: bank } = useQuery(bankQuestionsQuery);
+  const { data: bank, isError, refetch } = useQuery(bankQuestionsQuery);
 
   const pool = useMemo(() => {
     const all = [...EXAM_QUESTIONS, ...QUESTIONS, ...EXTRA_QUESTIONS, ...(bank ?? [])];
@@ -90,7 +92,38 @@ function QuizPage() {
           ))}
         </div>
 
-        {!done && (
+        {isError && !empty && (
+          <div className="flex items-start gap-3 rounded-lg border border-warning/25 bg-warning/10 p-4 text-sm" role="status">
+            <TriangleAlert className="mt-0.5 h-4 w-4 shrink-0 text-warning" aria-hidden="true" />
+            <div className="min-w-0 flex-1">
+              <p className="font-semibold">Extra frågor kunde inte hämtas</p>
+              <p className="mt-0.5 text-xs leading-5 text-muted-foreground">Du kan fortsätta med frågorna som redan finns i appen.</p>
+            </div>
+            <Button variant="ghost" size="sm" onClick={() => void refetch()} aria-label="Försök hämta extra frågor igen">
+              <RefreshCcw />
+            </Button>
+          </div>
+        )}
+
+        {empty && (
+          <AuraState
+            icon={BookOpenCheck}
+            title={isError ? "Frågorna kunde inte hämtas" : "Inga frågor i den här kategorin"}
+            description={
+              isError
+                ? "Kontrollera anslutningen och försök igen. Dina tidigare resultat påverkas inte."
+                : "Välj Alla för att fortsätta öva med hela frågebanken."
+            }
+            tone={isError ? "danger" : "default"}
+            actionLabel={isError ? "Försök igen" : "Visa alla frågor"}
+            onAction={() => {
+              if (isError) void refetch();
+              else setCat("Alla");
+            }}
+          />
+        )}
+
+        {!done && !empty && q && (
           <>
             <Progress value={(idx / pool.length) * 100} aria-label="Framsteg i övningen" />
             <QuestionCard
