@@ -47,7 +47,9 @@ function QuizPage() {
   const [cat, setCat] = useState<QuestionCategory | "Alla">("Alla");
   const [idx, setIdx] = useState(0);
   const [correctCount, setCorrectCount] = useState(0);
-  const [repActive, setRepActive] = useState(false);
+  const [custom, setCustom] = useState<{ label: string; list: typeof QUESTIONS } | null>(null);
+  const repActive = custom !== null;
+  const setRepActive = (v: boolean) => { if (!v) setCustom(null); };
 
   const [seed, setSeed] = useState(0);
 
@@ -73,7 +75,30 @@ function QuizPage() {
     [bank, s.wrongQueue],
   );
 
-  const activePool = repActive ? repPool : pool;
+  const allQ = useMemo(() => [...EXAM_QUESTIONS, ...QUESTIONS, ...EXTRA_QUESTIONS, ...(bank ?? [])], [bank]);
+  // Riktiga resultat per kategori från sparade svar.
+  const catStats = useMemo(() => {
+    const m = new Map<string, { total: number; correct: number }>();
+    for (const a of s.answers) {
+      const e = m.get(a.category) ?? { total: 0, correct: 0 };
+      e.total++; if (a.correct) e.correct++;
+      m.set(a.category, e);
+    }
+    return [...m.entries()]
+      .map(([category, e]) => ({ category, ...e, pct: e.total ? Math.round((e.correct / e.total) * 100) : 0 }))
+      .sort((a, b) => a.pct - b.pct);
+  }, [s.answers]);
+  const weakest = catStats[0];
+  const startCustom = (label: string, list: typeof QUESTIONS) => {
+    setCustom({ label, list }); setIdx(0); setCorrectCount(0);
+  };
+  const startWeak = () => {
+    if (!weakest) return;
+    startCustom(`Svagaste område · ${weakest.category}`, seededShuffle(allQ.filter((x) => x.category === weakest.category), Date.now()).slice(0, 10));
+  };
+  const startQuick = () => startCustom("Snabbträning · 10 blandade", seededShuffle(allQ, Date.now()).slice(0, 10));
+
+  const activePool = custom ? custom.list : pool;
   const q = activePool[idx];
   const empty = !repActive && pool.length === 0;
   const done = !q && !empty;
@@ -139,7 +164,29 @@ function QuizPage() {
               else setCat("Alla");
             }}
           >
-            {!isError && repPool.length === 0 && (
+            {!isError && s.answers.length > 0 && (
+              <div className="mt-5 w-full max-w-sm rounded-lg border border-sidebar-border bg-sidebar/55 p-4 text-left backdrop-blur">
+                <p className="text-xs font-bold uppercase text-premium">Dina resultat</p>
+                <div className="mt-3 grid grid-cols-3 gap-2 text-center">
+                  <MiniFact label="Besvarade" value={stats.total} />
+                  <MiniFact label="Rätt" value={`${stats.accuracy}%`} />
+                  <MiniFact label="Poäng" value={stats.correct} />
+                </div>
+                <ul className="mt-3 space-y-2">
+                  {catStats.slice(0, 5).map((c) => (
+                    <li key={c.category} className="text-xs text-sidebar-foreground/80">
+                      <div className="flex justify-between gap-2"><span className="truncate">{c.category}</span><span className="font-semibold tabular-nums">{c.correct}/{c.total} · {c.pct}%</span></div>
+                      <div className="mt-1 h-1.5 overflow-hidden rounded-full bg-sidebar-accent"><div className="h-full bg-premium" style={{ width: `${c.pct}%` }} /></div>
+                    </li>
+                  ))}
+                </ul>
+                <div className="mt-4 grid gap-2 sm:grid-cols-2">
+                  {weakest && <Button variant="outline" onClick={startWeak}>Öva svagaste området</Button>}
+                  <Button variant="outline" onClick={startQuick}>Snabbträning 10</Button>
+                </div>
+              </div>
+            )}
+            {!isError && repPool.length === 0 && s.answers.length === 0 && (
               <div className="mt-5 w-full max-w-sm rounded-lg border border-sidebar-border bg-sidebar/55 p-4 text-left backdrop-blur" role="note">
                 <p className="text-xs font-bold uppercase text-premium">Exempel i frågebanken</p>
                 <ul className="mt-3 grid gap-2 text-sm text-sidebar-foreground/80 sm:grid-cols-2">
@@ -167,9 +214,7 @@ function QuizPage() {
                 <Button
                   className="mt-4 w-full"
                   onClick={() => {
-                    setRepActive(true);
-                    setIdx(0);
-                    setCorrectCount(0);
+                    startCustom(`Repetition · ${repPool.length} sparade frågor`, repPool);
                   }}
                 >
                   Starta repetition
@@ -184,7 +229,7 @@ function QuizPage() {
             {repActive && (
               <div className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-2 rounded-lg border border-premium/30 bg-premium/10 px-4 py-2.5">
                 <p className="min-w-0 text-xs font-bold uppercase tracking-wider text-premium">
-                  Repetition · {activePool.length} sparade frågor
+                  {custom?.label}
                 </p>
                 <Button
                   variant="ghost"
