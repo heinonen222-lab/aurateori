@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
-import { AlertTriangle, CheckCircle2, Clock, CreditCard, Loader2, RefreshCw } from "lucide-react";
+import { AlertTriangle, CheckCircle2, Clock, CreditCard, Loader2, Receipt, RefreshCw } from "lucide-react";
 import { getBillingStatus } from "@/utils/billing.functions";
 import { getPaddleEnvironment } from "@/lib/paddle";
 import { useAuth } from "@/hooks/useAuth";
@@ -137,24 +137,23 @@ export function BillingStatus() {
                 {(sub.updatePaymentMethodUrl || sub.cancelUrl) && (
                   <div className="mt-3 flex flex-wrap gap-2">
                     {sub.updatePaymentMethodUrl && (
-                      <a
-                        href={sub.updatePaymentMethodUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="inline-flex min-h-11 items-center rounded-lg border border-border bg-background px-3 py-2 text-xs font-semibold transition-colors hover:border-primary/60"
-                      >
-                        Uppdatera betalkort
-                      </a>
+                      <Button asChild variant="outline" size="sm">
+                        <a href={sub.updatePaymentMethodUrl} target="_blank" rel="noopener noreferrer">
+                          Uppdatera betalkort
+                        </a>
+                      </Button>
                     )}
                     {sub.cancelUrl && !sub.cancelAtPeriodEnd && (
-                      <a
-                        href={sub.cancelUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="inline-flex min-h-11 items-center rounded-lg border border-border bg-background px-3 py-2 text-xs font-semibold transition-colors hover:border-destructive/60"
+                      <Button
+                        asChild
+                        variant="outline"
+                        size="sm"
+                        className="border-destructive/35 text-destructive hover:bg-destructive/10"
                       >
-                        Avsluta prenumeration
-                      </a>
+                        <a href={sub.cancelUrl} target="_blank" rel="noopener noreferrer">
+                          Avsluta prenumeration
+                        </a>
+                      </Button>
                     )}
                   </div>
                 )}
@@ -176,8 +175,8 @@ export function BillingStatus() {
           {data.transactions.length > 0 && (
             <div>
               <div className="mb-2 flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-muted-foreground">
-                <CreditCard className="h-3.5 w-3.5" />
-                Transaktioner
+                <Receipt className="h-3.5 w-3.5" />
+                Fakturor
               </div>
               <ul className="divide-y divide-border overflow-hidden rounded-lg border border-border">
                 {data.transactions.map((t) => (

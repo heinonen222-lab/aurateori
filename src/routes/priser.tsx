@@ -7,6 +7,7 @@ import { PriceComparison } from "@/components/PriceComparison";
 import { usePaddleCheckout } from "@/hooks/usePaddleCheckout";
 import { useAuth } from "@/hooks/useAuth";
 import { useSubscription } from "@/hooks/useSubscription";
+import { SubscriptionCountdown } from "@/components/SubscriptionCountdown";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 
@@ -99,6 +100,8 @@ function PricingPage() {
             </div>
           </div>
         </header>
+
+        {user && <SubscriptionCountdown />}
 
         {isActive && (
           <div className="flex items-center justify-center gap-2 rounded-lg border border-primary/40 bg-primary/10 p-4 text-sm font-semibold">
