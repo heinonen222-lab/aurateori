@@ -8,6 +8,6 @@
 - [x] Verifiera mobil, dator, mörkt läge och kärnflöden
 - [x] Anpassa genomgångar, sparade resultat, priser och betalningsstatus till mörka Aura-rymden
 - [x] Polera tom-, laddnings- och felvyer för statistik, genomgångar och övningar
-- [ ] Fylla tom-vyn i övningen med tydlig instruktion, exempel och NaN-skydd
-- [ ] Fylla tomma övningsvyn med egna frågor och repetition (riktig procent och poäng)
-- [ ] Betalningsflödet i filmisk Aura-stil: faktura, kreditstatus, avsluta premium
+- [x] Fylla tom-vyn i övningen med tydlig instruktion, exempel och NaN-skydd
+- [x] Fylla tomma övningsvyn med egna frågor och repetition (riktig procent och poäng)
+- [x] Betalningsflödet i filmisk Aura-stil: faktura, kreditstatus, avsluta premium
