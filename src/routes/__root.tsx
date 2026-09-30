@@ -98,7 +98,7 @@ const THEME_INIT = `try{var s=localStorage.getItem("korkortskollen-v1");if(s&&JS
 
 function RootShell({ children }: { children: ReactNode }) {
   return (
-    <html lang="sv">
+    <html lang="sv" suppressHydrationWarning>
       <head>
         <HeadContent />
         <script dangerouslySetInnerHTML={{ __html: THEME_INIT }} />
