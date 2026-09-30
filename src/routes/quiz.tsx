@@ -135,6 +135,35 @@ function QuizPage() {
           ))}
         </div>
 
+        {!repActive && !empty && (
+          <div className="rounded-lg border border-sidebar-border bg-sidebar/55 p-4 backdrop-blur">
+            <div className="flex flex-wrap items-center justify-between gap-2">
+              <p className="text-xs font-bold uppercase tracking-wider text-premium">Dina övningar</p>
+              {s.answers.length > 0 && (
+                <p className="text-xs text-sidebar-foreground/70 tabular-nums">
+                  {stats.total} besvarade · {stats.accuracy}% rätt · {stats.correct} poäng
+                </p>
+              )}
+            </div>
+            <div className="mt-3 grid gap-2 sm:grid-cols-3">
+              <Button
+                variant={repPool.length > 0 ? "default" : "outline"}
+                disabled={repPool.length === 0}
+                onClick={() => startCustom(`Repetition · ${repPool.length} sparade frågor`, repPool)}
+              >
+                <RotateCcw />
+                {repPool.length > 0 ? `Repetera felsvar (${repPool.length})` : "Inga felsvar att repetera"}
+              </Button>
+              <Button variant="outline" disabled={!weakest} onClick={startWeak}>
+                {weakest ? `Öva svagaste · ${weakest.category}` : "Öva svagaste området"}
+              </Button>
+              <Button variant="outline" onClick={startQuick}>
+                Snabbträning 10
+              </Button>
+            </div>
+          </div>
+        )}
+
         {isError && !empty && (
           <div className="flex items-start gap-3 rounded-lg border border-warning/25 bg-warning/10 p-4 text-sm" role="status">
             <TriangleAlert className="mt-0.5 h-4 w-4 shrink-0 text-warning" aria-hidden="true" />
