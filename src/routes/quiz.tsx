@@ -136,11 +136,11 @@ function QuizPage() {
         </div>
 
         {!repActive && !empty && (
-          <div className="rounded-lg border border-sidebar-border bg-sidebar/55 p-4 backdrop-blur">
+          <div className="rounded-lg border border-border bg-card p-4 shadow-soft">
             <div className="flex flex-wrap items-center justify-between gap-2">
-              <p className="text-xs font-bold uppercase tracking-wider text-premium">Dina övningar</p>
+              <p className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Dina övningar</p>
               {s.answers.length > 0 && (
-                <p className="text-xs text-sidebar-foreground/70 tabular-nums">
+                <p className="text-xs tabular-nums text-muted-foreground">
                   {stats.total} besvarade · {stats.accuracy}% rätt · {stats.correct} poäng
                 </p>
               )}
