@@ -1,7 +1,6 @@
 import { Link } from "@tanstack/react-router";
 import { CalendarClock, Crown, AlertTriangle, ArrowRight } from "lucide-react";
 import { useSubscription } from "@/hooks/useSubscription";
-import { useAuth } from "@/hooks/useAuth";
 import { cn } from "@/lib/utils";
 
 const PLAN_LABEL: Record<string, string> = {
