@@ -221,25 +221,25 @@ function ActionCard({
   return (
     <Link
       to={to}
-      className={`group relative flex h-full min-h-48 min-w-0 flex-col overflow-hidden border-b p-5 transition-colors duration-200 last:border-b-0 hover:bg-accent/40 focus-visible:z-10 focus-visible:ring-2 focus-visible:ring-ring sm:border-b-0 ${
+      className={`group relative flex h-full min-w-0 flex-col overflow-hidden border-b p-4 transition-colors duration-200 last:border-b-0 hover:bg-accent/40 focus-visible:z-10 focus-visible:ring-2 focus-visible:ring-ring sm:border-b-0 ${
         highlight ? "bg-primary text-primary-foreground hover:bg-primary/95" : "border-border bg-card"
       }`}
     >
-      <div
-        className={`inline-flex h-10 w-10 items-center justify-center rounded-lg ${
-          highlight ? "bg-primary-foreground/15" : "bg-primary/10 text-primary"
-        }`}
-      >
-        {icon}
+      <div className="flex items-center gap-3">
+        <div
+          className={`inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-lg ${
+            highlight ? "bg-primary-foreground/15" : "bg-primary/10 text-primary"
+          }`}
+        >
+          {icon}
+        </div>
+        <AutoFitText maxSize={16} minSize={13} className="h-6 min-w-0 flex-1 font-bold leading-6">{title}</AutoFitText>
+        <ArrowRight className="h-4 w-4 shrink-0 opacity-50 transition-transform group-hover:translate-x-0.5 group-hover:opacity-100" />
       </div>
-      <AutoFitText maxSize={16} minSize={12} className="mt-4 h-12 font-bold leading-6">{title}</AutoFitText>
       <div
-        className={`mt-1 min-h-[3.75rem] flex-1 text-sm leading-5 ${highlight ? "text-primary-foreground/80" : "text-muted-foreground"}`}
+        className={`mt-2 text-[13px] leading-5 ${highlight ? "text-primary-foreground/80" : "text-muted-foreground"}`}
       >
         {desc}
-      </div>
-      <div className="mt-3 inline-flex items-center gap-1 text-sm font-semibold opacity-70 transition group-hover:opacity-100">
-        Starta <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
       </div>
     </Link>
   );
