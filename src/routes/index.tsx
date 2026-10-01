@@ -3,6 +3,7 @@ import { Zap, Timer, Signpost, Flame, Target, CheckCircle2, ArrowRight, RotateCc
 import { AppShell } from "@/components/AppShell";
 import { AutoFitText } from "@/components/AutoFitText";
 import { SubscriptionCountdown } from "@/components/SubscriptionCountdown";
+import { Button } from "@/components/ui/button";
 import { useStore, computeStats } from "@/lib/store";
 
 export const Route = createFileRoute("/")({
@@ -74,6 +75,20 @@ function Dashboard() {
           <p className="mt-2 max-w-xl text-sm leading-relaxed text-muted-foreground sm:text-base">
             Träna smartare, se vad du behöver förbättra och följ din utveckling fram till provdagen.
           </p>
+          <div className="mt-5 grid grid-cols-1 gap-3 sm:flex sm:flex-row sm:items-center">
+            <Button asChild size="lg" className="h-12 w-full text-base sm:w-auto">
+              <Link to="/quiz">
+                Börja träna
+                <Zap className="h-4 w-4" />
+              </Link>
+            </Button>
+            <Button asChild variant="outline" size="lg" className="h-12 w-full text-base sm:w-auto">
+              <Link to="/exam">
+                Gör provet
+                <Timer className="h-4 w-4" />
+              </Link>
+            </Button>
+          </div>
         </header>
 
         <SubscriptionCountdown compact />
