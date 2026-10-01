@@ -1,7 +1,6 @@
 import { Link } from "@tanstack/react-router";
 import { CalendarClock, Crown, AlertTriangle, ArrowRight } from "lucide-react";
 import { useSubscription } from "@/hooks/useSubscription";
-import { useAuth } from "@/hooks/useAuth";
 import { cn } from "@/lib/utils";
 
 const PLAN_LABEL: Record<string, string> = {
@@ -40,9 +39,8 @@ export function useSubscriptionCountdown() {
   };
 }
 
-/** Visar hur många dagar som återstår av abonnemanget och när nästa betalning sker. */
+/** Visar hur många dagar som återstår av abonnemanget och när nästa betalning sker. Syns alltid, även utan abonnemang. */
 export function SubscriptionCountdown({ compact = false }: { compact?: boolean }) {
-  const { user } = useAuth();
   const {
     isActive,
     isPastDue,
@@ -53,10 +51,7 @@ export function SubscriptionCountdown({ compact = false }: { compact?: boolean }
     cancelAtPeriodEnd,
   } = useSubscriptionCountdown();
 
-  if (!user) return null;
-
   if (!isActive) {
-    if (compact) return null;
     return (
       <Link
         to="/priser"
