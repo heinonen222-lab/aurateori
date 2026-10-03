@@ -133,7 +133,7 @@ function AdminPage() {
   if (!user)
     return (
       <AppShell>
-        <AuraState title="Logga in först" description="Adminpanelen kräver inloggning.">
+        <AuraState icon={ShieldCheck} title="Logga in först" description="Adminpanelen kräver inloggning.">
           <Button asChild><Link to="/auth">Logga in</Link></Button>
         </AuraState>
       </AppShell>
@@ -141,7 +141,7 @@ function AdminPage() {
   if (!role.data)
     return (
       <AppShell>
-        <AuraState tone="danger" title="Ingen behörighet" description="Ditt konto är inte admin." />
+        <AuraState icon={ShieldCheck} tone="danger" title="Ingen behörighet" description="Ditt konto är inte admin." />
       </AppShell>
     );
 
@@ -216,9 +216,9 @@ function AdminPage() {
         {list.isLoading ? (
           <AuraLoading />
         ) : list.error ? (
-          <AuraState tone="danger" title="Frågorna kunde inte hämtas" description={String((list.error as Error).message)} actionLabel="Försök igen" onAction={() => void list.refetch()} />
+          <AuraState icon={ShieldCheck} tone="danger" title="Frågorna kunde inte hämtas" description={String((list.error as Error).message)} actionLabel="Försök igen" onAction={() => void list.refetch()} />
         ) : rows.length === 0 ? (
-          <AuraState title="Inga frågor" description="Lägg till din första fråga med knappen ovan." />
+          <AuraState icon={ShieldCheck} title="Inga frågor" description="Lägg till din första fråga med knappen ovan." />
         ) : (
           <ul className="divide-y divide-border overflow-hidden rounded-lg border border-border bg-card">
             {rows.map((r) => (
