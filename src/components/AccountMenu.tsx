@@ -1,6 +1,6 @@
 import { Link, useNavigate } from "@tanstack/react-router";
 import { useQueryClient } from "@tanstack/react-query";
-import { Crown, LogIn, LogOut, User as UserIcon } from "lucide-react";
+import { Crown, LogIn, LogOut, ShieldCheck, User as UserIcon } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { useSubscription } from "@/hooks/useSubscription";
@@ -69,6 +69,14 @@ export function AccountMenu({
       >
         <UserIcon className="h-4 w-4" />
         Mitt konto
+      </Link>
+      <Link
+        to="/admin"
+        onClick={onNavigate}
+        className={cn(base, "text-muted-foreground hover:bg-muted hover:text-foreground")}
+      >
+        <ShieldCheck className="h-4 w-4" />
+        Adminpanel
       </Link>
       <Link
         to="/priser"
