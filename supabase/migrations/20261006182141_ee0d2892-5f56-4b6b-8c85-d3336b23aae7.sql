@@ -1,0 +1,1 @@
+ALTER TABLE public.ai_questions ADD COLUMN image text;

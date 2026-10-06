@@ -22,6 +22,7 @@ export type Database = {
           difficulty: string
           explanation: string
           id: string
+          image: string | null
           options: Json
           question: string
           reference: string
@@ -34,6 +35,7 @@ export type Database = {
           difficulty?: string
           explanation: string
           id?: string
+          image?: string | null
           options: Json
           question: string
           reference: string
@@ -46,6 +48,7 @@ export type Database = {
           difficulty?: string
           explanation?: string
           id?: string
+          image?: string | null
           options?: Json
           question?: string
           reference?: string
