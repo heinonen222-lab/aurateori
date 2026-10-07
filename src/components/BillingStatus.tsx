@@ -20,13 +20,15 @@ function fmtDate(value: string | null) {
 }
 
 const PLAN_LABEL: Record<string, string> = {
-  premium_monthly: "Premium Månad",
-  premium_yearly: "Premium År",
+  premium_monthly: "Premium 1 månad",
+  premium_quarterly: "Premium 3 månader",
+  premium_yearly: "Premium 12 månader",
 };
 
 const PLAN_CYCLE: Record<string, string> = {
-  premium_monthly: "149 kr dras varje månad",
-  premium_yearly: "499 kr dras varje år",
+  premium_monthly: "249 kr dras varje månad",
+  premium_quarterly: "599 kr dras var tredje månad",
+  premium_yearly: "1 999 kr dras varje år",
 };
 
 const STATUS_LABEL: Record<string, string> = {

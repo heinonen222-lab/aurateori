@@ -4,13 +4,15 @@ import { useSubscription } from "@/hooks/useSubscription";
 import { cn } from "@/lib/utils";
 
 const PLAN_LABEL: Record<string, string> = {
-  premium_monthly: "Premium Månad",
-  premium_yearly: "Premium År",
+  premium_monthly: "Premium 1 månad",
+  premium_quarterly: "Premium 3 månader",
+  premium_yearly: "Premium 12 månader",
 };
 
 const PLAN_CYCLE: Record<string, string> = {
-  premium_monthly: "149 kr dras varje månad",
-  premium_yearly: "499 kr dras varje år",
+  premium_monthly: "249 kr dras varje månad",
+  premium_quarterly: "599 kr dras var tredje månad",
+  premium_yearly: "1 999 kr dras varje år",
 };
 
 const DAY_MS = 86_400_000;
@@ -63,7 +65,7 @@ export function SubscriptionCountdown({ compact = false }: { compact?: boolean }
         <div className="min-w-0">
           <div className="text-sm font-bold">Inget aktivt abonnemang</div>
           <div className="mt-0.5 text-xs text-muted-foreground">
-            Starta månadsabonnemanget för 149 kr/mån och lås upp allt innehåll.
+            Starta månadsabonnemanget för 249 kr/mån och lås upp allt innehåll.
           </div>
         </div>
         <ArrowRight className="h-5 w-5 transition-transform group-hover:translate-x-0.5" />
