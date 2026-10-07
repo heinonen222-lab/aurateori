@@ -85,7 +85,7 @@ function TermsPage() {
 
         <LegalSection title="6. Betalning, prenumeration och Paddle">
           <p>
-            Premium säljs som prenumeration om 30 dagar (149 kr) eller årsprenumeration (499 kr).
+            Premium säljs som löpande prenumeration: 1 månad (249 kr per månad), 3 månader (599 kr var tredje månad) eller 12 månader (1 999 kr per år).
             Priser anges i SEK inklusive tillämplig moms. Prenumerationer förnyas automatiskt vid
             periodens slut till gällande pris, tills du avslutar dem. Du kan avsluta när du vill och
             behåller åtkomsten till periodens slut.

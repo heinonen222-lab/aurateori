@@ -18,12 +18,12 @@ export const Route = createFileRoute("/priser")({
       {
         name: "description",
         content:
-          "Lås upp alla teorifrågor, interaktiva genomgångar, provsimulator och statistik. 149 kr per 30 dagar eller 499 kr per år.",
+          "Lås upp alla teorifrågor, interaktiva genomgångar, provsimulator och statistik. 249 kr/mån, 599 kr för 3 månader eller 1 999 kr för 12 månader.",
       },
       { property: "og:title", content: "Priser – Aurateori Premium" },
       {
         property: "og:description",
-        content: "Premium för svenskt B-körkort: 149 kr per 30 dagar eller 499 kr per år.",
+        content: "Premium för svenskt B-körkort: 249 kr/mån, 599 kr för 3 månader eller 1 999 kr för 12 månader.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
@@ -41,24 +41,9 @@ const FEATURES = [
 ];
 
 const PLANS = [
-  {
-    priceId: "premium_monthly",
-    name: "Premium Månad",
-    price: "149 kr",
-    per: "/mån",
-    note: "Förnyas automatiskt varje månad – avsluta när du vill",
-    highlight: false,
-    cta: "Starta månadsabonnemang",
-  },
-  {
-    priceId: "premium_yearly",
-    name: "Premium År",
-    price: "499 kr",
-    per: "/år",
-    note: "Förnyas automatiskt varje år – ≈ 42 kr/mån, spara ca 72 %",
-    highlight: true,
-    cta: "Starta årsabonnemang",
-  },
+  { priceId: "premium_monthly", name: "1 månad", price: "249 kr", per: "/mån", sub: "Per månad", save: null, badge: null, highlight: false, cta: "Välj månadsplan", note: "Dras varje månad – avsluta när du vill" },
+  { priceId: "premium_quarterly", name: "3 månader", price: "599 kr", per: "", sub: "≈ 200 kr/mån", save: "Spara 148 kr", badge: "Mest populär", highlight: true, cta: "Välj 3 månader", note: "599 kr dras var tredje månad – ingen månadsdebitering" },
+  { priceId: "premium_yearly", name: "12 månader", price: "1 999 kr", per: "", sub: "≈ 167 kr/mån", save: "Spara 989 kr", badge: "Bäst värde", highlight: false, cta: "Välj årsplan", note: "1 999 kr dras en gång per år" },
 ] as const;
 
 function PricingPage() {
@@ -89,9 +74,9 @@ function PricingPage() {
             <div className="inline-flex items-center gap-2 text-xs font-bold uppercase text-premium">
               <Sparkles className="h-4 w-4" /> Premium
             </div>
-            <h1 className="mt-3 font-display text-3xl font-extrabold sm:text-4xl">All teori. Ett tydligt mål.</h1>
+            <h1 className="mt-3 font-display text-3xl font-extrabold sm:text-4xl">Välj ditt Premium-abonnemang</h1>
             <p className="mx-auto mt-3 max-w-xl text-sm leading-relaxed text-muted-foreground sm:text-base">
-              Lås upp hela frågebanken, provsimulatorn, statistik och alla interaktiva 3D-genomgångar.
+              Lär dig snabbare. Öva smartare. Ta körkortet.
             </p>
             <div className="mt-5 flex flex-wrap justify-center gap-x-5 gap-y-2 text-xs font-semibold text-muted-foreground">
               <span className="inline-flex items-center gap-1.5"><Zap className="h-4 w-4 text-premium" /> Direkt tillgång</span>
@@ -112,7 +97,7 @@ function PricingPage() {
 
         <BillingStatus />
 
-        <div className="grid items-stretch gap-4 sm:grid-cols-2">
+        <div className="grid items-stretch gap-4 md:grid-cols-3">
           {PLANS.map((p) => (
             <div
               key={p.priceId}
@@ -121,9 +106,9 @@ function PricingPage() {
                 p.highlight ? "aura-surface border-premium/70 ring-1 ring-premium/40 shadow-lifted" : "border-border",
               )}
             >
-              {p.highlight && (
-                <div className="mb-3 inline-flex self-start rounded-md bg-premium px-3 py-1 text-[10px] font-bold uppercase leading-none text-premium-foreground">
-                  Bäst värde
+              {p.badge && (
+                <div className={cn("mb-3 inline-flex self-start rounded-md px-3 py-1 text-[10px] font-bold uppercase leading-none", p.highlight ? "bg-premium text-premium-foreground" : "border border-premium/60 text-premium")}>
+                  {p.badge}
                 </div>
               )}
               <div className="min-h-5 break-words text-sm font-bold">{p.name}</div>
@@ -131,7 +116,11 @@ function PricingPage() {
                   <span className="font-display text-4xl font-extrabold">{p.price}</span>
                 <span className="text-sm text-muted-foreground">{p.per}</span>
               </div>
-              <div className="mt-1 min-h-10 break-words text-xs leading-4 text-muted-foreground">{p.note}</div>
+              <div className="mt-1 flex flex-wrap items-center gap-2 text-sm font-semibold">
+                <span>{p.sub}</span>
+                {p.save && <span className="rounded-md bg-primary/10 px-2 py-0.5 text-xs text-primary">{p.save}</span>}
+              </div>
+              <div className="mt-2 mb-4 min-h-8 break-words text-xs leading-4 text-muted-foreground">{p.note}</div>
               <Button
                 variant={p.highlight ? "premium" : "default"}
                 onClick={() => buy(p.priceId)}
