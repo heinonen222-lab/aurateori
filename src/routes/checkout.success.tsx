@@ -32,7 +32,7 @@ function SuccessPage() {
             <div className="mx-auto grid h-14 w-14 place-items-center rounded-lg border border-success/30 bg-sidebar/75 text-success shadow-soft backdrop-blur-xl">
               <CheckCircle2 className="h-7 w-7" strokeWidth={1.5} aria-hidden="true" />
             </div>
-            <h1 className="mt-4 font-display text-2xl font-extrabold">Tack för ditt köp!</h1>
+            <h1 className="mt-4 font-display text-2xl font-extrabold">Välkommen till Aurateori Premium! 🎉</h1>
             <p className="mt-2 text-sm leading-6 text-muted-foreground">
               {isActive
                 ? "Premium är aktiverat. Lycka till med teoriprovet!"
