@@ -18,7 +18,7 @@ function isCategory(value: string): value is QuestionCategory {
 export async function fetchBankQuestions(): Promise<Question[]> {
   const { data, error } = await supabase
     .from("ai_questions")
-    .select("id, category, question, options, correct, explanation, reference")
+    .select("id, category, question, options, correct, explanation, reference, image")
     .order("created_at", { ascending: true });
 
   if (error) throw new Error(error.message);
@@ -35,6 +35,7 @@ export async function fetchBankQuestions(): Promise<Question[]> {
         correct: row.correct,
         explanation: row.explanation,
         reference: row.reference,
+        ...(row.image ? { image: row.image } : {}),
       },
     ];
   });

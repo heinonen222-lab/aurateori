@@ -1,7 +1,9 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { Loader2, Pencil, Plus, ShieldCheck, Trash2 } from "lucide-react";
+import { ArrowLeft, Loader2, Pencil, Plus, ShieldCheck, Trash2 } from "lucide-react";
+import { ROAD_SIGNS } from "@/data/signs";
+import { SignImage } from "@/components/SignImage";
 import { toast } from "sonner";
 import { AppShell } from "@/components/AppShell";
 import { AuraState, AuraLoading } from "@/components/AuraState";
@@ -37,6 +39,7 @@ type Row = {
   explanation: string;
   reference: string;
   difficulty: string;
+  image: string | null;
 };
 
 type Draft = Omit<Row, "options"> & { options: string[] };
@@ -50,6 +53,7 @@ const EMPTY: Draft = {
   explanation: "",
   reference: "",
   difficulty: "medel",
+  image: null,
 };
 
 const fieldCls =
@@ -83,7 +87,7 @@ function AdminPage() {
     queryFn: async () => {
       const { data, error } = await supabase
         .from("ai_questions")
-        .select("id, category, question, options, correct, explanation, reference, difficulty")
+        .select("id, category, question, options, correct, explanation, reference, difficulty, image")
         .order("created_at", { ascending: false });
       if (error) throw error;
       return data as Row[];
@@ -110,6 +114,7 @@ function AdminPage() {
       explanation: draft.explanation.trim(),
       reference: draft.reference.trim(),
       difficulty: draft.difficulty,
+      image: draft.image || null,
     };
     const { error } = draft.id
       ? await supabase.from("ai_questions").update(payload).eq("id", draft.id)
@@ -152,6 +157,9 @@ function AdminPage() {
   return (
     <AppShell>
       <section className="space-y-6">
+        <Button variant="ghost" size="sm" className="-ml-2" onClick={() => (draft ? setDraft(null) : window.history.length > 1 ? window.history.back() : (window.location.href = "/"))}>
+          <ArrowLeft className="h-4 w-4" /> {draft ? "Tillbaka till listan" : "Gå tillbaka"}
+        </Button>
         <header className="flex flex-wrap items-end justify-between gap-3">
           <div>
             <div className="flex items-center gap-2 text-xs font-bold uppercase text-muted-foreground">
@@ -179,6 +187,15 @@ function AdminPage() {
                   {DIFFICULTIES.map((d) => <option key={d}>{d}</option>)}
                 </select>
               </label>
+            </div>
+            <div className="flex items-start gap-3">
+              <label className="block flex-1 text-sm font-semibold">Vägmärkesbild (valfritt)
+                <select className={fieldCls + " mt-1"} value={draft.image ?? ""} onChange={(e) => setDraft({ ...draft, image: e.target.value || null })}>
+                  <option value="">Ingen bild</option>
+                  {ROAD_SIGNS.map((s) => <option key={s.id} value={s.id}>{s.name}</option>)}
+                </select>
+              </label>
+              {draft.image && <SignImage id={draft.image} className="h-16 w-16 shrink-0" />}
             </div>
             <label className="block text-sm font-semibold">Fråga
               <textarea className={fieldCls + " mt-1"} rows={2} value={draft.question} onChange={(e) => setDraft({ ...draft, question: e.target.value })} />
@@ -223,6 +240,7 @@ function AdminPage() {
           <ul className="divide-y divide-border overflow-hidden rounded-lg border border-border bg-card">
             {rows.map((r) => (
               <li key={r.id} className="flex items-start gap-3 p-3">
+                {r.image && <SignImage id={r.image} className="h-10 w-10 shrink-0" />}
                 <div className="min-w-0 flex-1">
                   <div className="text-xs text-muted-foreground">{r.category} · {r.difficulty}</div>
                   <div className="break-words text-sm font-semibold">{r.question}</div>
