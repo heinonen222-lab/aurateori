@@ -13,6 +13,7 @@ import { TRIAL_QUESTIONS } from "@/data/trial-questions";
 import { bankQuestionsQuery } from "@/lib/ai-questions";
 import { seededShuffle } from "@/lib/shuffle";
 import { store, useStore, examUsage } from "@/lib/store";
+import { checkPremiumAccess } from "@/utils/billing.functions";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 
