@@ -50,6 +50,33 @@ function toMajorUnit(amount: string, currency: string): number {
   return zeroDecimal.has(currency.toUpperCase()) ? value : value / 100;
 }
 
+/**
+ * Server-side entitlement check: is the caller an active Premium subscriber?
+ * Used to gate paid features (e.g. the full exam) so access cannot be granted
+ * by tampering with client-side state.
+ */
+export const checkPremiumAccess = createServerFn({ method: "GET" })
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }): Promise<{ allowed: boolean }> => {
+    const now = new Date().toISOString();
+    const { data, error } = await context.supabase
+      .from("subscriptions")
+      .select("status,current_period_end")
+      .eq("user_id", context.userId);
+
+    if (error) throw new Error(error.message);
+
+    const allowed = (data ?? []).some((row) => {
+      const end = row.current_period_end;
+      const withinPeriod = !end || end > now;
+      const statusActive =
+        ACTIVE_STATUSES.includes(row.status) || (row.status === "canceled" && !!end);
+      return statusActive && withinPeriod;
+    });
+
+    return { allowed };
+  });
+
 export const getBillingStatus = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
   .inputValidator((data: { environment: PaddleEnvInput }) => data)
