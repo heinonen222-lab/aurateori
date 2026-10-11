@@ -13,6 +13,7 @@ import { TRIAL_QUESTIONS } from "@/data/trial-questions";
 import { bankQuestionsQuery } from "@/lib/ai-questions";
 import { seededShuffle } from "@/lib/shuffle";
 import { store, useStore, examUsage } from "@/lib/store";
+import { checkPremiumAccess } from "@/utils/billing.functions";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 
@@ -95,6 +96,32 @@ function ExamPage() {
   const appState = useStore();
   const usage = examUsage(appState);
   const [attemptNo, setAttemptNo] = useState(0);
+  const [starting, setStarting] = useState(false);
+  const [startDenied, setStartDenied] = useState(false);
+
+  // Server-verified entitlement: the exam only starts after the backend
+  // confirms an active Premium subscription for the signed-in user.
+  const startExam = async () => {
+    if (starting) return;
+    setStarting(true);
+    setStartDenied(false);
+    try {
+      const { allowed } = await checkPremiumAccess();
+      if (!allowed) {
+        setStartDenied(true);
+        return;
+      }
+      setSeed((n) => n + 1);
+      setPhase("running");
+      setIdx(0);
+      setResults([]);
+      setTime(SECONDS);
+    } catch {
+      setStartDenied(true);
+    } finally {
+      setStarting(false);
+    }
+  };
   const exam = useMemo(
     () =>
       buildExam(
@@ -189,18 +216,17 @@ function ExamPage() {
                   </div>
                 </div>
               ) : (
-                <Button
-                  onClick={() => {
-                    setSeed((n) => n + 1);
-                    setPhase("running");
-                    setIdx(0);
-                    setResults([]);
-                    setTime(SECONDS);
-                  }}
-                  className="w-full"
-                >
-                  Starta provet
-                </Button>
+                <>
+                  <Button onClick={() => void startExam()} disabled={starting} className="w-full">
+                    {starting ? "Kontrollerar Premium…" : "Starta provet"}
+                  </Button>
+                  {startDenied && (
+                    <p className="text-xs font-semibold text-destructive">
+                      Vi kunde inte bekräfta ett aktivt Premium-abonnemang. Uppdatera sidan eller
+                      kontrollera din prenumeration under Mitt konto.
+                    </p>
+                  )}
+                </>
               )}
             </>
           ) : (
