@@ -88,9 +88,12 @@ export const store = {
     state.answers = [...state.answers, { qid, category, correct, at: Date.now() }];
     if (!correct) {
       if (!state.wrongQueue.includes(qid)) state.wrongQueue = [...state.wrongQueue, qid];
-    } else {
+    } else if (state.wrongQueue.includes(qid)) {
+      // Behåll samma array-identitet när inget togs bort. Annars räknas kön som
+      // ändrad i onödan och minnen som beror på den byggs om vid varje svar.
       state.wrongQueue = state.wrongQueue.filter((q) => q !== qid);
     }
+
     bumpStreak();
     emit();
   },
