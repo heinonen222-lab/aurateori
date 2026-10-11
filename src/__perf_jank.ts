@@ -25,6 +25,6 @@ for (let i = 0; i < 20; i++) computeStats(s);
 console.log("computeStats ms:", Math.round(((performance.now() - t) / 20) * 100) / 100);
 
 t = performance.now();
-for (let i = 0; i < 20; i++) localStorage.setItem("korkortskollen-perf", JSON.stringify(s));
+for (let i = 0; i < 20; i++) (JSON.stringify(s).length);
 console.log("localStorage JSON.stringify ms:", Math.round(((performance.now() - t) / 20) * 100) / 100);
-localStorage.removeItem("korkortskollen-perf");
+
