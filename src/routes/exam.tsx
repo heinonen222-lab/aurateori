@@ -96,6 +96,32 @@ function ExamPage() {
   const appState = useStore();
   const usage = examUsage(appState);
   const [attemptNo, setAttemptNo] = useState(0);
+  const [starting, setStarting] = useState(false);
+  const [startDenied, setStartDenied] = useState(false);
+
+  // Server-verified entitlement: the exam only starts after the backend
+  // confirms an active Premium subscription for the signed-in user.
+  const startExam = async () => {
+    if (starting) return;
+    setStarting(true);
+    setStartDenied(false);
+    try {
+      const { allowed } = await checkPremiumAccess();
+      if (!allowed) {
+        setStartDenied(true);
+        return;
+      }
+      setSeed((n) => n + 1);
+      setPhase("running");
+      setIdx(0);
+      setResults([]);
+      setTime(SECONDS);
+    } catch {
+      setStartDenied(true);
+    } finally {
+      setStarting(false);
+    }
+  };
   const exam = useMemo(
     () =>
       buildExam(
