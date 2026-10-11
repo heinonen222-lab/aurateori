@@ -1,11 +1,20 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { lazy, Suspense, useCallback, useEffect, useRef, useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { ArrowRight, CheckCircle2, Clock, ExternalLink, GraduationCap, Play, Sparkles, TriangleAlert } from "lucide-react";
 import { AppShell } from "@/components/AppShell";
 import { AutoFitText } from "@/components/AutoFitText";
-import { VisualLessonPlayer } from "@/components/lesson3d/VisualLessonPlayer";
+import { AuraLoading } from "@/components/AuraState";
+
+// 3D-spelaren är tung (three.js + drei). Den laddas först när en genomgång
+// faktiskt öppnas, så listan visas snabbt och utan 3D-kod i förhandsvisningen.
+const VisualLessonPlayer = lazy(() =>
+  import("@/components/lesson3d/VisualLessonPlayer").then((m) => ({
+    default: m.VisualLessonPlayer,
+  })),
+);
+
 import { LESSONS, type Lesson } from "@/data/lessons";
 import { useAuth } from "@/hooks/useAuth";
 import { listLessonProgress, saveLessonProgress } from "@/utils/lessons.functions";
