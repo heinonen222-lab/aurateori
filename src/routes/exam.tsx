@@ -216,18 +216,17 @@ function ExamPage() {
                   </div>
                 </div>
               ) : (
-                <Button
-                  onClick={() => {
-                    setSeed((n) => n + 1);
-                    setPhase("running");
-                    setIdx(0);
-                    setResults([]);
-                    setTime(SECONDS);
-                  }}
-                  className="w-full"
-                >
-                  Starta provet
-                </Button>
+                <>
+                  <Button onClick={() => void startExam()} disabled={starting} className="w-full">
+                    {starting ? "Kontrollerar Premium…" : "Starta provet"}
+                  </Button>
+                  {startDenied && (
+                    <p className="text-xs font-semibold text-destructive">
+                      Vi kunde inte bekräfta ett aktivt Premium-abonnemang. Uppdatera sidan eller
+                      kontrollera din prenumeration under Mitt konto.
+                    </p>
+                  )}
+                </>
               )}
             </>
           ) : (
