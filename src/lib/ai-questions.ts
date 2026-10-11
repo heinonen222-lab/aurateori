@@ -44,5 +44,8 @@ export async function fetchBankQuestions(): Promise<Question[]> {
 export const bankQuestionsQuery = queryOptions({
   queryKey: ["ai-questions"],
   queryFn: fetchBankQuestions,
-  staleTime: 60_000,
+  // Banken ändras bara via adminpanelen – hämta om vid behov, inte vid varje besök.
+  staleTime: 5 * 60_000,
+  gcTime: 30 * 60_000,
 });
+
