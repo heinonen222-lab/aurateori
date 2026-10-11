@@ -31,8 +31,16 @@ export const Route = createFileRoute("/quiz")({
       { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
+  loader: ({ context }) => {
+    // Frågebanken hämtas redan när användaren siktar hit, inte först när sidan
+    // monterats. Vi väntar inte in svaret så att sidan ritas direkt.
+    if (typeof window !== "undefined") {
+      void context.queryClient.prefetchQuery(bankQuestionsQuery);
+    }
+  },
   component: QuizPage,
 });
+
 
 const CATEGORIES: (QuestionCategory | "Alla")[] = [
   "Alla",

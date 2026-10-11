@@ -32,8 +32,15 @@ export const Route = createFileRoute("/exam")({
       { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
+  loader: ({ context }) => {
+    // Bankfrågorna behövs för att bygga provet – hämta dem redan vid sikten hit.
+    if (typeof window !== "undefined") {
+      void context.queryClient.prefetchQuery(bankQuestionsQuery);
+    }
+  },
   component: ExamPage,
 });
+
 
 const TOTAL = 70;
 const SCORED = 65;

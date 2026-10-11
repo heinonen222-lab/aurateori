@@ -602,7 +602,13 @@ export function LessonScene(props: SceneProps) {
   if (webGLStatus !== "supported") return <StaticSceneFallback scene={props.scene} />;
 
   return (
-    <Canvas shadows dpr={[1, 1.5]} gl={{ antialias: true }}>
+    <Canvas
+      shadows
+      dpr={[1, 1.5]}
+      gl={{ antialias: true, powerPreference: "high-performance" }}
+      performance={{ min: 0.5 }}
+    >
+
       <PerspectiveCamera makeDefault position={props.scene.camera} fov={44} />
       <color attach="background" args={[night ? COLORS.night : winter ? "#d9e9ed" : "#cfe3e9"]} />
       <fog attach="fog" args={[night ? COLORS.night : winter ? "#d9e9ed" : "#cfe3e9", 18, 36]} />
@@ -620,10 +626,11 @@ export function LessonScene(props: SceneProps) {
       />
       {night && <pointLight position={[-1.6, 2.5, 1.5]} color="#fff0b8" intensity={2.2} distance={10} />}
       <SceneWorld {...props} />
-      <Environment>
+      <Environment frames={1} resolution={128}>
         <Lightformer intensity={1.5} position={[0, 8, 2]} scale={[12, 5, 1]} />
         <Lightformer intensity={0.8} color="#a9c9d3" position={[-8, 2, 0]} rotation-y={Math.PI / 2} scale={[10, 3, 1]} />
       </Environment>
+
     </Canvas>
   );
 }

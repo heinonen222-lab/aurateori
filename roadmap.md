@@ -11,3 +11,4 @@
 - [x] Fylla tom-vyn i övningen med tydlig instruktion, exempel och NaN-skydd
 - [x] Fylla tomma övningsvyn med egna frågor och repetition (riktig procent och poäng)
 - [x] Betalningsflödet i filmisk Aura-stil: faktura, kreditstatus, avsluta premium
+- [x] Snabba upp appen: prov laddar snabbare, 3D laddas bara vid öppnad genomgång
