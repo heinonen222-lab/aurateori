@@ -57,6 +57,20 @@ export const ROAD_SIGNS: RoadSign[] = [
     trap: "Gäller tills annat hastighetsmärke eller tätbebyggt område upphör.",
   },
   {
+    id: "forbud-hastighet-60",
+    name: "Hastighetsbegränsning 60",
+    category: "Förbudsmärken",
+    meaning: "Högsta tillåtna hastighet 60 km/h tills nytt märke.",
+    trap: "Anpassa ändå farten efter väglag och sikt – 60 är ett tak, inte ett mål.",
+  },
+  {
+    id: "anv-atervandsvag",
+    name: "Återvändsväg",
+    category: "Anvisningsmärken",
+    meaning: "Vägen är en återvändsgränd – den går inte att köra vidare på.",
+    trap: "Märket (E15) är en upplysning, inget förbud – du får köra in men måste vända.",
+  },
+  {
     id: "forbud-omkorning",
     name: "Förbud mot omkörning",
     category: "Förbudsmärken",
