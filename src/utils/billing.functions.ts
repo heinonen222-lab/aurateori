@@ -70,7 +70,10 @@ export const checkPremiumAccess = createServerFn({ method: "GET" })
       const end = row.current_period_end;
       const withinPeriod = !end || end > now;
       const statusActive =
-        ACTIVE_STATUSES.includes(row.status) || (row.status === "canceled" && !!end);
+        ACTIVE_STATUSES.includes(row.status) ||
+        // past_due: Paddle retries payment (dunning) — keep access until it cancels.
+        row.status === "past_due" ||
+        (row.status === "canceled" && !!end);
       return statusActive && withinPeriod;
     });
 
