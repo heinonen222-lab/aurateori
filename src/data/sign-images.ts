@@ -6,6 +6,8 @@ import a_anv_overgang from "@/assets/signs/anv-overgang.svg.asset.json";
 import a_anv_slut_gangfart from "@/assets/signs/anv-slut-gangfart.svg.asset.json";
 import a_anv_slut_huvudled from "@/assets/signs/anv-slut-huvudled.svg.asset.json";
 import a_forbud_hastighet_30 from "@/assets/signs/forbud-hastighet-30.svg.asset.json";
+import a_anv_atervandsvag from "@/assets/signs/anv-atervandsvag.svg.asset.json";
+import a_forbud_hastighet_60 from "@/assets/signs/forbud-hastighet-60.svg.asset.json";
 import a_forbud_hastighet_50 from "@/assets/signs/forbud-hastighet-50.svg.asset.json";
 import a_forbud_infart from "@/assets/signs/forbud-infart.svg.asset.json";
 import a_forbud_omkorning from "@/assets/signs/forbud-omkorning.svg.asset.json";
@@ -47,6 +49,8 @@ export const SIGN_IMAGES: Record<string, string> = {
   "anv-slut-huvudled": a_anv_slut_huvudled.url,
   "forbud-hastighet-30": a_forbud_hastighet_30.url,
   "forbud-hastighet-50": a_forbud_hastighet_50.url,
+  "forbud-hastighet-60": a_forbud_hastighet_60.url,
+  "anv-atervandsvag": a_anv_atervandsvag.url,
   "forbud-infart": a_forbud_infart.url,
   "forbud-omkorning": a_forbud_omkorning.url,
   "forbud-parkering": a_forbud_parkering.url,
