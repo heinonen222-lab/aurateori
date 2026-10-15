@@ -19,6 +19,7 @@ import { Route as KontoRouteImport } from './routes/konto'
 import { Route as PriserRouteImport } from './routes/priser'
 import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as QuizRouteImport } from './routes/quiz'
+import { Route as RaderaKontoRouteImport } from './routes/radera-konto'
 import { Route as RefundRouteImport } from './routes/refund'
 import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as SignsRouteImport } from './routes/signs'
@@ -78,6 +79,11 @@ const QuizRoute = QuizRouteImport.update({
   path: '/quiz',
   getParentRoute: () => rootRouteImport,
 } as any)
+const RaderaKontoRoute = RaderaKontoRouteImport.update({
+  id: '/radera-konto',
+  path: '/radera-konto',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const RefundRoute = RefundRouteImport.update({
   id: '/refund',
   path: '/refund',
@@ -131,6 +137,7 @@ export interface FileRoutesByFullPath {
   '/priser': typeof PriserRoute
   '/privacy': typeof PrivacyRoute
   '/quiz': typeof QuizRoute
+  '/radera-konto': typeof RaderaKontoRoute
   '/refund': typeof RefundRoute
   '/reset-password': typeof ResetPasswordRoute
   '/signs': typeof SignsRoute
@@ -151,6 +158,7 @@ export interface FileRoutesByTo {
   '/priser': typeof PriserRoute
   '/privacy': typeof PrivacyRoute
   '/quiz': typeof QuizRoute
+  '/radera-konto': typeof RaderaKontoRoute
   '/refund': typeof RefundRoute
   '/reset-password': typeof ResetPasswordRoute
   '/signs': typeof SignsRoute
@@ -172,6 +180,7 @@ export interface FileRoutesById {
   '/priser': typeof PriserRoute
   '/privacy': typeof PrivacyRoute
   '/quiz': typeof QuizRoute
+  '/radera-konto': typeof RaderaKontoRoute
   '/refund': typeof RefundRoute
   '/reset-password': typeof ResetPasswordRoute
   '/signs': typeof SignsRoute
@@ -194,6 +203,7 @@ export interface FileRouteTypes {
     | '/priser'
     | '/privacy'
     | '/quiz'
+    | '/radera-konto'
     | '/refund'
     | '/reset-password'
     | '/signs'
@@ -214,6 +224,7 @@ export interface FileRouteTypes {
     | '/priser'
     | '/privacy'
     | '/quiz'
+    | '/radera-konto'
     | '/refund'
     | '/reset-password'
     | '/signs'
@@ -234,6 +245,7 @@ export interface FileRouteTypes {
     | '/priser'
     | '/privacy'
     | '/quiz'
+    | '/radera-konto'
     | '/refund'
     | '/reset-password'
     | '/signs'
@@ -255,6 +267,7 @@ export interface RootRouteChildren {
   PriserRoute: typeof PriserRoute
   PrivacyRoute: typeof PrivacyRoute
   QuizRoute: typeof QuizRoute
+  RaderaKontoRoute: typeof RaderaKontoRoute
   RefundRoute: typeof RefundRoute
   ResetPasswordRoute: typeof ResetPasswordRoute
   SignsRoute: typeof SignsRoute
@@ -337,6 +350,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof QuizRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/radera-konto': {
+      id: '/radera-konto'
+      path: '/radera-konto'
+      fullPath: '/radera-konto'
+      preLoaderRoute: typeof RaderaKontoRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/refund': {
       id: '/refund'
       path: '/refund'
@@ -407,6 +427,7 @@ const rootRouteChildren: RootRouteChildren = {
   PriserRoute: PriserRoute,
   PrivacyRoute: PrivacyRoute,
   QuizRoute: QuizRoute,
+  RaderaKontoRoute: RaderaKontoRoute,
   RefundRoute: RefundRoute,
   ResetPasswordRoute: ResetPasswordRoute,
   SignsRoute: SignsRoute,
