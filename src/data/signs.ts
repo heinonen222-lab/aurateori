@@ -68,7 +68,7 @@ export const ROAD_SIGNS: RoadSign[] = [
     name: "Återvändsväg",
     category: "Anvisningsmärken",
     meaning: "Vägen är en återvändsgränd – den går inte att köra vidare på.",
-    trap: "Märket (E15) är en upplysning, inget förbud – du får köra in men måste vända.",
+    trap: "Märket (E17) är en upplysning, inget förbud – du får köra in men måste vända.",
   },
   {
     id: "forbud-omkorning",
