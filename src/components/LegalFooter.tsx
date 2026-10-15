@@ -4,6 +4,7 @@ const LINKS = [
   { to: "/terms", label: "Användarvillkor" },
   { to: "/refund", label: "Återbetalningspolicy" },
   { to: "/privacy", label: "Integritetspolicy" },
+  { to: "/radera-konto", label: "Radera konto" },
   { to: "/priser", label: "Priser" },
 ] as const;
 

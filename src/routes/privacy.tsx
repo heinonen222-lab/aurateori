@@ -124,6 +124,9 @@ function PrivacyPage() {
             normalt inom en månad. Du har även rätt att lämna klagomål till
             Integritetsskyddsmyndigheten (IMY).
           </p>
+          <p>
+            Vill du radera ditt konto och all data? Se <a href="/radera-konto">Radera konto</a>.
+          </p>
         </LegalSection>
 
         <LegalSection title="7. Säkerhet">
