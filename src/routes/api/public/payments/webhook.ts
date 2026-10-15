@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { createClient } from "@supabase/supabase-js";
-import { verifyWebhook, EventName, type PaddleEnv } from "@/lib/paddle.server";
+import { verifyWebhook, gatewayFetch, EventName, type PaddleEnv } from "@/lib/paddle.server";
 import type { Database } from "@/integrations/supabase/types";
 
 let _supabase: ReturnType<typeof createClient<Database>> | null = null;
@@ -14,6 +14,40 @@ function getSupabase() {
   return _supabase;
 }
 
+/**
+ * customData.userId comes from client-supplied checkout metadata and can be
+ * tampered with. Verify ownership by matching the Paddle customer's email
+ * against the claimed user's profile email before granting access.
+ */
+async function verifyUserOwnership(userId: string, customerId: string | undefined, env: PaddleEnv): Promise<boolean> {
+  if (!customerId) return false;
+  try {
+    const res = await gatewayFetch(env, `/customers/${customerId}`);
+    if (!res.ok) {
+      console.error("Customer lookup failed:", res.status);
+      return false;
+    }
+    const json = await res.json();
+    const paddleEmail = (json?.data?.email ?? "").toLowerCase().trim();
+    if (!paddleEmail) return false;
+
+    const { data: profile } = await getSupabase()
+      .from("profiles")
+      .select("email")
+      .eq("id", userId)
+      .maybeSingle();
+    const profileEmail = (profile?.email ?? "").toLowerCase().trim();
+    if (!profileEmail || profileEmail !== paddleEmail) {
+      console.error("Ownership mismatch: customData.userId does not match Paddle customer email");
+      return false;
+    }
+    return true;
+  } catch (e) {
+    console.error("Ownership verification error:", e);
+    return false;
+  }
+}
+
 /* eslint-disable @typescript-eslint/no-explicit-any */
 async function handleSubscriptionCreated(data: any, env: PaddleEnv) {
   const { id, customerId, items, status, currentBillingPeriod, customData } = data;
@@ -21,6 +55,10 @@ async function handleSubscriptionCreated(data: any, env: PaddleEnv) {
   const userId = customData?.userId;
   if (!userId) {
     console.error("No userId in customData");
+    return;
+  }
+  if (!(await verifyUserOwnership(userId, customerId, env))) {
+    console.error("Rejecting subscription: userId ownership could not be verified");
     return;
   }
 
@@ -86,6 +124,10 @@ async function handleTransactionCompleted(data: any, env: PaddleEnv) {
   const productId = item?.price?.productId;
   if (!userId || !priceId) {
     console.warn("Skipping one-time transaction: missing userId or external price id");
+    return;
+  }
+  if (!(await verifyUserOwnership(userId, data.customerId, env))) {
+    console.error("Rejecting transaction: userId ownership could not be verified");
     return;
   }
 
