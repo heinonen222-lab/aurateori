@@ -57,6 +57,10 @@ async function handleSubscriptionCreated(data: any, env: PaddleEnv) {
     console.error("No userId in customData");
     return;
   }
+  if (!(await verifyUserOwnership(userId, customerId, env))) {
+    console.error("Rejecting subscription: userId ownership could not be verified");
+    return;
+  }
 
   const item = items?.[0];
   const priceId = item?.price?.importMeta?.externalId;
