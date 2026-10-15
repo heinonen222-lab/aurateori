@@ -126,6 +126,10 @@ async function handleTransactionCompleted(data: any, env: PaddleEnv) {
     console.warn("Skipping one-time transaction: missing userId or external price id");
     return;
   }
+  if (!(await verifyUserOwnership(userId, data.customerId, env))) {
+    console.error("Rejecting transaction: userId ownership could not be verified");
+    return;
+  }
 
   await getSupabase()
     .from("subscriptions")
