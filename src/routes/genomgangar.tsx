@@ -9,10 +9,23 @@ import { AutoFitText } from "@/components/AutoFitText";
 
 // 3D-spelaren är tung (three.js + drei). Den laddas först när en genomgång
 // faktiskt öppnas, så listan visas snabbt och utan 3D-kod i förhandsvisningen.
+// Om modulen inte kan hämtas (t.ex. en föråldrad fil efter en ny publicering)
+// laddas sidan om en gång automatiskt istället för att bli blank.
+const RELOAD_FLAG = "genomgangar-player-reloaded";
 const VisualLessonPlayer = lazy(() =>
-  import("@/components/lesson3d/VisualLessonPlayer").then((m) => ({
-    default: m.VisualLessonPlayer,
-  })),
+  import("@/components/lesson3d/VisualLessonPlayer")
+    .then((m) => {
+      sessionStorage.removeItem(RELOAD_FLAG);
+      return { default: m.VisualLessonPlayer };
+    })
+    .catch((err) => {
+      if (typeof window !== "undefined" && !sessionStorage.getItem(RELOAD_FLAG)) {
+        sessionStorage.setItem(RELOAD_FLAG, "1");
+        window.location.reload();
+        return new Promise<never>(() => {});
+      }
+      throw err;
+    }),
 );
 
 import { LESSONS, type Lesson } from "@/data/lessons";
