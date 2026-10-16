@@ -8,6 +8,13 @@
       "when": 1792048530301,
       "tag": "0000_fix_sign_codes",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1792164539686,
+      "tag": "0001_account_deletion_requests",
+      "breakpoints": true
     }
   ]
 }
