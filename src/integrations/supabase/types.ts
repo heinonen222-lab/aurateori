@@ -56,6 +56,30 @@ export type Database = {
         }
         Relationships: []
       }
+      deletion_requests: {
+        Row: {
+          delete_after: string
+          email: string | null
+          id: string
+          requested_at: string
+          user_id: string
+        }
+        Insert: {
+          delete_after?: string
+          email?: string | null
+          id?: string
+          requested_at?: string
+          user_id: string
+        }
+        Update: {
+          delete_after?: string
+          email?: string | null
+          id?: string
+          requested_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       lesson_progress: {
         Row: {
           answered_checks: number
@@ -201,6 +225,7 @@ export type Database = {
         }
         Returns: boolean
       }
+      verify_cron_token: { Args: { _token: string }; Returns: boolean }
     }
     Enums: {
       app_role: "admin" | "moderator" | "user"
