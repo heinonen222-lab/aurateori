@@ -19,7 +19,7 @@ export const Route = createFileRoute("/radera-konto")({
       {
         name: "description",
         content:
-          "Begär radering av ditt Aurateori-konto och all tillhörande data, även utan att logga in.",
+          "Begär radering av ditt Aurateori-konto och all tillhörande data, – raderas automatiskt efter 30 dagar.",
       },
       { property: "og:title", content: "Radera konto – Aurateori" },
       {
