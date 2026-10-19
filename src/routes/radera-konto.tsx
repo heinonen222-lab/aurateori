@@ -1,9 +1,16 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useServerFn } from "@tanstack/react-start";
 import { AppShell } from "@/components/AppShell";
 import { LegalPage, LegalSection } from "@/components/LegalPage";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+import { useAuth } from "@/hooks/useAuth";
+import {
+  cancelAccountDeletion,
+  getDeletionRequest,
+  requestAccountDeletion,
+  type DeletionRequest,
+} from "@/utils/deletion.functions";
 
 export const Route = createFileRoute("/radera-konto")({
   head: () => ({
@@ -12,7 +19,7 @@ export const Route = createFileRoute("/radera-konto")({
       {
         name: "description",
         content:
-          "Begär radering av ditt Aurateori-konto och all tillhörande data, även utan att logga in.",
+          "Begär radering av ditt Aurateori-konto och all tillhörande data, – raderas automatiskt efter 30 dagar.",
       },
       { property: "og:title", content: "Radera konto – Aurateori" },
       {
@@ -27,55 +34,96 @@ export const Route = createFileRoute("/radera-konto")({
 });
 
 function DeleteAccountPage() {
-  const [email, setEmail] = useState("");
-  const valid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim());
-  const mailto = `mailto:support@aurateori.se?subject=${encodeURIComponent(
-    "Begäran om kontoradering – Aurateori",
-  )}&body=${encodeURIComponent(
-    `Hej!\n\nJag vill att mitt Aurateori-konto och all tillhörande data raderas.\n\nE-postadress för kontot: ${email.trim()}\n\nTack!`,
-  )}`;
+  const { user, loading } = useAuth();
+  const getReq = useServerFn(getDeletionRequest);
+  const requestFn = useServerFn(requestAccountDeletion);
+  const cancelFn = useServerFn(cancelAccountDeletion);
+  const [req, setReq] = useState<DeletionRequest>(null);
+  const [busy, setBusy] = useState(false);
+  const [err, setErr] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (!user) return;
+    void getReq().then(setReq).catch(() => {});
+  }, [user, getReq]);
+
+  const fmt = (d: string) =>
+    new Date(d).toLocaleDateString("sv-SE", { day: "numeric", month: "long", year: "numeric" });
+
+  const run = async (fn: () => Promise<void>) => {
+    setBusy(true);
+    setErr(null);
+    try {
+      await fn();
+    } catch {
+      setErr("Något gick fel. Försök igen.");
+    } finally {
+      setBusy(false);
+    }
+  };
 
   return (
     <AppShell>
-      <LegalPage title="Radera konto och data" updated="15 oktober 2026">
+      <LegalPage title="Radera konto och data" updated="16 oktober 2026">
         <LegalSection title="1. Radera direkt i appen">
           <p>
-            Är du inloggad kan du radera ditt konto direkt under{" "}
-            <Link to="/konto">Mitt konto</Link> → "Radera konto". Raderingen sker omedelbart.
+            Vill du radera omedelbart gör du det under <Link to="/konto">Mitt konto</Link> →
+            "Radera konto".
           </p>
         </LegalSection>
 
-        <LegalSection title="2. Begär radering utan att logga in">
+        <LegalSection title="2. Begär radering inom 30 dagar">
           <p>
-            Ange e-postadressen som kontot är registrerat på. Vi skickar en bekräftelse till
-            adressen och raderar kontot inom 30 dagar.
+            Skicka en begäran så raderas kontot och all tillhörande data automatiskt efter 30
+            dagar. Fram till dess kan du ångra dig. Du loggar in för att bekräfta att kontot är
+            ditt.
           </p>
-          <form
-            className="flex flex-col gap-2 pt-2 sm:flex-row"
-            onSubmit={(e) => {
-              e.preventDefault();
-              if (valid) window.location.href = mailto;
-            }}
-          >
-            <Input
-              type="email"
-              required
-              aria-label="E-postadress"
-              placeholder="din@epost.se"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="sm:max-w-xs"
-            />
-            <Button type="submit" disabled={!valid}>
-              Skicka begäran
+          {loading ? null : !user ? (
+            <Button asChild>
+              <Link to="/auth" search={{ next: "/radera-konto" } as never}>
+                Logga in för att begära radering
+              </Link>
             </Button>
-          </form>
+          ) : req ? (
+            <div className="space-y-3 rounded-md border border-border bg-card p-4">
+              <p className="font-medium">
+                Begäran mottagen {fmt(req.requestedAt)}. Kontot raderas automatiskt{" "}
+                {fmt(req.deleteAfter)}.
+              </p>
+              <Button
+                variant="outline"
+                disabled={busy}
+                onClick={() =>
+                  run(async () => {
+                    await cancelFn();
+                    setReq(null);
+                  })
+                }
+              >
+                Ångra begäran
+              </Button>
+            </div>
+          ) : (
+            <Button
+              variant="destructive"
+              disabled={busy}
+              onClick={() =>
+                run(async () => {
+                  setReq(await requestFn());
+                })
+              }
+            >
+              Begär radering av {user.email ?? "mitt konto"}
+            </Button>
+          )}
+          {err && <p className="text-destructive">{err}</p>}
           <p>
-            Fungerar inte knappen? Mejla{" "}
+            Kan du inte logga in? Mejla{" "}
             <a href="mailto:support@aurateori.se">support@aurateori.se</a> från adressen kopplad
             till kontot.
           </p>
         </LegalSection>
+
 
         <LegalSection title="3. Vad som raderas">
           <ul>
