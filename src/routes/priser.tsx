@@ -164,7 +164,7 @@ function PricingPage() {
         <section className="border-y border-border py-6">
           <h2 className="font-display text-lg font-bold">Gratis eller Premium?</h2>
           <div className="mt-4 grid gap-6 sm:grid-cols-2">
-            <div><h3 className="text-sm font-semibold">Gratis</h3><ul className="mt-3 space-y-2 text-sm text-muted-foreground">{["Grundfrågor med förklaringar", "Vägmärken och snabbplugg", "Genomgångar och repetition", "Din träningsstatistik"].map((feature) => <li key={feature} className="flex gap-2"><Check className="mt-0.5 h-4 w-4 shrink-0 text-success" />{feature}</li>)}</ul></div>
+            <div><h3 className="text-sm font-semibold">Gratis</h3><ul className="mt-3 space-y-2 text-sm text-muted-foreground">{["10 gratisfrågor totalt med förklaringar", "Vägmärken och snabbplugg", "Genomgångar och repetition", "Din träningsstatistik"].map((feature) => <li key={feature} className="flex gap-2"><Check className="mt-0.5 h-4 w-4 shrink-0 text-success" />{feature}</li>)}</ul></div>
             <div><h3 className="flex items-center gap-2 text-sm font-semibold"><Crown className="h-4 w-4 text-premium" />Premium</h3><p className="mt-3 text-sm text-muted-foreground">Allt i Gratis, plus hela frågebanken och fullständiga teoriprov.</p><p className="mt-2 text-xs leading-5 text-muted-foreground">Hantera betalning och avsluta förnyelsen under Premium & betalning. Tillgången gäller till periodens slut.</p></div>
           </div>
         </section>

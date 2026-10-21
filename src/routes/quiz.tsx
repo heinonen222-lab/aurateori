@@ -1,15 +1,12 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import type { ReactNode } from "react";
 import { useMemo, useState } from "react";
-import { useQuery } from "@tanstack/react-query";
+import { useQuestions } from "@/hooks/useQuestions";
 import { TrainingTopics } from "@/components/TrainingTopics";
 import { TOPICS, matchesTopic, type TopicId } from "@/lib/practice";
 import { AppShell } from "@/components/AppShell";
 import { QuestionCard } from "@/components/QuestionCard";
 import { QUESTIONS, type QuestionCategory } from "@/data/questions";
-import { EXAM_QUESTIONS } from "@/data/exam-questions";
-import { EXTRA_QUESTIONS } from "@/data/extra-questions";
-import { bankQuestionsQuery } from "@/lib/ai-questions";
 import { seededShuffle } from "@/lib/shuffle";
 import { store, useStore, computeStats } from "@/lib/store";
 import { cn } from "@/lib/utils";
@@ -34,13 +31,6 @@ export const Route = createFileRoute("/quiz")({
       { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
-  loader: ({ context }) => {
-    // Frågebanken hämtas redan när användaren siktar hit, inte först när sidan
-    // monterats. Vi väntar inte in svaret så att sidan ritas direkt.
-    if (typeof window !== "undefined") {
-      void context.queryClient.prefetchQuery(bankQuestionsQuery);
-    }
-  },
   component: QuizPage,
 });
 
@@ -68,27 +58,26 @@ function QuizPage() {
 
   const s = useStore();
   const stats = computeStats(s);
-  const { data: bank, isError, refetch } = useQuery(bankQuestionsQuery);
+  const { questions: allQ, isError, refetch, isPremium } = useQuestions();
 
   const pool = useMemo(() => {
-    const all = [...EXAM_QUESTIONS, ...QUESTIONS, ...EXTRA_QUESTIONS, ...(bank ?? [])];
+    const all = allQ;
     const list = topic ? all.filter((q) => matchesTopic(q, topic)) : cat === "Alla" ? all : all.filter((q) => q.category === cat);
     return seededShuffle(list, seed);
-  }, [cat, topic, seed, bank]);
+  }, [cat, topic, seed, allQ]);
 
   // Användarens egna frågor: allt som ligger i repetitions-kön och går att lösa.
   const repPool = useMemo(
     () =>
       seededShuffle(
-        [...EXAM_QUESTIONS, ...QUESTIONS, ...EXTRA_QUESTIONS, ...(bank ?? [])].filter((q) =>
+        allQ.filter((q) =>
           s.wrongQueue.includes(q.id),
         ),
         7,
       ),
-    [bank, s.wrongQueue],
+    [allQ, s.wrongQueue],
   );
 
-  const allQ = useMemo(() => [...EXAM_QUESTIONS, ...QUESTIONS, ...EXTRA_QUESTIONS, ...(bank ?? [])], [bank]);
   // Riktiga resultat per kategori från sparade svar.
   const catStats = useMemo(() => {
     const m = new Map<string, { total: number; correct: number }>();
@@ -111,7 +100,7 @@ function QuizPage() {
   };
   const startQuick = () => startCustom("Snabbträning · 10 blandade", seededShuffle(allQ, Date.now()).slice(0, 10));
 
-  const activePool = custom ? custom.list : pool;
+  const activePool = custom ? custom.list.filter((q) => allQ.some((allowed) => allowed.id === q.id)) : pool;
   const q = activePool[idx];
   const empty = !repActive && pool.length === 0;
   const done = !q && !empty;
@@ -125,6 +114,8 @@ function QuizPage() {
             Filtrera på kategori och öva i din takt.
           </p>
         </div>
+
+        {!isPremium && <div className="flex flex-wrap items-center justify-between gap-3 border-y border-border py-3"><p className="text-sm text-muted-foreground">Gratis: 10 frågor totalt. Övriga frågor kräver Premium.</p><Button asChild variant="premium" size="sm"><Link to="/priser">Skaffa Premium</Link></Button></div>}
 
         <TrainingTopics questions={allQ} state={s} selected={topic} onSelect={(id) => { setTopic(id); setCat("Alla"); setIdx(0); setCorrectCount(0); setRepActive(false); }} />
 

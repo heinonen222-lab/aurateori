@@ -1,12 +1,8 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { Zap, Timer, Signpost, Flame, Target, CheckCircle2, ArrowRight, RotateCcw } from "lucide-react";
-import { useQuery } from "@tanstack/react-query";
+import { useQuestions } from "@/hooks/useQuestions";
 import { useNavigate } from "@tanstack/react-router";
 import { TrainingTopics } from "@/components/TrainingTopics";
-import { QUESTIONS } from "@/data/questions";
-import { EXAM_QUESTIONS } from "@/data/exam-questions";
-import { EXTRA_QUESTIONS } from "@/data/extra-questions";
-import { bankQuestionsQuery } from "@/lib/ai-questions";
 import { trainingSummary } from "@/lib/practice";
 import { AppShell } from "@/components/AppShell";
 import { AutoFitText } from "@/components/AutoFitText";
@@ -71,8 +67,7 @@ function Dashboard() {
   const stats = computeStats(s);
   const summary = trainingSummary(s);
   const navigate = useNavigate();
-  const { data: bank } = useQuery(bankQuestionsQuery);
-  const questions = [...QUESTIONS, ...EXAM_QUESTIONS, ...EXTRA_QUESTIONS, ...(bank ?? [])];
+  const { questions } = useQuestions();
 
   return (
     <AppShell>

@@ -1,23 +1,12 @@
 import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
 import { useMemo, useState, useEffect } from "react";
-import { useQuery } from "@tanstack/react-query";
-import { bankQuestionsQuery } from "@/lib/ai-questions";
+import { useQuestions } from "@/hooks/useQuestions";
 import { trainingSummary, swedishDay } from "@/lib/practice";
 import { Input } from "@/components/ui/input";
 import { Progress } from "@/components/ui/progress";
 import { AppShell } from "@/components/AppShell";
 import { QuestionCard } from "@/components/QuestionCard";
-import { QUESTIONS } from "@/data/questions";
-import { EXAM_QUESTIONS } from "@/data/exam-questions";
-import { EXTRA_QUESTIONS } from "@/data/extra-questions";
-import { TRIAL_QUESTIONS } from "@/data/trial-questions";
 
-const ALL_QUESTIONS = [
-  ...QUESTIONS,
-  ...EXAM_QUESTIONS,
-  ...EXTRA_QUESTIONS,
-  ...TRIAL_QUESTIONS,
-];
 import { store, useStore, computeStats } from "@/lib/store";
 import { RotateCcw, Trash2 } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -45,7 +34,7 @@ function StatsPage() {
   const s = useStore();
   const stats = computeStats(s);
   const summary = trainingSummary(s);
-  const { data: bank } = useQuery(bankQuestionsQuery);
+  const { questions } = useQuestions();
   const [weeklyGoal, setWeeklyGoal] = useState(3);
   useEffect(() => { const saved = Number(localStorage.getItem("aurateori-weekly-goal")); if (saved >= 1 && saved <= 7) setWeeklyGoal(saved); }, []);
   const [repeatIdx, setRepeatIdx] = useState(0);
@@ -83,9 +72,9 @@ function StatsPage() {
   const repeatQueue = useMemo(
     () =>
       s.wrongQueue
-        .map((id) => [...ALL_QUESTIONS, ...(bank ?? [])].find((q) => q.id === id))
+        .map((id) => questions.find((q) => q.id === id))
         .filter((q): q is NonNullable<typeof q> => Boolean(q)),
-    [s.wrongQueue, bank],
+    [s.wrongQueue, questions],
   );
 
   const repeatQuestion = repeatQueue.length > 0 ? repeatQueue[repeatIdx % repeatQueue.length] : null;
