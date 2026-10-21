@@ -1,12 +1,10 @@
 import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
-import { useMemo, useState }
-from "react";
+import { useMemo, useState, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { bankQuestionsQuery } from "@/lib/ai-questions";
 import { trainingSummary, swedishDay } from "@/lib/practice";
 import { Input } from "@/components/ui/input";
 import { Progress } from "@/components/ui/progress";
-import { useEffect } from "react";
 import { AppShell } from "@/components/AppShell";
 import { QuestionCard } from "@/components/QuestionCard";
 import { QUESTIONS } from "@/data/questions";

@@ -52,6 +52,8 @@ let state: AppState = defaultState;
 const listeners = new Set<() => void>();
 
 function emit() {
+  // useSyncExternalStore needs a new snapshot identity to update mounted views.
+  state = { ...state };
   if (typeof window !== "undefined") {
     localStorage.setItem(KEY, JSON.stringify(state));
     document.documentElement.classList.toggle("dark", state.theme === "dark");

@@ -180,6 +180,7 @@ export function AppShell({ children }: { children: ReactNode }) {
           <Sheet open={moreOpen} onOpenChange={setMoreOpen}>
             <SheetTrigger asChild>
               <Button
+                variant="ghost"
                 className={cn(
                   "flex h-11 w-11 min-h-11 flex-col items-center justify-center gap-0.5 rounded-lg px-0.5 py-2 text-[10px] font-semibold transition-colors focus-visible:ring-2 focus-visible:ring-ring",
                   isMoreActive ? "text-foreground" : "text-muted-foreground hover:text-foreground",

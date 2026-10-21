@@ -40,7 +40,7 @@ function Gauge({ value }: { value: number }) {
   const c = 2 * Math.PI * r;
   const offset = c - (value / 100) * c;
   return (
-    <div className="relative grid h-44 w-44 shrink-0 place-items-center sm:h-48 sm:w-48">
+    <div className="relative grid h-28 w-28 shrink-0 place-items-center sm:h-44 sm:w-44">
       <svg viewBox="0 0 160 160" className="h-full w-full -rotate-90" aria-hidden="true">
         <circle cx="80" cy="80" r={r} fill="none" stroke="var(--muted)" strokeWidth="14" />
         <circle
@@ -57,8 +57,8 @@ function Gauge({ value }: { value: number }) {
         />
       </svg>
       <div className="absolute text-center">
-        <div className="font-display text-4xl font-extrabold">{value}%</div>
-        <div className="mt-1 text-[10px] font-semibold uppercase text-muted-foreground">
+        <div className="font-display text-2xl font-extrabold sm:text-4xl">{value}%</div>
+        <div className="mt-1 text-[9px] font-semibold text-muted-foreground sm:text-[10px]">
           Körkortsklarhet
         </div>
       </div>
@@ -105,17 +105,17 @@ function Dashboard() {
 
         <SubscriptionCountdown compact />
 
-        <div className="relative border-y border-border py-6 sm:grid sm:grid-cols-[auto_minmax(0,1fr)] sm:items-center sm:gap-8">
-          <div className="relative z-10 mx-auto w-fit sm:mx-0"><Gauge value={stats.readiness} /></div>
-          <div className="relative z-10 mt-5 min-w-0 sm:mt-0">
+        <div className="relative grid grid-cols-[auto_minmax(0,1fr)] items-center gap-4 border-y border-border py-5 sm:gap-8">
+          <div className="relative z-10 w-fit"><Gauge value={stats.readiness} /></div>
+          <div className="relative z-10 min-w-0">
             <div className="mb-4 flex items-end justify-between gap-4">
               <div>
-                <h2 className="font-display text-xl font-bold">Dagens översikt</h2>
+                <h2 className="font-display text-base font-bold sm:text-xl">Dagens översikt</h2>
                 <p className="mt-1 text-sm text-muted-foreground">Målet är 80 % körkortsklarhet.</p>
               </div>
               <span className="hidden rounded-md bg-premium px-2.5 py-1 text-xs font-bold text-premium-foreground sm:inline-flex">Mål 80 %</span>
             </div>
-            <div className="grid min-w-0 grid-cols-2 sm:grid-cols-4 divide-x divide-border overflow-hidden rounded-lg border border-border bg-background/70 backdrop-blur">
+            <div className="grid min-w-0 grid-cols-2 gap-3 sm:grid-cols-4">
             <Stat
               icon={<Target className="h-4 w-4" />}
               label="Frågor"
@@ -211,14 +211,14 @@ function Stat({
     warning: "bg-warning/20 text-warning-foreground",
   }[accent];
   return (
-    <div className="flex min-w-0 flex-col overflow-hidden px-3 py-3 sm:px-4">
+    <div className="flex min-w-0 flex-col overflow-hidden">
       <div
-        className={`mb-2 inline-flex h-7 w-7 items-center justify-center rounded-md ${accentBg}`}
+        className={`mb-2 hidden h-7 w-7 items-center justify-center rounded-md sm:inline-flex ${accentBg}`}
       >
         {icon}
       </div>
       <AutoFitText maxSize={20} minSize={14} className="h-6 font-black leading-6">{value}</AutoFitText>
-      <AutoFitText maxSize={11} minSize={8} className="mt-1 h-8 uppercase leading-4 tracking-wider text-muted-foreground">{label}</AutoFitText>
+      <span className="mt-1 text-[10px] leading-4 text-muted-foreground">{label}</span>
     </div>
   );
 }
