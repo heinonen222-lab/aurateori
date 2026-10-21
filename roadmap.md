@@ -1,7 +1,7 @@
 # Premium omdesign
 
 ## Gratisfrågor
-- [ ] Begränsa offentliga frågor globalt och verifiera träning, ämnen och repetition
+- [x] Begränsa offentliga frågor globalt och verifiera träning, ämnen och repetition
 
 ## Förbättringsbrief – oktober 2026
 - [x] Förfina global design och femdelad mobilnavigation utan att dölja befintliga sidor
