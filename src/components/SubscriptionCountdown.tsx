@@ -36,7 +36,7 @@ export function useSubscriptionCountdown() {
     daysLeft,
     renewsAt: fmtDate(end),
     planLabel: subscription ? (PLAN_LABEL[subscription.price_id] ?? subscription.price_id) : null,
-    planCycle: subscription ? (PLAN_CYCLE[subscription.price_id] ?? "Löpande abonnemang") : null,
+    planCycle: subscription ? ("provider" in subscription && subscription.provider === "google_play" ? "Förnyas via Google Play" : PLAN_CYCLE[subscription.price_id] ?? "Löpande abonnemang") : null,
     cancelAtPeriodEnd: Boolean(subscription?.cancel_at_period_end),
   };
 }

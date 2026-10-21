@@ -15,3 +15,6 @@
 - Package Android as a Bubblewrap TWA for `app.aurateori.android`; retain its upload key and increment versionCode for every upload so Play accepts updates.
 - Keep Android tooling and private signing material outside the web project; only encrypted signing backups may be delivered to the owner.
 - Treat a signed AAB as a test artifact until Play app-signing Digital Asset Links and Google Play Billing are configured; packaging alone does not make the Paddle web checkout Play-compliant.
+- Android checkout uses the Digital Goods API with server-side Android Publisher verification; web checkout stays on Paddle to keep provider ownership separate.
+- Play purchase tokens are server-only and atomically bound to one account; refresh Play entitlements before access and keep question-bank grants fresh for at most ten minutes to reject revoked purchases.
+- Billing-enabled Bubblewrap releases must use startUrl with `play=1` and retain that marker during navigation; unavailable Play Billing must never fall back to Paddle inside the Android package.

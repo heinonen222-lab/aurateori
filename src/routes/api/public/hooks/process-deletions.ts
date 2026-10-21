@@ -23,6 +23,8 @@ export const Route = createFileRoute("/api/public/hooks/process-deletions")({
 
         let deleted = 0;
         for (const { user_id } of due ?? []) {
+          const { error: playError } = await supabaseAdmin.from("google_play_subscriptions").delete().eq("user_id", user_id);
+          if (playError) continue;
           await supabaseAdmin.from("subscriptions").delete().eq("user_id", user_id);
           await supabaseAdmin.from("lesson_progress").delete().eq("user_id", user_id);
           await supabaseAdmin.from("profiles").delete().eq("id", user_id);

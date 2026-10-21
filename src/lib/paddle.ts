@@ -1,4 +1,5 @@
 import { resolvePaddlePrice } from "@/utils/payments.functions";
+import { getPlayService, isPlayContext } from "@/lib/play-billing";
 
 const clientToken = import.meta.env.VITE_PAYMENTS_CLIENT_TOKEN as string | undefined;
 
@@ -16,6 +17,7 @@ export function getPaddleEnvironment(): "sandbox" | "live" {
 let paddleInitialized = false;
 
 export async function initializePaddle() {
+  if (isPlayContext() || await getPlayService()) throw new Error("Använd Google Play för köp i Android-appen.");
   if (paddleInitialized) return;
 
   if (!clientToken) {

@@ -1,5 +1,6 @@
 import { createServerFn } from "@tanstack/react-start";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
+import { getPlaySubscription } from "@/utils/play-billing.functions";
 
 export type PaddleEnvInput = "sandbox" | "live";
 
@@ -58,6 +59,13 @@ function toMajorUnit(amount: string, currency: string): number {
 export const checkPremiumAccess = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
   .handler(async ({ context }): Promise<{ allowed: boolean }> => {
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const { data: playRows, error: playError } = await supabaseAdmin.from("google_play_subscriptions").select("purchase_token").eq("user_id", context.userId);
+    if (playError) throw new Error("Kunde inte kontrollera Google Play-abonnemanget.");
+    const { verifyPlayPurchase } = await import("@/lib/play-billing.server");
+    for (const row of playRows ?? []) {
+      try { if ((await verifyPlayPurchase(row.purchase_token)).allowed) return { allowed: true }; } catch { /* Fall back only to independently valid Paddle access. */ }
+    }
     const now = new Date().toISOString();
     const { data, error } = await context.supabase
       .from("subscriptions")
