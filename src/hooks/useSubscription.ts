@@ -3,12 +3,15 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { getPaddleEnvironment } from "@/lib/paddle";
 import { useAuth } from "@/hooks/useAuth";
+import { useServerFn } from "@tanstack/react-start";
+import { getPlaySubscription } from "@/utils/play-billing.functions";
 
 const ACTIVE = ["active", "trialing", "past_due"];
 
 export function useSubscription(options?: { pollUntilActive?: boolean }) {
   const { user } = useAuth();
   const queryClient = useQueryClient();
+  const fetchPlay = useServerFn(getPlaySubscription);
   const userId = user?.id;
   const environment = getPaddleEnvironment();
   const pollUntilActive = options?.pollUntilActive ?? false;
@@ -25,10 +28,13 @@ export function useSubscription(options?: { pollUntilActive?: boolean }) {
         }
       : false,
     queryFn: async () => {
+      if (!userId) return null;
+      const play = await fetchPlay({});
+      if (play) return play;
       const { data, error } = await supabase
         .from("subscriptions")
         .select("*")
-        .eq("user_id", userId!)
+        .eq("user_id", userId)
         .eq("environment", environment)
         .order("created_at", { ascending: false })
         .limit(1)

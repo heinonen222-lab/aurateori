@@ -13,6 +13,9 @@ export const deleteAccount = createServerFn({ method: "POST" })
     const userId = context.userId;
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
 
+    const { error: playError } = await supabaseAdmin.from("google_play_subscriptions").delete().eq("user_id", userId);
+    if (playError) throw new Error("Kunde inte ta bort Google Play-kopplingen.");
+
     const { error: subError } = await supabaseAdmin
       .from("subscriptions")
       .delete()

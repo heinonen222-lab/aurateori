@@ -15,6 +15,13 @@
       "when": 1792164539686,
       "tag": "0001_account_deletion_requests",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1792591551896,
+      "tag": "0002_google_play_subscriptions",
+      "breakpoints": true
     }
   ]
 }

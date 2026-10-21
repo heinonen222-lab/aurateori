@@ -10,6 +10,8 @@ import { useSubscription } from "@/hooks/useSubscription";
 import { SubscriptionCountdown } from "@/components/SubscriptionCountdown";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
+import { usePlayBilling } from "@/hooks/usePlayBilling";
+import { PlayBillingPlans } from "@/components/PlayBillingPlans";
 
 export const Route = createFileRoute("/priser")({
   head: () => ({
@@ -51,6 +53,7 @@ function PricingPage() {
   const { user } = useAuth();
   const { isActive } = useSubscription();
   const { openCheckout, loading, error } = usePaddleCheckout();
+  const play = usePlayBilling();
 
   const buy = (priceId: string) => {
     if (!user) {
@@ -64,6 +67,8 @@ function PricingPage() {
       successUrl: `${window.location.origin}/checkout/success`,
     });
   };
+
+  if (play.android) return <AppShell><PlayBillingPlans /></AppShell>;
 
   return (
     <AppShell>
