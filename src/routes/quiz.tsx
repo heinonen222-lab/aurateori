@@ -193,7 +193,7 @@ function QuizPage() {
             description={
               isError
                 ? "Kontrollera anslutningen och försök igen. Dina tidigare resultat påverkas inte."
-                : "Välj Alla för att fortsätta öva med hela frågebanken."
+                : isPremium ? "Välj Alla för att fortsätta öva med hela frågebanken." : "Försäkringsutbildningens tio frågor är gratis. Övriga ämnen kräver Premium."
             }
             tone={isError ? "danger" : "default"}
             actionLabel={isError ? "Försök igen" : "Visa alla frågor"}
@@ -202,6 +202,7 @@ function QuizPage() {
               else { setTopic(null); setCat("Alla"); }
             }}
           >
+            {!isPremium && !isError && <Button asChild className="mt-4"><Link to="/forsakring">Öppna gratis försäkringsutbildning</Link></Button>}
             {!isError && s.answers.length > 0 && (
               <div className="mt-5 w-full max-w-sm rounded-lg border border-sidebar-border bg-sidebar/55 p-4 text-left backdrop-blur">
                 <p className="text-xs font-bold uppercase text-premium">Dina resultat</p>
