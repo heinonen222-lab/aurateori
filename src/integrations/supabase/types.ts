@@ -80,6 +80,48 @@ export type Database = {
         }
         Relationships: []
       }
+      google_play_subscriptions: {
+        Row: {
+          cancel_at_period_end: boolean
+          created_at: string
+          current_period_end: string
+          current_period_start: string | null
+          plan_id: string
+          product_id: string
+          purchase_token: string
+          purchase_token_hash: string
+          status: string
+          user_id: string
+          verified_at: string
+        }
+        Insert: {
+          cancel_at_period_end?: boolean
+          created_at?: string
+          current_period_end: string
+          current_period_start?: string | null
+          plan_id: string
+          product_id: string
+          purchase_token: string
+          purchase_token_hash: string
+          status: string
+          user_id: string
+          verified_at?: string
+        }
+        Update: {
+          cancel_at_period_end?: boolean
+          created_at?: string
+          current_period_end?: string
+          current_period_start?: string | null
+          plan_id?: string
+          product_id?: string
+          purchase_token?: string
+          purchase_token_hash?: string
+          status?: string
+          user_id?: string
+          verified_at?: string
+        }
+        Relationships: []
+      }
       lesson_progress: {
         Row: {
           answered_checks: number
@@ -224,6 +266,20 @@ export type Database = {
           _user_id: string
         }
         Returns: boolean
+      }
+      save_google_play_purchase: {
+        Args: {
+          p_cancel: boolean
+          p_end: string
+          p_plan_id: string
+          p_product_id: string
+          p_start: string
+          p_status: string
+          p_token: string
+          p_token_hash: string
+          p_user_id: string
+        }
+        Returns: undefined
       }
       verify_cron_token: { Args: { _token: string }; Returns: boolean }
     }
