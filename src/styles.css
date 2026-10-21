@@ -10,7 +10,7 @@
   --radius-sm: calc(var(--radius) - 2px);
   --radius-md: var(--radius);
   --radius-lg: var(--radius);
-  --radius-xl: calc(var(--radius) + 2px);
+  --radius-xl: var(--radius);
   --radius-2xl: calc(var(--radius) + 4px);
   --radius-3xl: calc(var(--radius) + 6px);
   --color-background: var(--background);
@@ -71,7 +71,7 @@
   --accent-foreground: oklch(0.225 0.047 250);
   --destructive: oklch(0.6 0.22 25);
   --destructive-foreground: oklch(0.99 0 0);
-  --success: oklch(0.65 0.16 155);
+  --success: oklch(0.46 0.12 155);
   --success-foreground: oklch(0.99 0 0);
   --warning: oklch(0.76 0.14 83);
   --warning-foreground: oklch(0.2 0.05 60);
@@ -91,8 +91,8 @@
   --sidebar-accent-foreground: oklch(0.98 0.006 250);
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: oklch(0.76 0.14 83);
-  --premium: oklch(0.76 0.14 83);
-  --premium-foreground: oklch(0.2 0.04 250);
+  --premium: oklch(0.48 0.085 83);
+  --premium-foreground: oklch(0.99 0.005 83);
   --shadow-soft: 0 1px 2px oklch(0.2 0.04 250 / 5%), 0 8px 28px oklch(0.2 0.04 250 / 6%);
   --shadow-lifted: 0 2px 4px oklch(0.2 0.04 250 / 6%), 0 18px 46px oklch(0.2 0.04 250 / 10%);
 }
@@ -184,6 +184,7 @@
   h2,
   h3 {
     min-width: 0;
+    letter-spacing: 0;
   }
   p,
   li,
@@ -221,10 +222,7 @@
 }
 
 @utility aura-surface {
-  background:
-    radial-gradient(circle at 18% 10%, color-mix(in oklab, var(--premium) 16%, transparent), transparent 36%),
-    radial-gradient(circle at 88% 82%, color-mix(in oklab, var(--chart-1) 20%, transparent), transparent 42%),
-    var(--card);
+  background: var(--card);
 }
 
 /* Mörk Aura-cockpit för 3D-spelarens körkontroller – samma känsla i ljust
