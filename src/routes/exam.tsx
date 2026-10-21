@@ -1,16 +1,12 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState, useRef } from "react";
-import { useQuery } from "@tanstack/react-query";
+import { useQuestions } from "@/hooks/useQuestions";
 import { Timer, Trophy, XCircle, CheckCircle2, Crown, Lock, ExternalLink, Flag, ChevronLeft, ChevronRight } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { useSubscription } from "@/hooks/useSubscription";
 import { AppShell } from "@/components/AppShell";
 import { QuestionCard } from "@/components/QuestionCard";
 import { QUESTIONS, type Question } from "@/data/questions";
-import { EXAM_QUESTIONS } from "@/data/exam-questions";
-import { EXTRA_QUESTIONS } from "@/data/extra-questions";
-import { TRIAL_QUESTIONS } from "@/data/trial-questions";
-import { bankQuestionsQuery } from "@/lib/ai-questions";
 import { seededShuffle } from "@/lib/shuffle";
 import { store, useStore, examUsage } from "@/lib/store";
 import { checkPremiumAccess } from "@/utils/billing.functions";
@@ -34,12 +30,6 @@ export const Route = createFileRoute("/exam")({
       { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
-  loader: ({ context }) => {
-    // Bankfrågorna behövs för att bygga provet – hämta dem redan vid sikten hit.
-    if (typeof window !== "undefined") {
-      void context.queryClient.prefetchQuery(bankQuestionsQuery);
-    }
-  },
   component: ExamPage,
 });
 
@@ -103,7 +93,7 @@ function ExamPage() {
   const [marked, setMarked] = useState<string[]>([]);
   const [sessionExam, setSessionExam] = useState<Question[]>([]);
   const recorded = useRef(false);
-  const { data: bank } = useQuery(bankQuestionsQuery);
+  const { refetch: refreshQuestions } = useQuestions();
   const { user } = useAuth();
   const { isActive, loading: subLoading } = useSubscription();
   const appState = useStore();
@@ -128,11 +118,13 @@ function ExamPage() {
         setStartDenied(true);
         return;
       }
+      const { data: paidQuestions } = await refreshQuestions();
+      if (!paidQuestions?.length) { setStartDenied(true); return; }
       setPhase("running");
       setIdx(0);
       setChoices({});
       setMarked([]);
-      setSessionExam(buildExam(Date.now(), [...EXAM_QUESTIONS, ...QUESTIONS, ...EXTRA_QUESTIONS, ...(bank ?? [])], TRIAL_QUESTIONS));
+      setSessionExam(buildExam(Date.now(), [...QUESTIONS, ...paidQuestions], paidQuestions.filter((q) => q.trial)));
       recorded.current = false;
       setTime(SECONDS);
     } catch {
