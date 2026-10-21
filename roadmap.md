@@ -18,3 +18,8 @@
 - [x] Leverera AAB och säkerhetskopiering av uppladdningsnyckeln
 - [ ] Koppla publicerad webbplats till Play-signeringscertifikatet (väntar på Play Console)
 - [ ] Google Play Billing före produktionslansering (väntar på Play Console-konfiguration)
+
+## Android-köp
+- [ ] Separera Google Play-kassan från Paddle på webben
+- [ ] Verifiera Android-köp på servern och visa Premium på kontot
+- [ ] Testa köp och återställning via Google Play (väntar på Play-produkter, tjänstekonto, appsigneringscertifikat och ny Billing-aktiverad AAB)
