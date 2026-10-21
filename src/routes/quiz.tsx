@@ -115,7 +115,7 @@ function QuizPage() {
           </p>
         </div>
 
-        {!isPremium && <div className="flex flex-wrap items-center justify-between gap-3 border-y border-border py-3"><p className="text-sm text-muted-foreground">Gratis: 10 frågor totalt. Övriga frågor kräver Premium.</p><Button asChild variant="premium" size="sm"><Link to="/priser">Skaffa Premium</Link></Button></div>}
+        <div className="flex flex-wrap items-center justify-between gap-3 border-y border-border py-3"><p className="text-sm text-muted-foreground">Gratis: 10 försäkringsfrågor totalt.{!isPremium && " Övriga frågor kräver Premium."}</p><Button asChild variant="outline" size="sm"><Link to="/forsakring">Träna försäkring</Link></Button></div>
 
         <TrainingTopics questions={allQ} state={s} selected={topic} onSelect={(id) => { setTopic(id); setCat("Alla"); setIdx(0); setCorrectCount(0); setRepActive(false); }} />
 
