@@ -1,7 +1,7 @@
 # Premium omdesign
 
 ## Swish och BankID
-- [ ] Lägg till Swish på webben (väntar på företagsavtal/betalleverantör och val av engångsköp eller återkommande betalning)
+- [ ] Lägg till Swish-engångsköp för en Premium-period utan automatisk förnyelse (väntar på företagsavtal/betalleverantör)
 - [ ] Lägg till BankID-inloggning (väntar på BankID-leverantör med OIDC och anslutningsuppgifter)
 
 ## Gratisfrågor
