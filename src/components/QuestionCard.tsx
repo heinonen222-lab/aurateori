@@ -12,6 +12,8 @@ interface Props {
   showExplanation?: boolean;
   index?: number;
   total?: number;
+  selectedAnswer?: number;
+  examMode?: boolean;
 }
 
 export function QuestionCard({
@@ -21,12 +23,14 @@ export function QuestionCard({
   showExplanation = true,
   index,
   total,
+  selectedAnswer,
+  examMode = false,
 }: Props) {
-  const [selected, setSelected] = useState<number | null>(null);
+  const [selected, setSelected] = useState<number | null>(selectedAnswer ?? null);
   const answered = selected !== null;
 
   const pick = (i: number) => {
-    if (answered) return;
+    if (answered && !examMode) return;
     setSelected(i);
     onAnswer(i === question.correct, i);
   };
@@ -61,16 +65,19 @@ export function QuestionCard({
         {question.options.map((opt, i) => {
           const isCorrect = i === question.correct;
           const isChosen = selected === i;
-          const state = !answered ? "idle" : isCorrect ? "correct" : isChosen ? "wrong" : "muted";
+          const state = examMode ? (isChosen ? "chosen" : "idle") : !answered ? "idle" : isCorrect ? "correct" : isChosen ? "wrong" : "muted";
           return (
-            <button
+            <Button
+              variant="outline"
+              aria-pressed={selected === i}
               key={i}
               onClick={() => pick(i)}
-              disabled={answered}
+              disabled={answered && !examMode}
               className={cn(
-                "flex min-h-12 w-full items-center gap-3 rounded-lg border px-3.5 py-3 text-left text-sm leading-relaxed transition-[background-color,border-color,transform,box-shadow] duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring active:scale-[0.99] sm:px-4",
+                "flex h-auto min-h-12 w-full justify-start whitespace-normal disabled:opacity-100 items-center gap-3 rounded-lg border px-3.5 py-3 text-left text-sm leading-relaxed transition-[background-color,border-color,transform,box-shadow] duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring active:scale-[0.99] sm:px-4",
                 state === "idle" &&
                   "border-border bg-background hover:border-primary/50 hover:bg-primary/5",
+                state === "chosen" && "border-ring bg-accent text-accent-foreground",
                 state === "correct" && "border-success bg-success/10 text-foreground",
                 state === "wrong" && "border-destructive bg-destructive/10 text-foreground",
                 state === "muted" && "border-border bg-background opacity-60",
@@ -79,7 +86,8 @@ export function QuestionCard({
               <span
                 className={cn(
                   "grid h-6 w-6 shrink-0 place-items-center rounded-md border text-xs font-bold",
-                  state === "correct" && "border-success bg-success text-success-foreground",
+                  state === "chosen" && "border-ring bg-accent text-accent-foreground",
+                state === "correct" && "border-success bg-success text-success-foreground",
                   state === "wrong" &&
                     "border-destructive bg-destructive text-destructive-foreground",
                   (state === "idle" || state === "muted") && "border-border bg-secondary",
@@ -94,13 +102,15 @@ export function QuestionCard({
                 )}
               </span>
               <span className="flex-1">{opt}</span>
-            </button>
+            </Button>
           );
         })}
       </div>
 
-      {answered && showExplanation && (
-        <div className="mt-5 rounded-lg border border-border bg-secondary/60 p-4">
+      {answered && showExplanation && !examMode && (
+        <div className="mt-5 border-l-2 border-primary bg-secondary/60 p-4" role="status" aria-live="polite">
+          <p className="mb-2 flex items-center gap-2 text-sm font-bold">{selected === question.correct ? <Check className="h-4 w-4 text-success" /> : <X className="h-4 w-4 text-destructive" />}{selected === question.correct ? "Rätt svar!" : "Inte riktigt – förstå regeln och försök igen."}</p>
+          <p className="mb-3 text-sm"><strong>Rätt svar: </strong>{question.options[question.correct]}</p>
           <div className="mb-1 text-xs font-bold uppercase tracking-wider text-primary">
             Förklaring
           </div>
@@ -120,7 +130,7 @@ export function QuestionCard({
         </div>
       )}
 
-      {answered && (
+      {answered && !examMode && (
         <Button onClick={next} className="mt-5 w-full">
           Nästa fråga →
         </Button>

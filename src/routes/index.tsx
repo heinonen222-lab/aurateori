@@ -1,5 +1,13 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { Zap, Timer, Signpost, Flame, Target, CheckCircle2, ArrowRight, RotateCcw } from "lucide-react";
+import { useQuery } from "@tanstack/react-query";
+import { useNavigate } from "@tanstack/react-router";
+import { TrainingTopics } from "@/components/TrainingTopics";
+import { QUESTIONS } from "@/data/questions";
+import { EXAM_QUESTIONS } from "@/data/exam-questions";
+import { EXTRA_QUESTIONS } from "@/data/extra-questions";
+import { bankQuestionsQuery } from "@/lib/ai-questions";
+import { trainingSummary } from "@/lib/practice";
 import { AppShell } from "@/components/AppShell";
 import { AutoFitText } from "@/components/AutoFitText";
 import { SubscriptionCountdown } from "@/components/SubscriptionCountdown";
@@ -32,8 +40,8 @@ function Gauge({ value }: { value: number }) {
   const c = 2 * Math.PI * r;
   const offset = c - (value / 100) * c;
   return (
-    <div className="relative grid h-44 w-44 shrink-0 place-items-center sm:h-48 sm:w-48">
-      <svg viewBox="0 0 160 160" className="h-full w-full -rotate-90">
+    <div className="relative grid h-28 w-28 shrink-0 place-items-center sm:h-44 sm:w-44">
+      <svg viewBox="0 0 160 160" className="h-full w-full -rotate-90" aria-hidden="true">
         <circle cx="80" cy="80" r={r} fill="none" stroke="var(--muted)" strokeWidth="14" />
         <circle
           cx="80"
@@ -49,8 +57,8 @@ function Gauge({ value }: { value: number }) {
         />
       </svg>
       <div className="absolute text-center">
-        <div className="font-display text-4xl font-extrabold">{value}%</div>
-        <div className="mt-1 text-[10px] font-semibold uppercase text-muted-foreground">
+        <div className="font-display text-2xl font-extrabold sm:text-4xl">{value}%</div>
+        <div className="mt-1 text-[9px] font-semibold text-muted-foreground sm:text-[10px]">
           Körkortsklarhet
         </div>
       </div>
@@ -61,6 +69,10 @@ function Gauge({ value }: { value: number }) {
 function Dashboard() {
   const s = useStore();
   const stats = computeStats(s);
+  const summary = trainingSummary(s);
+  const navigate = useNavigate();
+  const { data: bank } = useQuery(bankQuestionsQuery);
+  const questions = [...QUESTIONS, ...EXAM_QUESTIONS, ...EXTRA_QUESTIONS, ...(bank ?? [])];
 
   return (
     <AppShell>
@@ -70,21 +82,21 @@ function Dashboard() {
             Personbil · Behörighet B
           </div>
           <h1 className="mt-2 font-display text-3xl font-extrabold leading-tight sm:text-4xl">
-            Din väg till körkortet
+            Ditt körkort börjar här.
           </h1>
           <p className="mt-2 max-w-xl text-sm leading-relaxed text-muted-foreground sm:text-base">
-            Träna smartare, se vad du behöver förbättra och följ din utveckling fram till provdagen.
+            Träna smartare. Förstå trafiken. Var redo för teoriprovet.
           </p>
           <div className="mt-5 grid grid-cols-1 gap-3 sm:flex sm:flex-row sm:items-center">
             <Button asChild size="lg" className="h-12 w-full text-base sm:w-auto">
               <Link to="/quiz">
-                Börja träna
+                Fortsätt träna
                 <Zap className="h-4 w-4" />
               </Link>
             </Button>
             <Button asChild variant="outline" size="lg" className="h-12 w-full text-base sm:w-auto">
               <Link to="/exam">
-                Gör provet
+                Starta teoriprov
                 <Timer className="h-4 w-4" />
               </Link>
             </Button>
@@ -93,17 +105,17 @@ function Dashboard() {
 
         <SubscriptionCountdown compact />
 
-        <div className="aura-surface relative overflow-hidden rounded-xl border border-border p-5 shadow-lifted sm:grid sm:grid-cols-[auto_minmax(0,1fr)] sm:items-center sm:gap-10 sm:p-8">
-          <div className="relative z-10 mx-auto w-fit sm:mx-0"><Gauge value={stats.readiness} /></div>
-          <div className="relative z-10 mt-5 min-w-0 sm:mt-0">
+        <div className="relative grid grid-cols-[auto_minmax(0,1fr)] items-center gap-4 border-y border-border py-5 sm:gap-8">
+          <div className="relative z-10 w-fit"><Gauge value={stats.readiness} /></div>
+          <div className="relative z-10 min-w-0">
             <div className="mb-4 flex items-end justify-between gap-4">
               <div>
-                <h2 className="font-display text-xl font-bold">Dagens översikt</h2>
+                <h2 className="font-display text-base font-bold sm:text-xl">Dagens översikt</h2>
                 <p className="mt-1 text-sm text-muted-foreground">Målet är 80 % körkortsklarhet.</p>
               </div>
               <span className="hidden rounded-md bg-premium px-2.5 py-1 text-xs font-bold text-premium-foreground sm:inline-flex">Mål 80 %</span>
             </div>
-            <div className="grid min-w-0 grid-cols-3 divide-x divide-border overflow-hidden rounded-lg border border-border bg-background/70 backdrop-blur">
+            <div className="grid min-w-0 grid-cols-2 gap-3 sm:grid-cols-4">
             <Stat
               icon={<Target className="h-4 w-4" />}
               label="Frågor"
@@ -118,13 +130,19 @@ function Dashboard() {
             />
             <Stat
               icon={<Flame className="h-4 w-4" />}
-              label="Streak"
-              value={`${s.streak}d`}
+              label="Träningsdagar"
+              value={summary.trainingDays}
               accent="warning"
             />
+            <Stat icon={<Timer className="h-4 w-4" />} label="Senaste prov" value={summary.latestExam ? `${summary.latestExam.correct}/${summary.latestExam.total}` : "–"} accent="primary" />
             </div>
           </div>
         </div>
+
+        <section className="space-y-4">
+          <div className="flex items-center justify-between gap-3"><h2 className="font-display text-xl font-bold">Dina kunskapsområden</h2><Button asChild variant="ghost" size="sm"><Link to="/stats">Statistik <ArrowRight /></Link></Button></div>
+          <TrainingTopics questions={questions} state={s} onSelect={(topic) => void navigate({ to: "/quiz", search: { topic } })} />
+        </section>
 
         <div>
           <div className="mb-4 grid grid-cols-[minmax(0,1fr)_auto] items-end gap-4">
@@ -144,14 +162,14 @@ function Dashboard() {
             to="/exam"
             icon={<Timer className="h-5 w-5" />}
             title="Fullständigt prov"
-            desc="65 frågor på 50 minuter – som riktigt provet."
+            desc="70 frågor · 50 minuter · 65 poänggrundande."
             highlight
           />
           <ActionCard
             to="/signs"
             icon={<Signpost className="h-5 w-5" />}
             title="Vägmärken"
-            desc="Bläddra bland alla svenska vägmärken."
+            desc="Lär dig märkenas betydelse och regler."
           />
           </div>
         </div>
@@ -193,14 +211,14 @@ function Stat({
     warning: "bg-warning/20 text-warning-foreground",
   }[accent];
   return (
-    <div className="flex min-w-0 flex-col overflow-hidden px-3 py-3 sm:px-4">
+    <div className="flex min-w-0 flex-col overflow-hidden">
       <div
-        className={`mb-2 inline-flex h-7 w-7 items-center justify-center rounded-md ${accentBg}`}
+        className={`mb-2 hidden h-7 w-7 items-center justify-center rounded-md sm:inline-flex ${accentBg}`}
       >
         {icon}
       </div>
       <AutoFitText maxSize={20} minSize={14} className="h-6 font-black leading-6">{value}</AutoFitText>
-      <AutoFitText maxSize={11} minSize={8} className="mt-1 h-8 uppercase leading-4 tracking-wider text-muted-foreground">{label}</AutoFitText>
+      <span className="mt-1 text-[10px] leading-4 text-muted-foreground">{label}</span>
     </div>
   );
 }

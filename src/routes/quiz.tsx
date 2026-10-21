@@ -2,6 +2,8 @@ import { createFileRoute } from "@tanstack/react-router";
 import type { ReactNode } from "react";
 import { useMemo, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
+import { TrainingTopics } from "@/components/TrainingTopics";
+import { TOPICS, matchesTopic, type TopicId } from "@/lib/practice";
 import { AppShell } from "@/components/AppShell";
 import { QuestionCard } from "@/components/QuestionCard";
 import { QUESTIONS, type QuestionCategory } from "@/data/questions";
@@ -17,6 +19,7 @@ import { BookOpenCheck, RefreshCcw, RotateCcw, TriangleAlert } from "lucide-reac
 import { AuraState } from "@/components/AuraState";
 
 export const Route = createFileRoute("/quiz")({
+  validateSearch: (search: Record<string, unknown>): { topic?: TopicId } => ({ topic: TOPICS.find((topic) => topic.id === search.topic)?.id }),
   head: () => ({
     meta: [
       { title: "Övningsfrågor – Aurateori" },
@@ -52,6 +55,8 @@ const CATEGORIES: (QuestionCategory | "Alla")[] = [
 ];
 
 function QuizPage() {
+  const search = Route.useSearch();
+  const [topic, setTopic] = useState<TopicId | null>(search.topic ?? null);
   const [cat, setCat] = useState<QuestionCategory | "Alla">("Alla");
   const [idx, setIdx] = useState(0);
   const [correctCount, setCorrectCount] = useState(0);
@@ -67,9 +72,9 @@ function QuizPage() {
 
   const pool = useMemo(() => {
     const all = [...EXAM_QUESTIONS, ...QUESTIONS, ...EXTRA_QUESTIONS, ...(bank ?? [])];
-    const list = cat === "Alla" ? all : all.filter((q) => q.category === cat);
+    const list = topic ? all.filter((q) => matchesTopic(q, topic)) : cat === "Alla" ? all : all.filter((q) => q.category === cat);
     return seededShuffle(list, seed);
-  }, [cat, seed, bank]);
+  }, [cat, topic, seed, bank]);
 
   // Användarens egna frågor: allt som ligger i repetitions-kön och går att lösa.
   const repPool = useMemo(
@@ -121,11 +126,16 @@ function QuizPage() {
           </p>
         </div>
 
+        <TrainingTopics questions={allQ} state={s} selected={topic} onSelect={(id) => { setTopic(id); setCat("Alla"); setIdx(0); setCorrectCount(0); setRepActive(false); }} />
+
         <div className="no-scrollbar -mx-4 flex gap-2 overflow-x-auto px-4 pb-1 lg:mx-0 lg:flex-wrap lg:px-0">
           {CATEGORIES.map((c) => (
-            <button
+            <Button
+              variant="outline"
+              aria-pressed={!topic && cat === c}
               key={c}
               onClick={() => {
+                setTopic(null);
                 setCat(c);
                 setIdx(0);
                 setCorrectCount(0);
@@ -133,13 +143,13 @@ function QuizPage() {
               }}
               className={cn(
                 "min-h-11 shrink-0 rounded-lg border px-4 py-2 text-xs font-semibold transition-[background-color,border-color,color] focus-visible:ring-2 focus-visible:ring-ring",
-                cat === c
+                !topic && cat === c
                   ? "border-primary bg-primary text-primary-foreground"
                   : "border-border bg-card hover:border-primary/40",
               )}
             >
               {c}
-            </button>
+            </Button>
           ))}
         </div>
 
@@ -198,7 +208,7 @@ function QuizPage() {
             actionLabel={isError ? "Försök igen" : "Visa alla frågor"}
             onAction={() => {
               if (isError) void refetch();
-              else setCat("Alla");
+              else { setTopic(null); setCat("Alla"); }
             }}
           >
             {!isError && s.answers.length > 0 && (

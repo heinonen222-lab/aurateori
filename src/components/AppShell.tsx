@@ -13,8 +13,10 @@ import {
   Crown,
   Menu,
   X,
+  UserRound,
   Sparkles,
 } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import { store, useStore } from "@/lib/store";
 import { cn } from "@/lib/utils";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
@@ -22,18 +24,19 @@ import { LegalFooter } from "@/components/LegalFooter";
 import { AccountMenu } from "@/components/AccountMenu";
 
 const NAV = [
-  { to: "/", label: "Start", icon: Home },
-  { to: "/quiz", label: "Övning", icon: BookOpen },
+  { to: "/", label: "Hem", icon: Home },
+  { to: "/quiz", label: "Teori", icon: BookOpen },
   { to: "/exam", label: "Prov", icon: Timer },
   { to: "/signs", label: "Vägmärken", icon: Signpost },
   { to: "/flashcards", label: "Snabbplugg", icon: Layers },
   { to: "/genomgangar", label: "Genomgång", icon: GraduationCap },
   { to: "/stats", label: "Statistik", icon: BarChart3 },
   { to: "/priser", label: "Premium", icon: Crown },
+  { to: "/konto", label: "Profil", icon: UserRound },
 ] as const;
 
-const PRIMARY_NAV = NAV.slice(0, 4);
-const MORE_NAV = NAV.slice(4);
+const PRIMARY_NAV = [NAV[0], NAV[1], NAV[2], NAV[3], NAV[8]];
+const MORE_NAV = NAV.slice(4, 8);
 
 function NavLink({
   item,
@@ -127,18 +130,19 @@ export function AppShell({ children }: { children: ReactNode }) {
         <div className="mt-auto border-t border-border pt-3">
           <AccountMenu />
         </div>
-        <button
+        <Button
+          variant="ghost"
           onClick={() => store.toggleTheme()}
           className="mt-1 flex min-h-11 items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium text-sidebar-foreground/65 transition-colors hover:bg-sidebar-accent hover:text-sidebar-accent-foreground focus-visible:ring-sidebar-ring"
         >
           {s.theme === "dark" ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
           {s.theme === "dark" ? "Ljust läge" : "Mörkt läge"}
-        </button>
+        </Button>
       </aside>
 
       {/* Mobile top bar */}
       <header className="sticky top-0 z-20 grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3 border-b border-border bg-background/90 px-4 py-2.5 backdrop-blur-xl lg:hidden">
-        <Link to="/" className="flex min-h-11 min-w-0 items-center gap-2.5 rounded-lg focus-visible:ring-2 focus-visible:ring-ring">
+        <Link to="/" className="mr-12 flex min-h-11 min-w-0 items-center gap-2.5 rounded-lg focus-visible:ring-2 focus-visible:ring-ring">
           <img
             src="/apple-touch-icon.png"
             alt="Aurateori"
@@ -146,13 +150,14 @@ export function AppShell({ children }: { children: ReactNode }) {
           />
           <span className="truncate font-display text-base font-extrabold">Aurateori</span>
         </Link>
-        <button
+        <Button
+          variant="ghost"
           onClick={() => store.toggleTheme()}
           aria-label="Byt tema"
           className="grid h-11 w-11 shrink-0 place-items-center rounded-lg border border-border bg-card transition-colors hover:bg-accent focus-visible:ring-2 focus-visible:ring-ring"
         >
           {s.theme === "dark" ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
-        </button>
+        </Button>
       </header>
 
       <main id="innehall" className="pb-[calc(5rem+env(safe-area-inset-bottom))] lg:ml-60 lg:pb-10">
@@ -169,18 +174,22 @@ export function AppShell({ children }: { children: ReactNode }) {
             const active = n.to === "/" ? pathname === "/" : pathname.startsWith(n.to);
             return <NavLink key={n.to} item={n} active={active} />;
           })}
+        </div>
+      </nav>
+      <div className="fixed right-17 top-3.5 z-30 lg:hidden">
           <Sheet open={moreOpen} onOpenChange={setMoreOpen}>
             <SheetTrigger asChild>
-              <button
+              <Button
+                variant="ghost"
                 className={cn(
-                  "flex min-h-11 flex-col items-center justify-center gap-0.5 rounded-lg px-0.5 py-2 text-[10px] font-semibold transition-colors focus-visible:ring-2 focus-visible:ring-ring",
+                  "flex h-11 w-11 min-h-11 flex-col items-center justify-center gap-0.5 rounded-lg px-0.5 py-2 text-[10px] font-semibold transition-colors focus-visible:ring-2 focus-visible:ring-ring",
                   isMoreActive ? "text-foreground" : "text-muted-foreground hover:text-foreground",
                 )}
                 aria-label="Fler sidor"
               >
                 {moreOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
-                <span>Mer</span>
-              </button>
+                <span className="sr-only">Mer</span>
+              </Button>
             </SheetTrigger>
             <SheetContent side="bottom" className="rounded-t-xl px-4 pb-[calc(1.5rem+env(safe-area-inset-bottom))] pt-4">
               <SheetHeader className="sr-only">
@@ -203,7 +212,7 @@ export function AppShell({ children }: { children: ReactNode }) {
               <div className="mt-4 border-t border-border pt-4">
                 <AccountMenu variant="sheet" onNavigate={() => setMoreOpen(false)} />
               </div>
-              <button
+              <Button
                 onClick={() => {
                   store.toggleTheme();
                   setMoreOpen(false);
@@ -219,11 +228,10 @@ export function AppShell({ children }: { children: ReactNode }) {
                     <Moon className="h-4 w-4" /> Mörkt läge
                   </>
                 )}
-              </button>
+              </Button>
             </SheetContent>
           </Sheet>
-        </div>
-      </nav>
+      </div>
     </div>
   );
 }
