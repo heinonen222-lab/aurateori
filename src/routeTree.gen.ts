@@ -14,6 +14,7 @@ import { Route as AdminRouteImport } from './routes/admin'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as ExamRouteImport } from './routes/exam'
 import { Route as FlashcardsRouteImport } from './routes/flashcards'
+import { Route as ForsakringRouteImport } from './routes/forsakring'
 import { Route as GenomgangarRouteImport } from './routes/genomgangar'
 import { Route as KontoRouteImport } from './routes/konto'
 import { Route as PriserRouteImport } from './routes/priser'
@@ -53,6 +54,11 @@ const ExamRoute = ExamRouteImport.update({
 const FlashcardsRoute = FlashcardsRouteImport.update({
   id: '/flashcards',
   path: '/flashcards',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ForsakringRoute = ForsakringRouteImport.update({
+  id: '/forsakring',
+  path: '/forsakring',
   getParentRoute: () => rootRouteImport,
 } as any)
 const GenomgangarRoute = GenomgangarRouteImport.update({
@@ -139,6 +145,7 @@ export interface FileRoutesByFullPath {
   '/auth': typeof AuthRoute
   '/exam': typeof ExamRoute
   '/flashcards': typeof FlashcardsRoute
+  '/forsakring': typeof ForsakringRoute
   '/genomgangar': typeof GenomgangarRoute
   '/konto': typeof KontoRoute
   '/priser': typeof PriserRoute
@@ -161,6 +168,7 @@ export interface FileRoutesByTo {
   '/auth': typeof AuthRoute
   '/exam': typeof ExamRoute
   '/flashcards': typeof FlashcardsRoute
+  '/forsakring': typeof ForsakringRoute
   '/genomgangar': typeof GenomgangarRoute
   '/konto': typeof KontoRoute
   '/priser': typeof PriserRoute
@@ -184,6 +192,7 @@ export interface FileRoutesById {
   '/auth': typeof AuthRoute
   '/exam': typeof ExamRoute
   '/flashcards': typeof FlashcardsRoute
+  '/forsakring': typeof ForsakringRoute
   '/genomgangar': typeof GenomgangarRoute
   '/konto': typeof KontoRoute
   '/priser': typeof PriserRoute
@@ -208,6 +217,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/exam'
     | '/flashcards'
+    | '/forsakring'
     | '/genomgangar'
     | '/konto'
     | '/priser'
@@ -230,6 +240,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/exam'
     | '/flashcards'
+    | '/forsakring'
     | '/genomgangar'
     | '/konto'
     | '/priser'
@@ -252,6 +263,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/exam'
     | '/flashcards'
+    | '/forsakring'
     | '/genomgangar'
     | '/konto'
     | '/priser'
@@ -275,6 +287,7 @@ export interface RootRouteChildren {
   AuthRoute: typeof AuthRoute
   ExamRoute: typeof ExamRoute
   FlashcardsRoute: typeof FlashcardsRoute
+  ForsakringRoute: typeof ForsakringRoute
   GenomgangarRoute: typeof GenomgangarRoute
   KontoRoute: typeof KontoRoute
   PriserRoute: typeof PriserRoute
@@ -327,6 +340,13 @@ declare module '@tanstack/react-router' {
       path: '/flashcards'
       fullPath: '/flashcards'
       preLoaderRoute: typeof FlashcardsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/forsakring': {
+      id: '/forsakring'
+      path: '/forsakring'
+      fullPath: '/forsakring'
+      preLoaderRoute: typeof ForsakringRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/genomgangar': {
@@ -443,6 +463,7 @@ const rootRouteChildren: RootRouteChildren = {
   AuthRoute: AuthRoute,
   ExamRoute: ExamRoute,
   FlashcardsRoute: FlashcardsRoute,
+  ForsakringRoute: ForsakringRoute,
   GenomgangarRoute: GenomgangarRoute,
   KontoRoute: KontoRoute,
   PriserRoute: PriserRoute,

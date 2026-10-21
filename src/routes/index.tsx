@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { Zap, Timer, Signpost, Flame, Target, CheckCircle2, ArrowRight, RotateCcw } from "lucide-react";
+import { Zap, Timer, Signpost, Flame, Target, CheckCircle2, ArrowRight, RotateCcw, ShieldCheck } from "lucide-react";
 import { useQuestions } from "@/hooks/useQuestions";
 import { useNavigate } from "@tanstack/react-router";
 import { TrainingTopics } from "@/components/TrainingTopics";
@@ -99,6 +99,11 @@ function Dashboard() {
         </header>
 
         <SubscriptionCountdown compact />
+
+        <section className="flex flex-wrap items-center justify-between gap-4 border-y border-border py-4">
+          <div className="flex items-start gap-3"><ShieldCheck className="mt-1 h-6 w-6 shrink-0 text-success" /><div><h2 className="text-base font-bold">Gratis försäkringsutbildning</h2><p className="mt-1 text-sm text-muted-foreground">10 frågor med förklaringar · Ingen Premium krävs</p></div></div>
+          <Button asChild variant="outline"><Link to="/forsakring">Träna försäkring <ArrowRight /></Link></Button>
+        </section>
 
         <div className="relative grid grid-cols-[auto_minmax(0,1fr)] items-center gap-4 border-y border-border py-5 sm:gap-8">
           <div className="relative z-10 w-fit"><Gauge value={stats.readiness} /></div>

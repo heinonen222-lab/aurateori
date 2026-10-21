@@ -115,7 +115,7 @@ function QuizPage() {
           </p>
         </div>
 
-        {!isPremium && <div className="flex flex-wrap items-center justify-between gap-3 border-y border-border py-3"><p className="text-sm text-muted-foreground">Gratis: 10 frågor totalt. Övriga frågor kräver Premium.</p><Button asChild variant="premium" size="sm"><Link to="/priser">Skaffa Premium</Link></Button></div>}
+        <div className="flex flex-wrap items-center justify-between gap-3 border-y border-border py-3"><p className="text-sm text-muted-foreground">Gratis: 10 försäkringsfrågor totalt.{!isPremium && " Övriga frågor kräver Premium."}</p><Button asChild variant="outline" size="sm"><Link to="/forsakring">Träna försäkring</Link></Button></div>
 
         <TrainingTopics questions={allQ} state={s} selected={topic} onSelect={(id) => { setTopic(id); setCat("Alla"); setIdx(0); setCorrectCount(0); setRepActive(false); }} />
 
@@ -193,7 +193,7 @@ function QuizPage() {
             description={
               isError
                 ? "Kontrollera anslutningen och försök igen. Dina tidigare resultat påverkas inte."
-                : "Välj Alla för att fortsätta öva med hela frågebanken."
+                : isPremium ? "Välj Alla för att fortsätta öva med hela frågebanken." : "Försäkringsutbildningens tio frågor är gratis. Övriga ämnen kräver Premium."
             }
             tone={isError ? "danger" : "default"}
             actionLabel={isError ? "Försök igen" : "Visa alla frågor"}
@@ -202,6 +202,7 @@ function QuizPage() {
               else { setTopic(null); setCat("Alla"); }
             }}
           >
+            {!isPremium && !isError && <Button asChild className="mt-4"><Link to="/forsakring">Öppna gratis försäkringsutbildning</Link></Button>}
             {!isError && s.answers.length > 0 && (
               <div className="mt-5 w-full max-w-sm rounded-lg border border-sidebar-border bg-sidebar/55 p-4 text-left backdrop-blur">
                 <p className="text-xs font-bold uppercase text-premium">Dina resultat</p>

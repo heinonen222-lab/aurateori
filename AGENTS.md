@@ -21,6 +21,7 @@
 
 ## Learning experience
 - Keep paid question data behind authorized server-function imports; all practice, dashboard and repetition views share the same accessible question inventory.
+- The free insurance module uses the same public question inventory and progress store as practice; superseded free questions remain server-authorized paid content to preserve saved question IDs.
 - Install bounded module-load recovery in the HTML head before app entry execution; React boundaries cannot catch failed bootstrap imports.
 - Derive dashboard and topic progress from existing answer/exam logs; topic filters map existing questions without changing stored categories, preserving saved results.
 - Keep exam choices keyed by question ID in a frozen session question set; commit outcomes once at submission, allowing revisits without duplicate scoring.
