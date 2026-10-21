@@ -14,10 +14,12 @@ declare global {
 }
 
 export function isPlayContext() {
-  return typeof window !== "undefined" && (
-    new URLSearchParams(window.location.search).get("play") === "1" ||
-    document.referrer.startsWith(`android-app://${PLAY_PACKAGE}`)
-  );
+  if (typeof window === "undefined") return false;
+  const detected = new URLSearchParams(window.location.search).get("play") === "1" || document.referrer.startsWith(`android-app://${PLAY_PACKAGE}`);
+  try {
+    if (detected) window.sessionStorage.setItem("aurateori-play", "1");
+    return detected || window.sessionStorage.getItem("aurateori-play") === "1";
+  } catch { return detected; }
 }
 
 export async function getPlayService() {

@@ -16,15 +16,15 @@ export const verifyPlayCheckout = createServerFn({ method: "POST" })
       if (error) throw new Error("Kunde inte kontrollera köpets konto.");
       if (owner && owner.user_id !== context.userId) throw new Error("Köpet är redan kopplat till ett annat Aurateori-konto.");
     }
-    await verified.acknowledge();
     const { error } = await supabaseAdmin.rpc("save_google_play_purchase", {
       p_token_hash: await tokenHash(data.purchaseToken), p_token: data.purchaseToken, p_user_id: context.userId,
       p_product_id: verified.item.productId, p_plan_id: data.productId,
       p_status: verified.purchase.subscriptionState === "SUBSCRIPTION_STATE_IN_GRACE_PERIOD" ? "past_due" : verified.purchase.subscriptionState === "SUBSCRIPTION_STATE_CANCELED" ? "canceled" : verified.allowed ? "active" : "expired",
-      p_start: verified.purchase.startTime ?? null, p_end: verified.item.expiryTime,
+      p_start: verified.purchase.startTime, p_end: verified.item.expiryTime,
       p_cancel: verified.purchase.subscriptionState === "SUBSCRIPTION_STATE_CANCELED",
     });
     if (error) throw new Error("Kunde inte spara köpet på kontot. Försök återställa köpet.");
+    await verified.acknowledge();
     return { allowed: verified.allowed };
   });
 

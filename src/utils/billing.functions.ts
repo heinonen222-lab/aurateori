@@ -1,6 +1,5 @@
 import { createServerFn } from "@tanstack/react-start";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
-import { getPlaySubscription } from "@/utils/play-billing.functions";
 
 export type PaddleEnvInput = "sandbox" | "live";
 

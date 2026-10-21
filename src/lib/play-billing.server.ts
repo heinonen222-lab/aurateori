@@ -3,7 +3,7 @@ import { PLAY_PACKAGE, PLAY_PLANS, playEntitled } from "./play-billing";
 type PlayPurchase = {
   subscriptionState: string;
   acknowledgementState: string;
-  startTime?: string;
+  startTime: string;
   linkedPurchaseToken?: string;
   lineItems: { productId: string; expiryTime: string; autoRenewingPlan?: { autoRenewEnabled?: boolean } }[];
 };
@@ -41,7 +41,7 @@ export async function verifyPlayPurchase(token: string, expectedProduct?: string
   if (!response.ok) throw new Error(`Google Play kunde inte verifiera köpet (${response.status}).`);
   const purchase = await response.json() as PlayPurchase;
   const item = purchase.lineItems?.filter((line) => (PLAY_PLANS as readonly string[]).includes(line.productId)).sort((a,b) => Date.parse(b.expiryTime) - Date.parse(a.expiryTime))[0];
-  if (!item || (expectedProduct && item.productId !== expectedProduct) || !Number.isFinite(Date.parse(item.expiryTime))) throw new Error("Köpet gäller inte en giltig Aurateori-plan.");
+  if (!item || (expectedProduct && item.productId !== expectedProduct) || !Number.isFinite(Date.parse(item.expiryTime)) || !Number.isFinite(Date.parse(purchase.startTime))) throw new Error("Köpet gäller inte en giltig Aurateori-plan.");
   const allowed = playEntitled(purchase.subscriptionState, item.expiryTime);
   return {
     purchase, item, allowed,
