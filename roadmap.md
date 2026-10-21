@@ -1,5 +1,9 @@
 # Premium omdesign
 
+## Swish och BankID
+- [ ] Lägg till Swish på webben (väntar på företagsavtal/betalleverantör och val av engångsköp eller återkommande betalning)
+- [ ] Lägg till BankID-inloggning (väntar på BankID-leverantör med OIDC och anslutningsuppgifter)
+
 ## Gratisfrågor
 - [x] Begränsa offentliga frågor globalt och verifiera träning, ämnen och repetition
 - [x] Ersätt gratisfrågorna med tio källkontrollerade försäkringsfrågor och en tillgänglig gratismodul; testa resultat och totalgräns
