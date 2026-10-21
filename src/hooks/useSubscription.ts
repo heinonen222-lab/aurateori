@@ -1,3 +1,4 @@
+// @refresh reset
 import { useEffect } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
@@ -26,7 +27,7 @@ export function useSubscription(options?: { pollUntilActive?: boolean }) {
           const active = row ? ACTIVE.includes(row.status ?? "") : false;
           return active ? false : 2000;
         }
-      : false,
+      : 5 * 60_000,
     queryFn: async () => {
       if (!userId) return null;
       const play = await fetchPlay({});

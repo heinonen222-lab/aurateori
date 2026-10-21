@@ -20,6 +20,8 @@
 - [ ] Google Play Billing före produktionslansering (väntar på Play Console-konfiguration)
 
 ## Android-köp
-- [ ] Separera Google Play-kassan från Paddle på webben
-- [ ] Verifiera Android-köp på servern och visa Premium på kontot
+- [x] Besvara iPhone-uppladdning: Play Console kan användas i webbläsare; Android behövs för riktig enhetstestning
+- [x] Kontrollera kontomenyns hook-krasch och återställ dess tillstånd vid utvecklingsuppdateringar
+- [x] Separera Google Play-kassan från Paddle på webben
+- [x] Implementera serververifiering och Premium-visning för Android-köp (aktivering ej testad utan Google-tjänstekonto)
 - [ ] Testa köp och återställning via Google Play (väntar på Play-produkter, tjänstekonto, appsigneringscertifikat och ny Billing-aktiverad AAB)
