@@ -2,7 +2,7 @@
 
 ## Gratisfrågor
 - [x] Begränsa offentliga frågor globalt och verifiera träning, ämnen och repetition
-- [ ] Ersätt gratisfrågorna med tio källkontrollerade försäkringsfrågor och en tillgänglig gratismodul; testa resultat och totalgräns
+- [x] Ersätt gratisfrågorna med tio källkontrollerade försäkringsfrågor och en tillgänglig gratismodul; testa resultat och totalgräns
 
 ## Förbättringsbrief – oktober 2026
 - [x] Förfina global design och femdelad mobilnavigation utan att dölja befintliga sidor
