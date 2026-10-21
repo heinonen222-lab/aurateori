@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { Timer, Trophy, XCircle, CheckCircle2, Crown, Lock, ExternalLink } from "lucide-react";
+import { Timer, Trophy, XCircle, CheckCircle2, Crown, Lock, ExternalLink, Flag, ChevronLeft, ChevronRight } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { useSubscription } from "@/hooks/useSubscription";
 import { AppShell } from "@/components/AppShell";
@@ -14,6 +14,8 @@ import { bankQuestionsQuery } from "@/lib/ai-questions";
 import { seededShuffle } from "@/lib/shuffle";
 import { store, useStore, examUsage } from "@/lib/store";
 import { checkPremiumAccess } from "@/utils/billing.functions";
+import { scoreExam } from "@/lib/exam-session";
+import { Progress } from "@/components/ui/progress";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 
@@ -68,7 +70,8 @@ function buildExam(seed: number, source: Question[], trialSource: Question[]) {
   }
   // Fallback padding if the pool is smaller than the scored exam length.
   for (let i = 0; picked.length < SCORED; i++) {
-    const src = pool[i % pool.length]!;
+    const src = pool[i % pool.length];
+    if (!src) break;
     picked.push({ ...src, id: `${src.id}-e${i}` });
   }
   // Add the 5 non-scored test questions ("testfrågor") so the exam is 70 questions.
@@ -76,7 +79,8 @@ function buildExam(seed: number, source: Question[], trialSource: Question[]) {
     .slice(0, TRIAL)
     .map((q) => ({ ...q, trial: true as const }));
   for (let i = 0; trials.length < TRIAL; i++) {
-    const src = trialSource[i % trialSource.length]!;
+    const src = trialSource[i % trialSource.length];
+    if (!src) break;
     trials.push({ ...src, id: `${src.id}-t${i}`, trial: true as const });
   }
   return seededShuffle([...picked, ...trials], seed);
@@ -95,8 +99,10 @@ function ExamPage() {
   const [phase, setPhase] = useState<"intro" | "running" | "done">("intro");
   const [idx, setIdx] = useState(0);
   const [time, setTime] = useState(SECONDS);
-  const [results, setResults] = useState<Result[]>([]);
-  const [seed, setSeed] = useState(0);
+  const [choices, setChoices] = useState<Record<string, number>>({});
+  const [marked, setMarked] = useState<string[]>([]);
+  const [sessionExam, setSessionExam] = useState<Question[]>([]);
+  const recorded = useRef(false);
   const { data: bank } = useQuery(bankQuestionsQuery);
   const { user } = useAuth();
   const { isActive, loading: subLoading } = useSubscription();
@@ -118,10 +124,12 @@ function ExamPage() {
         setStartDenied(true);
         return;
       }
-      setSeed((n) => n + 1);
       setPhase("running");
       setIdx(0);
-      setResults([]);
+      setChoices({});
+      setMarked([]);
+      setSessionExam(buildExam(Date.now(), [...EXAM_QUESTIONS, ...QUESTIONS, ...EXTRA_QUESTIONS, ...(bank ?? [])], TRIAL_QUESTIONS));
+      recorded.current = false;
       setTime(SECONDS);
     } catch {
       setStartDenied(true);
@@ -129,24 +137,21 @@ function ExamPage() {
       setStarting(false);
     }
   };
-  const exam = useMemo(
-    () =>
-      buildExam(
-        seed,
-        [...EXAM_QUESTIONS, ...QUESTIONS, ...EXTRA_QUESTIONS, ...(bank ?? [])],
-        TRIAL_QUESTIONS,
-      ),
-    [seed, bank],
-  );
-
-  const scoredResults = results.filter((r) => !r.trial);
-  const correctCountRef = scoredResults.filter((r) => r.correct).length;
+  const exam = sessionExam;
+  const results: Result[] = exam.map((question) => ({ qid: question.id, category: question.category, correct: choices[question.id] === question.correct, chosen: choices[question.id] ?? -1, q: question, trial: Boolean(question.trial) }));
+  const scoredResults = results.filter((result) => !result.trial);
+  const score = scoreExam(exam, choices);
+  const current = exam[idx];
+  const answeredCount = Object.keys(choices).length;
   useEffect(() => {
-    if (phase !== "done") return;
-    store.recordExamAttempt(correctCountRef, scoredResults.length, correctCountRef >= PASS);
+    if (phase !== "done" || recorded.current) return;
+    recorded.current = true;
+    for (const question of exam) {
+      if (!question.trial) store.recordAnswer(question.id, question.category, choices[question.id] === question.correct);
+    }
+    store.recordExamAttempt(score.correct, score.total, score.passed);
     setAttemptNo(examUsage(store.get()).total);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [phase]);
+  }, [phase, exam, choices, score.correct, score.total, score.passed]);
 
   useEffect(() => {
     if (phase !== "running") return;
@@ -171,7 +176,7 @@ function ExamPage() {
   return (
     <AppShell>
       {phase === "intro" && (
-        <div className="mx-auto max-w-xl space-y-6 rounded-xl border border-border bg-card p-6 text-center shadow-lifted sm:p-8">
+        <div className="mx-auto max-w-xl space-y-6 py-4 text-center sm:py-8">
           <div className="inline-flex h-14 w-14 items-center justify-center rounded-lg bg-primary/10 text-primary">
             <Timer className="h-7 w-7" />
           </div>
@@ -183,10 +188,10 @@ function ExamPage() {
           </div>
           <ul className="mx-auto max-w-sm space-y-2 text-left text-sm text-muted-foreground">
             <li>• Alla frågor visas utan förklaring – som i skarpt läge.</li>
-            <li>• Du kan inte gå tillbaka till tidigare frågor.</li>
+            <li>• Du kan markera frågor och gå tillbaka innan du lämnar in.</li>
             <li>• 5 av de 70 frågorna är testfrågor och räknas inte i resultatet.</li>
             <li>• Sammanställning per kategori i slutet.</li>
-            <li>• Frågorna följer Trafikverkets provformat och är källhänvisade.</li>
+            <li>• Egna övningsfrågor – inte officiella frågor från Trafikverket.</li>
             <li>
               • Max {usage.limit} prov per dygn · {usage.usedToday}/{usage.limit} använda idag.
             </li>
@@ -278,37 +283,33 @@ function ExamPage() {
               {mm}:{ss}
             </div>
           </div>
-          <QuestionCard
-            key={exam[idx].id}
-            question={exam[idx]}
-            index={idx}
-            total={TOTAL}
-            showExplanation={false}
-            onAnswer={(ok, chosen) => {
-              const src = exam[idx];
-              setResults((r) => [
-                ...r,
-                {
-                  qid: src.id,
-                  category: src.category,
-                  correct: ok,
-                  chosen,
-                  q: src,
-                  trial: !!src.trial,
-                },
-              ]);
-              store.recordAnswer(src.id, src.category, ok);
-            }}
-            onNext={() => {
-              if (idx + 1 >= TOTAL) setPhase("done");
-              else setIdx((i) => i + 1);
-            }}
-          />
+          <Progress value={answeredCount / TOTAL * 100} aria-label={`${answeredCount} av ${TOTAL} besvarade`} />
+          {current && <>
+            <div className="flex items-center justify-between gap-3 text-xs text-muted-foreground">
+              <span>{answeredCount}/{TOTAL} besvarade · {marked.length} markerade</span>
+              <Button variant={marked.includes(current.id) ? "secondary" : "ghost"} aria-pressed={marked.includes(current.id)} onClick={() => setMarked((items) => items.includes(current.id) ? items.filter((id) => id !== current.id) : [...items, current.id])}><Flag />Markera</Button>
+            </div>
+            <QuestionCard key={current.id} question={current} index={idx} total={TOTAL} selectedAnswer={choices[current.id]} examMode showExplanation={false} onAnswer={(_, chosen) => setChoices((answers) => ({ ...answers, [current.id]: chosen }))} onNext={() => {}} />
+            <div className="grid grid-cols-2 gap-3">
+              <Button variant="outline" disabled={idx === 0} onClick={() => setIdx((index) => index - 1)}><ChevronLeft />Föregående</Button>
+              <Button disabled={idx === TOTAL - 1} onClick={() => setIdx((index) => index + 1)}>Nästa<ChevronRight /></Button>
+            </div>
+            <section className="border-t border-border pt-5">
+              <h2 className="mb-3 text-sm font-semibold">Frågeöversikt</h2>
+              <div className="grid grid-cols-7 gap-1.5 sm:grid-cols-10">
+                {exam.map((question, index) => <Button key={question.id} variant="outline" aria-label={`Fråga ${index + 1}${marked.includes(question.id) ? ", markerad" : ""}${choices[question.id] !== undefined ? ", besvarad" : ", obesvarad"}`} aria-current={idx === index ? "step" : undefined} onClick={() => setIdx(index)} className={cn("relative h-11 min-w-0 px-0 text-xs tabular-nums", choices[question.id] !== undefined && "bg-secondary", marked.includes(question.id) && "border-premium", idx === index && "border-ring ring-1 ring-ring")}>
+                  {index + 1}{marked.includes(question.id) && <Flag className="absolute right-0.5 top-0.5 size-2! text-premium" />}
+                </Button>)}
+              </div>
+              <Button className="mt-5 w-full" onClick={() => { if (answeredCount === TOTAL || confirm(`Du har ${TOTAL - answeredCount} obesvarade frågor. Lämna in provet ändå?`)) setPhase("done"); }}>Lämna in provet</Button>
+            </section>
+          </>}
         </div>
       )}
 
       {phase === "done" && (
         <ExamResults
+          secondsUsed={SECONDS - time}
           results={results}
           correct={correctCount}
           scoredTotal={scoredResults.length}
@@ -324,6 +325,7 @@ function ExamPage() {
 }
 
 function ExamResults({
+  secondsUsed,
   results,
   correct,
   scoredTotal,
@@ -333,6 +335,7 @@ function ExamResults({
   canRetry,
   onRestart,
 }: {
+  secondsUsed: number;
   results: Result[];
   correct: number;
   scoredTotal: number;
@@ -384,7 +387,12 @@ function ExamResults({
         </p>
       </div>
 
-      <div className="rounded-lg border border-border bg-card p-5 shadow-soft sm:p-6">
+      <div className="grid grid-cols-3 divide-x divide-border border-y border-border py-4 text-center">
+        <div><p className="font-display text-xl font-bold">{scoredTotal ? Math.round(correct / scoredTotal * 100) : 0}%</p><p className="mt-1 text-xs text-muted-foreground">Rätt</p></div>
+        <div><p className="font-display text-xl font-bold">{scoredTotal - correct}</p><p className="mt-1 text-xs text-muted-foreground">Fel / obesvarade</p></div>
+        <div><p className="font-display text-xl font-bold">{Math.floor(secondsUsed / 60)}:{String(secondsUsed % 60).padStart(2, "0")}</p><p className="mt-1 text-xs text-muted-foreground">Tid använd</p></div>
+      </div>
+      <div className="border-b border-border pb-6">
         <h2 className="text-lg font-bold">Resultat per kategori</h2>
         <div className="mt-4 space-y-3">
           {Object.entries(byCat).map(([cat, v]) => {
@@ -457,7 +465,9 @@ function ExamResults({
                 ["wrong", `Endast fel (${wrongCount})`],
               ] as const
             ).map(([key, label]) => (
-              <button
+              <Button
+                variant="ghost"
+                aria-pressed={filter === key}
                 key={key}
                 onClick={() => setFilter(key)}
                 className={cn(
@@ -468,7 +478,7 @@ function ExamResults({
                 )}
               >
                 {label}
-              </button>
+              </Button>
             ))}
           </div>
         </div>

@@ -1,5 +1,12 @@
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { useMemo, useState } from "react";
+import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
+import { useMemo, useState }
+from "react";
+import { useQuery } from "@tanstack/react-query";
+import { bankQuestionsQuery } from "@/lib/ai-questions";
+import { trainingSummary, swedishDay } from "@/lib/practice";
+import { Input } from "@/components/ui/input";
+import { Progress } from "@/components/ui/progress";
+import { useEffect } from "react";
 import { AppShell } from "@/components/AppShell";
 import { QuestionCard } from "@/components/QuestionCard";
 import { QUESTIONS } from "@/data/questions";
@@ -39,6 +46,10 @@ function StatsPage() {
   const navigate = useNavigate();
   const s = useStore();
   const stats = computeStats(s);
+  const summary = trainingSummary(s);
+  const { data: bank } = useQuery(bankQuestionsQuery);
+  const [weeklyGoal, setWeeklyGoal] = useState(3);
+  useEffect(() => { const saved = Number(localStorage.getItem("aurateori-weekly-goal")); if (saved >= 1 && saved <= 7) setWeeklyGoal(saved); }, []);
   const [repeatIdx, setRepeatIdx] = useState(0);
 
   // Group answers by day (last 7 days)
@@ -46,9 +57,9 @@ function StatsPage() {
     const out: { day: string; correct: number; total: number }[] = [];
     for (let i = 6; i >= 0; i--) {
       const d = new Date(Date.now() - i * 86400000);
-      const key = d.toISOString().slice(0, 10);
-      const label = d.toLocaleDateString("sv-SE", { weekday: "short" });
-      const dayAns = s.answers.filter((a) => new Date(a.at).toISOString().slice(0, 10) === key);
+      const key = swedishDay(d.getTime());
+      const label = d.toLocaleDateString("sv-SE", { weekday: "short", timeZone: "Europe/Stockholm" });
+      const dayAns = s.answers.filter((a) => swedishDay(a.at) === key);
       out.push({
         day: label,
         correct: dayAns.filter((a) => a.correct).length,
@@ -74,9 +85,9 @@ function StatsPage() {
   const repeatQueue = useMemo(
     () =>
       s.wrongQueue
-        .map((id) => ALL_QUESTIONS.find((q) => q.id === id))
+        .map((id) => [...ALL_QUESTIONS, ...(bank ?? [])].find((q) => q.id === id))
         .filter((q): q is NonNullable<typeof q> => Boolean(q)),
-    [s.wrongQueue],
+    [s.wrongQueue, bank],
   );
 
   const repeatQuestion = repeatQueue.length > 0 ? repeatQueue[repeatIdx % repeatQueue.length] : null;
@@ -105,6 +116,11 @@ function StatsPage() {
           )}
         </div>
 
+        <section className="border-y border-border py-5">
+          <div className="flex items-center justify-between gap-4"><div><h2 className="font-display text-lg font-bold">Ditt veckomål</h2><p className="mt-1 text-sm text-muted-foreground">{summary.weeklyDays} av {weeklyGoal} träningsdagar · denna vecka</p></div><div className="flex items-center gap-2"><label htmlFor="weekly-goal" className="text-xs text-muted-foreground">Dagar</label><Input id="weekly-goal" type="number" min={1} max={7} value={weeklyGoal} className="h-11 w-16" onChange={(event) => { const value = Number(event.target.value); if (Number.isInteger(value) && value >= 1 && value <= 7) { setWeeklyGoal(value); localStorage.setItem("aurateori-weekly-goal", String(value)); } }} /></div></div>
+          <Progress value={Math.min(100, summary.weeklyDays / weeklyGoal * 100)} aria-label="Veckomål" className="mt-4 h-2" />
+        </section>
+
         {s.answers.length === 0 ? (
           <AuraState
             icon={BarChart3}
@@ -121,7 +137,7 @@ function StatsPage() {
           <MiniStat label="Träffsäkerhet" value={`${stats.accuracy}%`} accent="primary" />
         </div>
 
-        <div className="rounded-lg border border-border bg-card p-5 shadow-soft sm:p-6">
+        <div className="border-b border-border py-5 sm:py-6">
           <h2 className="text-sm font-bold uppercase tracking-wider text-muted-foreground">
             Senaste 7 dagarna
           </h2>
@@ -130,12 +146,12 @@ function StatsPage() {
               Inga svar den här veckan än – svara på några frågor så fylls diagrammet.
             </p>
           )}
-          <div className="mt-5 flex h-40 items-end gap-2">
+          <div className="mt-5 flex h-40 items-end gap-2" role="img" aria-label={days.map((day) => `${day.day}: ${day.correct} rätt av ${day.total}`).join(", ")}>
             {days.map((d, i) => {
               const h = (d.total / maxTotal) * 100;
               const accuracy = d.total ? (d.correct / d.total) * 100 : 0;
               return (
-                <div key={i} className="flex flex-1 flex-col items-center gap-2">
+                <div key={i} className="flex h-full flex-1 flex-col items-center gap-2">
                   <div className="relative flex w-full flex-1 items-end">
                     <div
                       className="w-full rounded-t-md bg-muted"
@@ -155,7 +171,7 @@ function StatsPage() {
           </div>
         </div>
 
-        <div className="rounded-lg border border-border bg-card p-5 shadow-soft sm:p-6">
+        <div className="border-b border-border py-5 sm:py-6">
           <h2 className="text-sm font-bold uppercase tracking-wider text-muted-foreground">
             Per kategori
           </h2>
@@ -187,8 +203,14 @@ function StatsPage() {
           </>
         )}
 
+        <section className="border-b border-border pb-6">
+          <h2 className="font-display text-lg font-bold">Tidigare prov</h2>
+          {s.examAttempts.length ? <ul className="mt-3 divide-y divide-border">{s.examAttempts.slice(-10).reverse().map((attempt, index) => <li key={`${attempt.at}-${index}`} className="flex items-center justify-between gap-3 py-3 text-sm"><span className="text-muted-foreground">{new Date(attempt.at).toLocaleString("sv-SE", { timeZone: "Europe/Stockholm", dateStyle: "medium", timeStyle: "short" })}</span><span className="font-semibold tabular-nums">{attempt.correct}/{attempt.total}</span><span className={attempt.passed ? "text-success" : "text-destructive"}>{attempt.passed ? "Godkänt" : "Ej godkänt"}</span></li>)}</ul> : <p className="mt-2 text-sm text-muted-foreground">Inga genomförda prov ännu.</p>}
+        </section>
+        <div className="flex flex-wrap gap-2"><Button asChild variant="outline"><Link to="/genomgangar">Genomgångar</Link></Button><Button asChild variant="outline"><Link to="/flashcards">Snabbplugg</Link></Button></div>
+
         {repeatQuestion ? (
-          <div className="rounded-lg border border-border bg-card p-5 shadow-soft sm:p-6">
+          <div className="border-b border-border py-5 sm:py-6">
             <div className="mb-4 flex items-center justify-between">
               <div>
                 <h2 className="text-lg font-bold">Repetera felaktiga svar</h2>

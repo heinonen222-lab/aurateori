@@ -3,7 +3,7 @@ import { Check, Loader2, Crown, ShieldCheck, Sparkles, Zap } from "lucide-react"
 import { AppShell } from "@/components/AppShell";
 import { PaymentTestModeBanner } from "@/components/PaymentTestModeBanner";
 import { BillingStatus } from "@/components/BillingStatus";
-import { PriceComparison } from "@/components/PriceComparison";
+
 import { usePaddleCheckout } from "@/hooks/usePaddleCheckout";
 import { useAuth } from "@/hooks/useAuth";
 import { useSubscription } from "@/hooks/useSubscription";
@@ -36,10 +36,9 @@ export const Route = createFileRoute("/priser")({
 
 const FEATURES = [
   "Alla teorifrågor i frågebanken",
-  "Interaktiva genomgångar av alla nyckelkunskaper",
-  "Provsimulator: 65 frågor, 50 minuter",
-  "Vägmärkesarkiv med fällor och förklaringar",
-  "Statistik och repetition av felsvar",
+  "Provsimulator: 70 frågor, 65 poänggrundande, 50 minuter",
+  "Upp till 3 fullständiga prov per dag",
+  "Förklaringar och referenser till Premium-frågorna",
 ];
 
 const PLANS = [
@@ -74,12 +73,12 @@ function PricingPage() {
     <AppShell>
       <PaymentTestModeBanner />
       <div className="space-y-7">
-        <header className="aura-surface relative overflow-hidden rounded-xl border border-border px-5 py-8 text-center shadow-lifted sm:px-8 sm:py-10">
+        <header className="relative border-b border-border py-6 text-center sm:py-8">
           <div className="relative z-10 mx-auto max-w-2xl">
             <div className="inline-flex items-center gap-2 text-xs font-bold uppercase text-premium">
               <Sparkles className="h-4 w-4" /> Premium
             </div>
-            <h1 className="mt-3 font-display text-3xl font-extrabold sm:text-4xl">Välj ditt Premium-abonnemang</h1>
+            <h1 className="mt-3 font-display text-3xl font-extrabold sm:text-4xl">Aurateori Premium</h1>
             <p className="mx-auto mt-3 max-w-xl text-sm leading-relaxed text-muted-foreground sm:text-base">
               Lär dig snabbare. Öva smartare. Ta körkortet.
             </p>
@@ -162,9 +161,15 @@ function PricingPage() {
           ))}
         </div>
 
-        <PriceComparison />
+        <section className="border-y border-border py-6">
+          <h2 className="font-display text-lg font-bold">Gratis eller Premium?</h2>
+          <div className="mt-4 grid gap-6 sm:grid-cols-2">
+            <div><h3 className="text-sm font-semibold">Gratis</h3><ul className="mt-3 space-y-2 text-sm text-muted-foreground">{["Grundfrågor med förklaringar", "Vägmärken och snabbplugg", "Genomgångar och repetition", "Din träningsstatistik"].map((feature) => <li key={feature} className="flex gap-2"><Check className="mt-0.5 h-4 w-4 shrink-0 text-success" />{feature}</li>)}</ul></div>
+            <div><h3 className="flex items-center gap-2 text-sm font-semibold"><Crown className="h-4 w-4 text-premium" />Premium</h3><p className="mt-3 text-sm text-muted-foreground">Allt i Gratis, plus hela frågebanken och fullständiga teoriprov.</p><p className="mt-2 text-xs leading-5 text-muted-foreground">Hantera betalning och avsluta förnyelsen under Premium & betalning. Tillgången gäller till periodens slut.</p></div>
+          </div>
+        </section>
 
-        <div className="rounded-lg border border-border bg-card p-5 shadow-soft">
+        <div className="pb-5">
           <div className="mb-3 text-xs font-bold uppercase tracking-wider text-muted-foreground">
             Detta ingår
           </div>
