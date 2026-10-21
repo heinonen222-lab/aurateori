@@ -14,7 +14,7 @@
 - [x] Snabba upp appen: prov laddar snabbare, 3D laddas bara vid öppnad genomgång
 
 ## Android – första Play-versionen
-- [ ] Bygg och verifiera signerad AAB med Bubblewrap
-- [ ] Leverera AAB och säkerhetskopiering av uppladdningsnyckeln
+- [x] Bygg och verifiera signerad AAB med Bubblewrap
+- [x] Leverera AAB och säkerhetskopiering av uppladdningsnyckeln
 - [ ] Koppla publicerad webbplats till Play-signeringscertifikatet (väntar på Play Console)
 - [ ] Google Play Billing före produktionslansering (väntar på Play Console-konfiguration)
