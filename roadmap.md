@@ -1,11 +1,15 @@
 # Premium omdesign
 
 ## Förbättringsbrief – oktober 2026
-- [ ] Förfina global design och femdelad mobilnavigation utan att dölja befintliga sidor
-- [ ] Bygg startsidans verkliga översikt och åtta fungerande träningsämnen
-- [ ] Förbättra svarsåterkoppling samt prov med markering och återbesök
-- [ ] Visa veckomål, träningshistorik och tydlig gratis/Premium-jämförelse
-- [ ] Testa sparade resultat, träning, provåtkomst och ljus/mörk mobil- och datorvy
+- [x] Förfina global design och femdelad mobilnavigation utan att dölja befintliga sidor
+- [x] Bygg startsidans verkliga översikt och åtta fungerande träningsämnen
+- [x] Förbättra svarsåterkoppling samt prov med markering och återbesök
+- [x] Visa veckomål, träningshistorik och tydlig gratis/Premium-jämförelse
+- [x] Testa sparade resultat, träning, provåtkomst och ljus/mörk mobil- och datorvy
+- [ ] Testa ny betalning och uppsägning hos betaltjänsten (kräver kundens betalningsgodkännande; befintligt Premium och provstart verifierade)
+
+## Raderingsnotiser
+- [ ] Skicka adminmejl vid raderingsbegäran (väntar på verifierad avsändardomän)
 
 - [x] Lås designriktning och inventera appen
 - [x] Uppdatera designsystem, sidram och gemensamma komponenter

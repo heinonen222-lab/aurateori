@@ -112,6 +112,10 @@ function ExamPage() {
   const [starting, setStarting] = useState(false);
   const [startDenied, setStartDenied] = useState(false);
 
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "instant" });
+  }, [phase, idx]);
+
   // Server-verified entitlement: the exam only starts after the backend
   // confirms an active Premium subscription for the signed-in user.
   const startExam = async () => {
