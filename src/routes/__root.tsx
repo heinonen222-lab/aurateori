@@ -15,6 +15,7 @@ import { reportLovableError } from "../lib/lovable-error-reporting";
 import { AuthSync } from "@/components/AuthSync";
 import { Button } from "@/components/ui/button";
 import { Toaster } from "@/components/ui/sonner";
+import { MODULE_RECOVERY_SCRIPT } from "@/lib/module-recovery";
 
 function NotFoundComponent() {
   return (
@@ -105,6 +106,7 @@ function RootShell({ children }: { children: ReactNode }) {
       <head>
         <HeadContent />
         <script dangerouslySetInnerHTML={{ __html: THEME_INIT }} />
+        <script dangerouslySetInnerHTML={{ __html: MODULE_RECOVERY_SCRIPT }} />
       </head>
       <body>
         {children}

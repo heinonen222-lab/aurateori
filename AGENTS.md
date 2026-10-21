@@ -20,6 +20,7 @@
 - Billing-enabled Bubblewrap releases must use startUrl with `play=1` and retain that marker during navigation; unavailable Play Billing must never fall back to Paddle inside the Android package.
 
 ## Learning experience
+- Install bounded module-load recovery in the HTML head before app entry execution; React boundaries cannot catch failed bootstrap imports.
 - Derive dashboard and topic progress from existing answer/exam logs; topic filters map existing questions without changing stored categories, preserving saved results.
 - Keep exam choices keyed by question ID in a frozen session question set; commit outcomes once at submission, allowing revisits without duplicate scoring.
 - Render the five primary mobile destinations directly and keep secondary tools in the header menu; preserve all existing public URLs.
