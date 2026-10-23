@@ -30,10 +30,12 @@ export const Route = createFileRoute("/signs")({
 const CATS: (SignCategory | "Alla")[] = [
   "Alla",
   "Varningsmärken",
+  "Väjningspliktsmärken",
   "Förbudsmärken",
   "Påbudsmärken",
   "Anvisningsmärken",
-  "Information",
+  "Lokaliseringsmärken för vägvisning",
+  "Lokaliseringsmärken för upplysning om allmänna inrättningar med mera",
 ];
 
 function SignsPage() {

@@ -29,3 +29,4 @@
 
 - The learning UI contains no 3D engine or driving controls; keep /genomgangar as a permanent redirect to /quiz and preserve legacy lesson_progress records for existing users.
 - Account training metrics reuse computeStats and trainingSummary from the shared progress store so dashboard, practice and account stay consistent.
+- Preserve fact-bank order and existing question/sign IDs during content corrections because saved answers refer to generated IDs; distinguish official rules from model calculations and manufacturer-specific guidance.

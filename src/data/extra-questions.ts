@@ -50,7 +50,7 @@ const SIGN_CATEGORIES = [
   "Anvisningsmärken",
   "Information",
   "Lokaliseringsmärken för vägvisning",
-  "Lokaliseringsmärken för upplysning om serviceanläggningar",
+  "Lokaliseringsmärken för upplysning om allmänna inrättningar med mera",
 ];
 
 function signQuestions(): Question[] {
@@ -63,7 +63,7 @@ function signQuestions(): Question[] {
       build(
         `xs-${sign.id}-meaning`,
         "Vägmärken",
-        `Vad betyder vägmärket "${sign.name}"?`,
+        "Vad innebär vägmärket?",
         sign.meaning,
         pool.slice(0, 3).map((s) => s.meaning),
         `${sign.name}: ${sign.meaning} ${sign.trap}`,
@@ -155,11 +155,11 @@ function numberQuestions(): Question[] {
       build(
         `xn-brake-${v}`,
         "Fordonskännedom",
-        `Ungefär hur lång är bromssträckan i ${v} km/h på torr asfalt (friktion 0,8)?`,
+        `Ungefär hur lång är bromssträckan i ${v} km/h på plan väg med friktionstal 0,8 och konstant retardation?`,
         m(b),
         [m(b * 0.5), m(b * 1.6), m(b * 2.4)],
-        `Bromssträcka ≈ v²/(2·μ·g). Med ${v} km/h och μ = 0,8 blir det cirka ${Math.round(b)} meter.`,
-        "Trafikverket – bromssträcka",
+        `Modellberäkning: bromssträcka ≈ v²/(2·μ·g). Med ${v} km/h, μ = 0,8 och g = 9,82 m/s² blir det cirka ${Math.round(b)} meter. Verklig bromssträcka beror även på bil, däck och väglag.`,
+        "Modellberäkning: s = v²/(2μg), g = 9,82 m/s²",
         i + 401,
       ),
     );
@@ -175,8 +175,8 @@ function numberQuestions(): Question[] {
         `Ungefär hur lång blir stoppsträckan i ${v} km/h med 1 sekunds reaktionstid och friktionstalet 0,8 på plan väg?`,
         m(s),
         [m(s * 0.6), m(s * 1.5), m(s * 2.2)],
-        `Stoppsträcka = reaktionssträcka + bromssträcka ≈ ${Math.round(v / 3.6)} + ${Math.round((v / 3.6) ** 2 / (2 * 0.8 * 9.82))} ≈ ${Math.round(s)} meter.`,
-        "Trafikverket – stoppsträcka",
+        `Modellberäkning på plan väg med konstant retardation: stoppsträcka = reaktionssträcka + bromssträcka. ${(v / 3.6).toFixed(1)} + ${((v / 3.6) ** 2 / (2 * 0.8 * 9.82)).toFixed(1)} ≈ ${Math.round(s)} meter. Verkliga förhållanden kan ge längre sträcka.`,
+        "Modellberäkning: s = vt + v²/(2μg), t = 1 s, μ = 0,8",
         i + 501,
       ),
     );
@@ -193,7 +193,7 @@ function numberQuestions(): Question[] {
       build(
         `xn-double-${low}`,
         "Människan & Trafiken",
-        `Hur förändras bromssträckan när du ökar från ${low} km/h till ${high} km/h?`,
+        `Hur förändras bromssträckan från ${low} till ${high} km/h om väggrepp och bromsförmåga är oförändrade?`,
         "Den blir ungefär fyra gånger så lång",
         [
           "Den blir dubbelt så lång",
