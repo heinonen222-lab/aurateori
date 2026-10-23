@@ -21,6 +21,12 @@ export function getQuestionSources(question: Pick<Question, "reference" | "categ
   if (/lokala.*föreskrifter|miljöbalk/.test(ref)) links.push(link("Transportstyrelsen – Svensk trafikföreskriftssamling", "https://rdt.transportstyrelsen.se/rdt/AF06_Search.aspx"));
   if (question.category === "Vägmärken" || /vägmärken|vägmärkesförordning|vmf/.test(ref)) {
     links.push(link("Transportstyrelsen – Vägmärken", signs));
+    const code = question.reference.match(/\b([ABCDEFM])\d+/)?.[1];
+    const groups: Record<string, [string, string]> = { A: ["Varningsmärken", "varningsmarken"], B: ["Väjningspliktsmärken", "vajningspliktsmarken"], C: ["Förbudsmärken", "forbudsmarken"], D: ["Påbudsmärken", "pabudsmarken"], E: ["Anvisningsmärken", "anvisningsmarken"], F: ["Lokaliseringsmärken för vägvisning", "lokaliseringsmarken-for-vagvisning"], M: ["Vägmarkeringar", "vagmarkeringar"] };
+    if (code && groups[code]) {
+      const [label, path] = groups[code];
+      links.push(link(`Transportstyrelsen – ${label}`, `${signs}${path}/`));
+    }
     if (/\bE17\b/i.test(question.reference) || /återvändsväg/i.test(question.question)) {
       links.push(link("Transportstyrelsen – E17 Återvändsväg", `${signs}anvisningsmarken/atervandsvag/`));
     }
@@ -28,7 +34,9 @@ export function getQuestionSources(question: Pick<Question, "reference" | "categ
   if (!links.length) {
     if (/besiktning/.test(ref)) links.push(link("Transportstyrelsen – Besiktningsregler för personbil", `${ts}fordon/aga-kopa-eller-salja-fordon/fordonsbesiktning/besiktningsregler/personbil-och-lastbil-som-inte-overstiger-3500-kg-i-totalvikt/`));
     else if (/däck/.test(ref)) links.push(link("Transportstyrelsen – Däck", `${ts}fordon/fordonsregler/dack/${/vinter/.test(ref) ? "vinterdack/" : ""}`));
-    else if (/kunskapsprov|personbil och lätt|behörighet|riskutbildning|övningskörning/.test(ref)) links.push(link("Trafikverket – Personbil och lätt lastbil (B)", `${tv}korkort/ta-korkort/personbil-och-latt-lastbil/`));
+    else if (/riskutbildning|trötthet/.test(ref)) links.push(link("Transportstyrelsen – Riskutbildning för personbil", `${ts}korkort/ta-korkort/riskutbildning/riskutbildning-bil/`));
+    else if (/vikter|släp/.test(ref)) links.push(link("Transportstyrelsen – Vikter för bil och släpvagn", `${ts}fordon/fordonsregler/regler-for-olika-fordonsslag/slap/vikter/`));
+    else if (/kunskapsprov|personbil och lätt|behörighet|övningskörning/.test(ref)) links.push(link("Trafikverket – Personbil och lätt lastbil (B)", `${tv}korkort/ta-korkort/personbil-och-latt-lastbil/`));
     else if (/alkohol/.test(ref)) links.push(link("Trafikverket – Alkohol och narkotika i vägtrafiken", `${safety}alkohol-och-narkotika-i-vagtrafiken/`));
     else if (/hastighet|stoppsträcka|reaktionstid|kinetisk energi|avstånd/.test(ref)) links.push(link("Trafikverket – Hastighet och krockvåld", `${safety}hastighetsgranser-pa-vag/hastighet-och-krockvald/`));
     else if (/trafikförsäkring/.test(ref)) links.push(link("Transportstyrelsen – Trafikförsäkring", `${ts}fordon/aga-kopa-eller-salja-fordon/trafikforsakring/`));
@@ -47,6 +55,6 @@ export function getQuestionSources(question: Pick<Question, "reference" | "categ
   let note: string | undefined;
   if (/instruktionsbok|fordonsteknik/.test(ref)) note = "Fordonsspecifik funktion: kontrollera instruktionsboken för din bil. Myndighetslänken är bakgrund, inte en källa för varje bilmodell.";
   else if (/modell|räkne|tumregel/i.test(question.reference + " " + question.question) || /kinetisk energi|reaktionstid|stoppsträcka/.test(ref)) note = "Beräkningar och tumregler är pedagogiska modeller, inte lagstadgade eller garanterade sträckor.";
-  else if (links.some((s) => new URL(s.url).pathname === "/")) note = "Översiktskälla: sök efter ämnet eller referensen på den länkade webbplatsen.";
+  else if (!question.source && !/förordning|körkortslagen|trafikbrott/.test(ref)) note = "Översiktskälla: använd ämnet och referensen för att kontrollera uppgiften. Länken är inte en certifiering av frågan.";
   return { links: links.filter((source, i, all) => all.findIndex((s) => s.url === source.url) === i), note };
 }
