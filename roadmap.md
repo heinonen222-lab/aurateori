@@ -1,5 +1,10 @@
 # Premium omdesign
 
+## Källgranskning av frågebanken
+- [x] Läs alla 623 lokala och 49 administrerade frågor; jämför regler och alla 40 vägmärkesbilder med officiella källor (ej certifiering av varje påstående)
+- [x] Rätta bekräftade fel utan att radera historik; inga dummyfrågor hittades
+- [x] Testa struktur och konkreta rättningar: 20 tester godkända; rättad E17-bild och adminfråga verifierade i inloggad app; begränsningar dokumenterade i docs/question-audit-2026-10-23.md
+
 ## Renodling till teoriapp
 - [x] Ta bort 3D-motor, spelkontroller och genomgångsmenyer; behåll gamla länkar och lagrad historik
 - [x] Visa verklig träningsöversikt på kontot och rätta berörda produkttexter

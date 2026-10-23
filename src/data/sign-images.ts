@@ -6,7 +6,7 @@ import a_anv_overgang from "@/assets/signs/anv-overgang.svg.asset.json";
 import a_anv_slut_gangfart from "@/assets/signs/anv-slut-gangfart.svg.asset.json";
 import a_anv_slut_huvudled from "@/assets/signs/anv-slut-huvudled.svg.asset.json";
 import a_forbud_hastighet_30 from "@/assets/signs/forbud-hastighet-30.svg.asset.json";
-import a_anv_atervandsvag from "@/assets/signs/anv-atervandsvag.svg.asset.json";
+import a_anv_atervandsvag from "@/assets/signs/atervandsvag-e17.png.asset.json";
 import a_forbud_hastighet_60 from "@/assets/signs/forbud-hastighet-60.svg.asset.json";
 import a_forbud_hastighet_50 from "@/assets/signs/forbud-hastighet-50.svg.asset.json";
 import a_forbud_infart from "@/assets/signs/forbud-infart.svg.asset.json";
