@@ -4,6 +4,7 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { ArrowLeft, Loader2, Pencil, Plus, ShieldCheck, Trash2 } from "lucide-react";
 import { ROAD_SIGNS } from "@/data/signs";
 import { SignImage } from "@/components/SignImage";
+import { QuestionReference } from "@/components/QuestionReference";
 import { toast } from "sonner";
 import { AppShell } from "@/components/AppShell";
 import { AuraState, AuraLoading } from "@/components/AuraState";
@@ -219,6 +220,7 @@ function AdminPage() {
             <label className="block text-sm font-semibold">Källa/referens
               <Input className="mt-1" value={draft.reference} placeholder="t.ex. Trafikförordningen 3 kap. 18 §" onChange={(e) => setDraft({ ...draft, reference: e.target.value })} />
             </label>
+            {draft.reference.trim() && <QuestionReference question={{ reference: draft.reference, category: draft.category as import("@/data/questions").QuestionCategory, question: draft.question }} />}
             <div className="flex gap-2">
               <Button onClick={() => void save()} disabled={saving}>
                 {saving && <Loader2 className="h-4 w-4 animate-spin" />} Spara

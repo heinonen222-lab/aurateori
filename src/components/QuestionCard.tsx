@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { Check, ExternalLink, X } from "lucide-react";
+import { Check, X } from "lucide-react";
+import { QuestionReference } from "@/components/QuestionReference";
 import type { Question } from "@/data/questions";
 import { SignImage } from "@/components/SignImage";
 import { cn } from "@/lib/utils";
@@ -115,20 +116,10 @@ export function QuestionCard({
             Förklaring
           </div>
           <p className="text-sm leading-relaxed">{question.explanation}</p>
-          <div className="mt-2 text-xs text-muted-foreground">Referens: {question.reference}</div>
-          {question.source && (
-            <a
-              href={question.source.url}
-              target="_blank"
-              rel="noreferrer noopener"
-              className="mt-2 inline-flex items-center gap-1 text-xs font-semibold text-primary underline decoration-primary/40 underline-offset-2 hover:decoration-primary"
-            >
-              {question.source.label}
-              <ExternalLink className="h-3 w-3" />
-            </a>
-          )}
         </div>
       )}
+
+      {!examMode && <QuestionReference question={question} />}
 
       {answered && !examMode && (
         <Button onClick={next} className="mt-5 w-full">
