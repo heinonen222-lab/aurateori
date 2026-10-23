@@ -1,7 +1,7 @@
 # Premium omdesign
 
 ## Källänkar på varje fråga
-- [ ] Visa referens och klickbara relevanta myndighets- eller lagkällor i träning, admin och provresultat; skilj modeller från lagregler och testa täckning
+- [x] Visa referens och klickbara källor i träning, admin och provresultat; 623 lokala frågor täckta, adminfrågor använder samma källval, 17 tester godkända och mobilövning verifierad; översiktskällor och modeller märks tydligt
 
 ## Källgranskning av frågebanken
 - [x] Läs alla 623 lokala och 49 administrerade frågor; jämför regler och alla 40 vägmärkesbilder med officiella källor (ej certifiering av varje påstående)
