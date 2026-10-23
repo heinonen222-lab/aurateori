@@ -1,5 +1,10 @@
 # Premium omdesign
 
+## Källgranskning av frågebanken
+- [ ] Granska alla lokala och administrerade frågor, förklaringar och vägmärkesbilder mot officiella källor
+- [ ] Rätta bekräftade fel och avlägsna felaktiga testfrågor utan att radera sparad historik
+- [ ] Testa frågebankens struktur, rättningar och visning; redovisa återstående osäkerheter
+
 ## Renodling till teoriapp
 - [x] Ta bort 3D-motor, spelkontroller och genomgångsmenyer; behåll gamla länkar och lagrad historik
 - [x] Visa verklig träningsöversikt på kontot och rätta berörda produkttexter
