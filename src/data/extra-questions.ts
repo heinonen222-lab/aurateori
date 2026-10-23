@@ -44,10 +44,13 @@ function build(
 
 const SIGN_CATEGORIES = [
   "Varningsmärken",
+  "Väjningspliktsmärken",
   "Förbudsmärken",
   "Påbudsmärken",
   "Anvisningsmärken",
   "Information",
+  "Lokaliseringsmärken för vägvisning",
+  "Lokaliseringsmärken för upplysning om serviceanläggningar",
 ];
 
 function signQuestions(): Question[] {
@@ -102,7 +105,7 @@ function signQuestions(): Question[] {
       build(
         `xs-${sign.id}-trap`,
         "Vägmärken",
-        `Vad är den vanligaste fällan på provet kring "${sign.name}"?`,
+        `Vad ska du särskilt tänka på vid "${sign.name}"?`,
         sign.trap,
         pool.slice(6, 9).map((s) => s.trap),
         `${sign.name}: ${sign.trap}`,
@@ -169,7 +172,7 @@ function numberQuestions(): Question[] {
       build(
         `xn-stop-${v}`,
         "Människan & Trafiken",
-        `Ungefär hur lång blir stoppsträckan i ${v} km/h med 1 sekunds reaktionstid på torr asfalt?`,
+        `Ungefär hur lång blir stoppsträckan i ${v} km/h med 1 sekunds reaktionstid och friktionstalet 0,8 på plan väg?`,
         m(s),
         [m(s * 0.6), m(s * 1.5), m(s * 2.2)],
         `Stoppsträcka = reaktionssträcka + bromssträcka ≈ ${Math.round(v / 3.6)} + ${Math.round((v / 3.6) ** 2 / (2 * 0.8 * 9.82))} ≈ ${Math.round(s)} meter.`,
@@ -289,8 +292,8 @@ function numberQuestions(): Question[] {
           `${(per100 * 1.5).toString().replace(".", ",")} liter`,
           `${(per100 * 2).toString().replace(".", ",")} liter`,
         ],
-        `100 km = 10 mil, alltså ${l.toString().replace(".", ",")} × 10 = ${per100.toString().replace(".", ",")} liter. Sparsam körning kan sänka siffran med 10–20 %.`,
-        "Trafikverket – sparsam körning",
+        `100 km = 10 mil, alltså ${l.toString().replace(".", ",")} × 10 = ${per100.toString().replace(".", ",")} liter. Beräkningen förutsätter oförändrad förbrukning.`,
+        "Enhetsomvandling: 1 mil = 10 km",
         i + 1101,
       ),
     );
