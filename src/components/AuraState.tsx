@@ -30,7 +30,7 @@ export function AuraState({
   return (
     <section
       className={cn(
-        "aura-cockpit relative isolate overflow-hidden rounded-lg border p-6 text-center shadow-lifted sm:p-8",
+        "relative isolate overflow-hidden rounded-lg border bg-sidebar text-sidebar-foreground p-6 text-center shadow-lifted sm:p-8",
         tone === "danger" ? "border-destructive/30" : "border-border",
         compact ? "min-h-52" : "min-h-72",
         className,
@@ -73,7 +73,7 @@ export function AuraLoading({ label = "Laddar innehåll…", compact = false }: 
   return (
     <section
       className={cn(
-        "aura-cockpit relative overflow-hidden rounded-lg border border-border p-6 shadow-lifted",
+        "relative overflow-hidden rounded-lg border border-border bg-sidebar text-sidebar-foreground p-6 shadow-lifted",
         compact ? "min-h-40" : "min-h-72",
       )}
       aria-busy="true"

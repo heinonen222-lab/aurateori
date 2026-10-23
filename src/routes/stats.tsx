@@ -194,7 +194,7 @@ function StatsPage() {
           <h2 className="font-display text-lg font-bold">Tidigare prov</h2>
           {s.examAttempts.length ? <ul className="mt-3 divide-y divide-border">{s.examAttempts.slice(-10).reverse().map((attempt, index) => <li key={`${attempt.at}-${index}`} className="flex items-center justify-between gap-3 py-3 text-sm"><span className="text-muted-foreground">{new Date(attempt.at).toLocaleString("sv-SE", { timeZone: "Europe/Stockholm", dateStyle: "medium", timeStyle: "short" })}</span><span className="font-semibold tabular-nums">{attempt.correct}/{attempt.total}</span><span className={attempt.passed ? "text-success" : "text-destructive"}>{attempt.passed ? "Godkänt" : "Ej godkänt"}</span></li>)}</ul> : <p className="mt-2 text-sm text-muted-foreground">Inga genomförda prov ännu.</p>}
         </section>
-        <div className="flex flex-wrap gap-2"><Button asChild variant="outline"><Link to="/genomgangar">Genomgångar</Link></Button><Button asChild variant="outline"><Link to="/flashcards">Snabbplugg</Link></Button></div>
+        <div className="flex flex-wrap gap-2"><Button asChild variant="outline"><Link to="/quiz">Öva frågor</Link></Button><Button asChild variant="outline"><Link to="/flashcards">Snabbplugg</Link></Button></div>
 
         {repeatQuestion ? (
           <div className="border-b border-border py-5 sm:py-6">

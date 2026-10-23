@@ -26,7 +26,7 @@ export const Route = createFileRoute("/terms")({
 function TermsPage() {
   return (
     <AppShell>
-      <LegalPage title="Användarvillkor" updated="31 augusti 2026">
+      <LegalPage title="Användarvillkor" updated="23 oktober 2026">
         <LegalSection title="1. Vem du ingår avtal med">
           <p>
             Tjänsten Aurateori (”Tjänsten”) tillhandahålls av <strong>Aurateori</strong> (”vi”,
@@ -40,7 +40,7 @@ function TermsPage() {
         <LegalSection title="2. Vad Tjänsten är">
           <p>
             Aurateori är ett digitalt studieverktyg för teoriprovet till svenskt B-körkort. Tjänsten
-            innehåller övningsfrågor, provsimulator, vägmärkesarkiv, interaktiva genomgångar och
+            innehåller övningsfrågor, provsimulator, vägmärkesarkiv, repetition och
             statistik. Aurateori är inte Trafikverket, är inte kopplat till Trafikverket eller
             Transportstyrelsen, och vi kan inte garantera ett godkänt teoriprov. Innehållet är
             studiematerial – vid tvivel gäller alltid gällande lag och Trafikverkets egen

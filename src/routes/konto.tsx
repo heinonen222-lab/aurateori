@@ -1,8 +1,8 @@
 import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
 import { useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { AlertTriangle, CheckCircle2, Crown, GraduationCap, Loader2, LockKeyhole, LogOut, Mail, Play, Target, Trash2, User as UserIcon } from "lucide-react";
+import { useQueryClient } from "@tanstack/react-query";
+import { AlertTriangle, ArrowRight, BarChart3, Crown, Loader2, LogOut, Mail, Trash2, User as UserIcon } from "lucide-react";
 import { AppShell } from "@/components/AppShell";
 import { AutoFitText } from "@/components/AutoFitText";
 import { Button } from "@/components/ui/button";
@@ -11,9 +11,8 @@ import { useAuth } from "@/hooks/useAuth";
 import { useSubscription } from "@/hooks/useSubscription";
 import { SubscriptionCountdown } from "@/components/SubscriptionCountdown";
 import { deleteAccount } from "@/utils/account.functions";
-import { listLessonProgress } from "@/utils/lessons.functions";
-import { LESSONS } from "@/data/lessons";
-import { store } from "@/lib/store";
+import { store, useStore, computeStats } from "@/lib/store";
+import { trainingSummary } from "@/lib/practice";
 import { Input } from "@/components/ui/input";
 
 export const Route = createFileRoute("/konto")({
@@ -34,49 +33,18 @@ export const Route = createFileRoute("/konto")({
 });
 
 const CONFIRM_WORD = "TA BORT";
-const LESSON_READINESS_TARGET = 80;
-
-function LessonReadinessGauge({ value }: { value: number }) {
-  const radius = 44;
-  const circumference = 2 * Math.PI * radius;
-  return (
-    <div className="relative grid h-32 w-32 shrink-0 place-items-center">
-      <svg viewBox="0 0 104 104" className="h-full w-full -rotate-90" aria-hidden="true">
-        <circle cx="52" cy="52" r={radius} fill="none" stroke="var(--muted)" strokeWidth="10" />
-        <circle cx="52" cy="52" r={radius} fill="none" stroke="var(--primary)" strokeWidth="10" strokeLinecap="round" strokeDasharray={circumference} strokeDashoffset={circumference - value / 100 * circumference} className="transition-all duration-700" />
-      </svg>
-      <div className="absolute text-center">
-        <div className="text-2xl font-black">{value}%</div>
-        <div className="text-[9px] font-bold uppercase text-muted-foreground">Klarhet</div>
-      </div>
-    </div>
-  );
-}
-
 function AccountPage() {
   const { user, loading } = useAuth();
   const { isActive } = useSubscription();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const runDelete = useServerFn(deleteAccount);
-  const fetchLessonProgress = useServerFn(listLessonProgress);
-
-  const { data: lessonProgress, isLoading: lessonsLoading } = useQuery({
-    queryKey: ["lesson-progress", user?.id],
-    queryFn: () => fetchLessonProgress({}),
-    enabled: Boolean(user),
-  });
-
+  const state = useStore();
+  const stats = computeStats(state);
+  const summary = trainingSummary(state);
   const [confirm, setConfirm] = useState("");
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const totalAvailableChecks = LESSONS.reduce((sum, lesson) => sum + lesson.steps.filter((step) => step.kind === "check").length, 0);
-  const totalCorrectChecks = lessonProgress?.reduce((sum, row) => sum + row.correct_checks, 0) ?? 0;
-  const totalAnsweredChecks = lessonProgress?.reduce((sum, row) => sum + row.answered_checks, 0) ?? 0;
-  const completedLessons = lessonProgress?.filter((row) => row.completed).length ?? 0;
-  const lessonReadiness = totalAvailableChecks ? Math.round(totalCorrectChecks / totalAvailableChecks * 100) : 0;
-  const remainingToTarget = Math.max(0, LESSON_READINESS_TARGET - lessonReadiness);
-
   const signOut = async () => {
     await queryClient.cancelQueries();
     queryClient.clear();
@@ -160,73 +128,24 @@ function AccountPage() {
 
             <SubscriptionCountdown />
 
-            <section className="aura-surface relative space-y-5 overflow-hidden rounded-xl border border-border p-5 shadow-lifted sm:p-6">
-              <div className="flex items-start gap-3">
-                <span className="grid h-10 w-10 shrink-0 place-items-center rounded-lg border border-premium/30 bg-background/65">
-                  <GraduationCap className="h-5 w-5 text-premium" />
-                </span>
-                <div className="min-w-0">
-                  <h2 className="text-base font-bold">Mina genomgångar</h2>
-                  <p className="mt-1 text-sm text-muted-foreground">
-                    Poäng från kontrollfrågorna och din väg mot målet.
-                  </p>
-                </div>
+            <section className="space-y-4 border-y border-border py-5" aria-labelledby="training-heading">
+              <div className="flex flex-wrap items-center justify-between gap-3">
+                <h2 id="training-heading" className="flex items-center gap-2 text-base font-bold"><BarChart3 className="h-5 w-5 text-primary" /> Min träning</h2>
+                <Button asChild variant="ghost" size="sm"><Link to="/stats">Alla resultat <ArrowRight className="h-4 w-4" /></Link></Button>
               </div>
-
-              {lessonsLoading ? (
-                <p className="text-sm text-muted-foreground">Laddar dina genomgångar…</p>
+              <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
+                <ResultStat value={`${stats.readiness}%`} label="Körkortsklarhet" />
+                <ResultStat value={stats.total} label="Besvarade frågor" />
+                <ResultStat value={`${stats.accuracy}%`} label="Rätt svar" />
+                <ResultStat value={state.examAttempts.length} label="Genomförda prov" />
+              </div>
+              {stats.total === 0 && state.examAttempts.length === 0 ? (
+                <p className="text-sm text-muted-foreground">Du har inte besvarat några frågor ännu.</p>
               ) : (
-                <>
-                  <div className="grid gap-4 rounded-lg border border-border bg-background/60 p-4 backdrop-blur sm:grid-cols-[auto_minmax(0,1fr)] sm:items-center">
-                    <div className="mx-auto"><LessonReadinessGauge value={lessonReadiness} /></div>
-                    <div className="min-w-0">
-                      <div className="flex items-center gap-2 text-sm font-bold"><Target className="h-4 w-4 text-premium" /> Mål: {LESSON_READINESS_TARGET}%</div>
-                      <p className="mt-1 text-sm text-muted-foreground">{remainingToTarget === 0 ? "Målet är nått. Fortsätt repetera för att behålla kunskapen." : `${remainingToTarget} procentenheter kvar till målet.`}</p>
-                      <div className="mt-3 grid grid-cols-3 gap-2">
-                        <ResultStat value={`${totalCorrectChecks}/${totalAvailableChecks}`} label="Poäng" />
-                        <ResultStat value={totalAnsweredChecks} label="Svar" />
-                        <ResultStat value={`${completedLessons}/${LESSONS.length}`} label="Klara" />
-                      </div>
-                    </div>
-                  </div>
-                  <ul className="space-y-2">
-                  {LESSONS.map((lesson) => {
-                    const row = lessonProgress?.find((item) => item.lesson_id === lesson.id);
-                    const total = row?.total_steps || lesson.steps.filter((s) => s.kind === "info").length;
-                    const totalChecks = lesson.steps.filter((s) => s.kind === "check").length;
-                    const step = row ? Math.min(row.last_step + 1, total) : 0;
-                    const progressPercent = row && total ? Math.round((row.completed ? total : step) / total * 100) : 0;
-                    const scorePercent = row?.answered_checks && totalChecks ? Math.round(row.correct_checks / totalChecks * 100) : 0;
-                    const status = !row ? "Ej startad" : row.completed && scorePercent >= LESSON_READINESS_TARGET ? "Klar" : row.answered_checks > 0 && scorePercent < LESSON_READINESS_TARGET ? "Repetera" : "Pågår";
-                    return (
-                      <li key={lesson.id}>
-                        <Link
-                          to="/genomgangar"
-                          search={{ lesson: lesson.id }}
-                          className="group block min-w-0 rounded-lg border border-border bg-background/45 p-4 transition-[background-color,border-color,transform] hover:-translate-y-0.5 hover:border-premium/45 hover:bg-background/75 focus-visible:ring-2 focus-visible:ring-ring"
-                        >
-                          <div className="grid grid-cols-[minmax(0,1fr)_auto] items-start gap-3">
-                            <AutoFitText maxSize={14} minSize={11} className="h-10 min-w-0 font-bold leading-5">{lesson.title}</AutoFitText>
-                            <span className={status === "Klar" ? "inline-flex shrink-0 items-center gap-1 rounded-full bg-success/15 px-2 py-1 text-[10px] font-bold text-success" : status === "Repetera" ? "inline-flex shrink-0 items-center gap-1 rounded-full bg-warning/20 px-2 py-1 text-[10px] font-bold text-warning-foreground" : "inline-flex shrink-0 items-center gap-1 rounded-full bg-secondary px-2 py-1 text-[10px] font-bold"}>
-                              {status === "Klar" ? <CheckCircle2 className="h-3 w-3" /> : status === "Ej startad" ? <LockKeyhole className="h-3 w-3" /> : <Play className="h-3 w-3" />}{status}
-                            </span>
-                          </div>
-                          <div className="mt-2 grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3 text-xs">
-                            <div className="h-1.5 overflow-hidden rounded-full bg-muted"><div className="h-full rounded-full bg-premium transition-[width] duration-700" style={{ width: `${progressPercent}%` }} /></div>
-                            <span className="shrink-0 font-bold">{row ? `${row.correct_checks}/${totalChecks} poäng` : `0/${totalChecks} poäng`}</span>
-                          </div>
-                          <p className="mt-2 text-[11px] font-medium text-muted-foreground">
-                            {row ? `Scen ${step}/${total} · ${scorePercent}% klarhet · ${new Date(row.updated_at).toLocaleDateString("sv-SE")}` : "Starta genomgången"}
-                          </p>
-                        </Link>
-                      </li>
-                    );
-                  })}
-                  </ul>
-                </>
+                <p className="text-sm text-muted-foreground">{stats.correct} av {stats.total} svar rätt · {state.wrongQueue.length} frågor att repetera{summary.latestExam ? ` · Senaste prov: ${summary.latestExam.correct}/${summary.latestExam.total}` : ""}</p>
               )}
+              <Button asChild variant="outline"><Link to="/quiz">Fortsätt träna <ArrowRight className="h-4 w-4" /></Link></Button>
             </section>
-
 
             <div className="space-y-4 rounded-lg border border-destructive/40 bg-destructive/5 p-6">
               <div className="flex items-start gap-3">
@@ -280,9 +199,9 @@ function AccountPage() {
 
 function ResultStat({ value, label }: { value: React.ReactNode; label: string }) {
   return (
-    <div className="min-w-0 rounded-lg bg-background p-2 text-center">
+    <div className="min-w-0 text-center">
       <AutoFitText maxSize={18} minSize={12} className="h-6 font-black leading-6">{value}</AutoFitText>
-      <AutoFitText maxSize={10} minSize={8} className="h-4 uppercase leading-4 text-muted-foreground">{label}</AutoFitText>
+      <AutoFitText maxSize={10} minSize={8} className="h-8 leading-4 text-muted-foreground">{label}</AutoFitText>
     </div>
   );
 }
