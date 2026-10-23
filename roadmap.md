@@ -1,5 +1,10 @@
 # Premium omdesign
 
+## Renodling till teoriapp
+- [ ] Ta bort 3D-motor, spelkontroller och genomgångsmenyer; behåll gamla länkar och lagrad historik
+- [ ] Visa verklig träningsöversikt på kontot och rätta berörda produkttexter
+- [ ] Verifiera träning, prov, konto och mobilnavigation utan 3D-laddning
+
 ## Swish och BankID
 - [ ] Lägg till Swish-engångsköp för en Premium-period utan automatisk förnyelse (väntar på företagsavtal/betalleverantör)
 - [ ] Lägg till BankID-inloggning (väntar på BankID-leverantör med OIDC och anslutningsuppgifter)
