@@ -1,7 +1,8 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState, useRef } from "react";
 import { useQuestions } from "@/hooks/useQuestions";
-import { Timer, Trophy, XCircle, CheckCircle2, Crown, Lock, ExternalLink, Flag, ChevronLeft, ChevronRight } from "lucide-react";
+import { Timer, Trophy, XCircle, CheckCircle2, Crown, Lock, Flag, ChevronLeft, ChevronRight } from "lucide-react";
+import { QuestionReference } from "@/components/QuestionReference";
 import { useAuth } from "@/hooks/useAuth";
 import { useSubscription } from "@/hooks/useSubscription";
 import { AppShell } from "@/components/AppShell";
@@ -528,18 +529,7 @@ function ExamResults({
                 <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
                   {r.q.explanation}
                 </p>
-                <div className="mt-2 text-xs text-muted-foreground">Referens: {r.q.reference}</div>
-                {r.q.source && (
-                  <a
-                    href={r.q.source.url}
-                    target="_blank"
-                    rel="noreferrer noopener"
-                    className="mt-2 inline-flex items-center gap-1 text-xs font-semibold text-primary underline decoration-primary/40 underline-offset-2 hover:decoration-primary"
-                  >
-                    {r.q.source.label}
-                    <ExternalLink className="h-3 w-3" />
-                  </a>
-                )}
+                <QuestionReference question={r.q} />
               </li>
             ))}
         </ul>
