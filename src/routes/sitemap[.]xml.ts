@@ -15,7 +15,6 @@ const PUBLIC_ROUTES: SitemapEntry[] = [
   { path: "/forsakring", changefreq: "monthly", priority: "0.8" },
   { path: "/exam", changefreq: "weekly", priority: "0.9" },
   { path: "/flashcards", changefreq: "weekly", priority: "0.8" },
-  { path: "/genomgangar", changefreq: "weekly", priority: "0.9" },
   { path: "/priser", changefreq: "weekly", priority: "0.8" },
   { path: "/signs", changefreq: "weekly", priority: "0.9" },
   { path: "/stats", changefreq: "weekly", priority: "0.7" },

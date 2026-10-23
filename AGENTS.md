@@ -26,3 +26,6 @@
 - Derive dashboard and topic progress from existing answer/exam logs; topic filters map existing questions without changing stored categories, preserving saved results.
 - Keep exam choices keyed by question ID in a frozen session question set; commit outcomes once at submission, allowing revisits without duplicate scoring.
 - Render the five primary mobile destinations directly and keep secondary tools in the header menu; preserve all existing public URLs.
+
+- The learning UI contains no 3D engine or driving controls; keep /genomgangar as a permanent redirect to /quiz and preserve legacy lesson_progress records for existing users.
+- Account training metrics reuse computeStats and trainingSummary from the shared progress store so dashboard, practice and account stay consistent.

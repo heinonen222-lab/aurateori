@@ -212,14 +212,14 @@ function ExamPage() {
                   </div>
                   <p className="mt-1 text-xs text-muted-foreground">
                     Du har gjort {usage.limit} prov idag. Kom tillbaka imorgon – öva vidare med
-                    övningsfrågor eller genomgångar under tiden.
+                    övningsfrågor eller vägmärken under tiden.
                   </p>
                   <div className="mt-4 flex flex-col gap-2 sm:flex-row">
                     <Button asChild className="sm:flex-1">
                       <Link to="/quiz">Öva frågor</Link>
                     </Button>
                     <Button asChild variant="outline" className="sm:flex-1">
-                      <Link to="/genomgangar">Genomgångar</Link>
+                      <Link to="/signs">Vägmärken</Link>
                     </Button>
                   </div>
                 </div>
@@ -245,8 +245,8 @@ function ExamPage() {
               </div>
               <p className="mt-1 text-xs text-muted-foreground">
                 {user
-                  ? "Lås upp hela examsimulatorn med Premium. Övningsfrågor och genomgångar är fortsatt gratis."
-                  : "Logga in och aktivera Premium för att köra hela provet. Övningsfrågor och genomgångar är fortsatt gratis."}
+                  ? "Lås upp hela examsimulatorn med Premium. Du kan träna tio försäkringsfrågor gratis."
+                  : "Logga in och aktivera Premium för att köra hela provet. Du kan träna tio försäkringsfrågor gratis."}
               </p>
               <div className="mt-4 flex flex-col gap-2 sm:flex-row">
                 <Button asChild className="sm:flex-1">

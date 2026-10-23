@@ -9,7 +9,6 @@ import {
   BarChart3,
   Moon,
   Sun,
-  GraduationCap,
   Crown,
   Menu,
   X,
@@ -29,14 +28,13 @@ const NAV = [
   { to: "/exam", label: "Prov", icon: Timer },
   { to: "/signs", label: "Vägmärken", icon: Signpost },
   { to: "/flashcards", label: "Snabbplugg", icon: Layers },
-  { to: "/genomgangar", label: "Genomgång", icon: GraduationCap },
   { to: "/stats", label: "Statistik", icon: BarChart3 },
   { to: "/priser", label: "Premium", icon: Crown },
   { to: "/konto", label: "Profil", icon: UserRound },
 ] as const;
 
-const PRIMARY_NAV = [NAV[0], NAV[1], NAV[2], NAV[3], NAV[8]];
-const MORE_NAV = NAV.slice(4, 8);
+const PRIMARY_NAV = [NAV[0], NAV[1], NAV[2], NAV[3], NAV[7]];
+const MORE_NAV = NAV.slice(4, 7);
 
 function NavLink({
   item,

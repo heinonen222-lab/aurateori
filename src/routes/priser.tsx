@@ -20,7 +20,7 @@ export const Route = createFileRoute("/priser")({
       {
         name: "description",
         content:
-          "Lås upp alla teorifrågor, interaktiva genomgångar, provsimulator och statistik. 249 kr/mån, 599 kr för 3 månader eller 1 999 kr för 12 månader.",
+          "Lås upp alla teorifrågor, repetition, provsimulator och statistik. 249 kr/mån, 599 kr för 3 månader eller 1 999 kr för 12 månader.",
       },
       { property: "og:title", content: "Priser – Aurateori Premium" },
       {
