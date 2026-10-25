@@ -98,7 +98,7 @@ export function AppShell({ children }: { children: ReactNode }) {
       <aside className="fixed inset-y-0 left-0 z-30 hidden w-60 flex-col border-r border-sidebar-border bg-sidebar px-4 py-5 text-sidebar-foreground lg:flex">
         <Link to="/" className="mb-8 flex min-h-11 items-center gap-3 rounded-lg px-2 focus-visible:ring-sidebar-ring">
           <img
-            src="/apple-touch-icon.png"
+            src="/icon-192.png"
             alt="Aurateori"
             className="h-9 w-9 rounded-lg shadow-soft"
           />
@@ -147,7 +147,7 @@ export function AppShell({ children }: { children: ReactNode }) {
       <header className="sticky top-0 z-20 grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3 border-b border-border bg-background/90 px-4 py-2.5 backdrop-blur-xl lg:hidden">
         <Link to="/" className="mr-12 flex min-h-11 min-w-0 items-center gap-2.5 rounded-lg focus-visible:ring-2 focus-visible:ring-ring">
           <img
-            src="/apple-touch-icon.png"
+            src="/icon-192.png"
             alt="Aurateori"
             className="h-8 w-8 shrink-0 rounded-md shadow-soft"
           />

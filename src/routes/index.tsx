@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { Zap, Timer, Signpost, Flame, Target, CheckCircle2, ArrowRight, RotateCcw, ShieldCheck, BookOpenCheck } from "lucide-react";
+import { Zap, Timer, Signpost, Flame, Target, CheckCircle2, ArrowRight, RotateCcw, ShieldCheck, BookOpenCheck, BookOpen, BarChart3, Star } from "lucide-react";
 import { useQuestions } from "@/hooks/useQuestions";
 import { useNavigate } from "@tanstack/react-router";
 import { TrainingTopics } from "@/components/TrainingTopics";
@@ -11,17 +11,19 @@ import { Button } from "@/components/ui/button";
 import { useStore, computeStats } from "@/lib/store";
 import { useAuth } from "@/hooks/useAuth";
 import { StudentLogin } from "@/components/StudentLogin";
+import logo from "@/assets/aurateori-logo.png";
+import hero from "@/assets/hero-license.jpg";
 
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Aurateori – Teoriprov för B-körkort" },
+      { title: "Ta körkortet med Aurateori – Teoriprov B" },
       {
         name: "description",
         content:
           "Träna inför Trafikverkets teoriprov för B-körkort. Övningsfrågor, examsimulator och vägmärken – helt på svenska.",
       },
-      { property: "og:title", content: "Aurateori – Teoriprov för B-körkort" },
+      { property: "og:title", content: "Ta körkortet med Aurateori" },
       {
         property: "og:description",
         content: "Träna inför Trafikverkets teoriprov för B-körkort på svenska.",
@@ -71,25 +73,59 @@ function Dashboard() {
   const navigate = useNavigate();
   const { questions } = useQuestions();
   const { user, loading: authLoading } = useAuth();
+  const favCount = (s.favorites ?? []).length;
 
   return (
     <AppShell>
       <section className="space-y-5 sm:space-y-7">
-        <header>
-          <div className="text-[11px] font-bold uppercase tracking-[0.14em] text-muted-foreground">
-            Personbil · Behörighet B
+        <section className="relative overflow-hidden rounded-2xl border border-border bg-card shadow-soft">
+          <div aria-hidden="true" className="pointer-events-none absolute -left-32 -top-32 h-80 w-80 rounded-full bg-electric/15 blur-3xl" />
+          <div className="relative grid items-center gap-6 p-5 sm:p-8 md:grid-cols-[minmax(0,1fr)_minmax(0,0.95fr)] md:gap-8">
+            <div className="min-w-0">
+              <div className="flex items-center gap-2.5">
+                <img src={logo} alt="" width={36} height={36} className="h-9 w-9 rounded-[10px] shadow-soft" />
+                <span className="font-display text-lg font-extrabold tracking-tight">Aurateori</span>
+              </div>
+              <h1 className="mt-5 font-display text-[32px] font-extrabold leading-[1.08] tracking-tight sm:text-5xl">
+                Ta körkortet med <span className="text-electric">Aurateori</span>
+              </h1>
+              <p className="mt-3 max-w-md text-[15px] leading-relaxed text-muted-foreground sm:text-base">
+                Smartare körkortsteori. Öva, testa och följ dina framsteg – allt på ett ställe.
+              </p>
+              <div className="mt-6 grid grid-cols-1 gap-2 sm:flex sm:gap-3">
+                <Button asChild size="lg" className="h-12 w-full rounded-xl text-base sm:w-auto">
+                  <Link to="/quiz">Börja öva <ArrowRight className="h-4 w-4" /></Link>
+                </Button>
+                <Button asChild variant="outline" size="lg" className="h-12 w-full rounded-xl text-base sm:w-auto">
+                  <a href="#sa-fungerar-det">Se hur det fungerar</a>
+                </Button>
+              </div>
+            </div>
+            <img
+              src={hero}
+              alt="Körkort och bilnyckel på en väg med vägmarkeringar"
+              width={1280}
+              height={960}
+              fetchPriority="high"
+              className="animate-aura-float aspect-[4/3] w-full rounded-xl object-cover shadow-soft"
+            />
           </div>
-          <h1 className="mt-1.5 font-display text-[28px] font-extrabold leading-tight sm:text-4xl">
-            Ditt körkort börjar här.
-          </h1>
-          <p className="mt-1.5 max-w-xl text-sm leading-relaxed text-muted-foreground sm:text-base">
-            Träna smartare. Förstå trafiken. Var redo för teoriprovet.
-          </p>
-        </header>
+        </section>
+
+        <section id="sa-fungerar-det" aria-labelledby="features-title" className="scroll-mt-20">
+          <h2 id="features-title" className="font-display text-lg font-bold sm:text-xl">Så fungerar Aurateori</h2>
+          <p className="mt-1 text-sm text-muted-foreground">Fyra verktyg som tar dig hela vägen till teoriprovet.</p>
+          <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+            <FeatureCard to="/quiz" icon={<BookOpen className="h-5 w-5" />} title="Teori" desc="Träna på teorifrågor efter kategori." />
+            <FeatureCard to="/exam" icon={<Timer className="h-5 w-5" />} title="Övningsprov" desc="Testa dina kunskaper inför teoriprovet." />
+            <FeatureCard to="/stats" icon={<BarChart3 className="h-5 w-5" />} title="Statistik" desc="Följ dina framsteg och se vad du behöver träna mer på." />
+            <FeatureCard to="/quiz" search={{ mode: "favorites" }} icon={<Star className="h-5 w-5" />} title="Favoriter" desc={`Spara frågor och repetera dem senare.${favCount ? ` ${favCount} sparade.` : ""}`} />
+          </div>
+        </section>
 
         <section
           aria-labelledby="daily-overview-title"
-          className="relative overflow-hidden rounded-xl border border-border bg-card p-5 shadow-soft sm:p-7"
+          className="relative overflow-hidden rounded-2xl border border-border bg-card p-5 shadow-soft sm:p-7"
         >
           <div aria-hidden="true" className="pointer-events-none absolute -right-24 -top-24 h-64 w-64 rounded-full bg-primary/10 blur-3xl" />
           <div className="relative flex items-start justify-between gap-3">
@@ -121,18 +157,9 @@ function Dashboard() {
               <Stat icon={<Timer className="h-4 w-4" />} label="Senaste prov" value={summary.latestExam ? `${summary.latestExam.correct}/${summary.latestExam.total}` : "–"} accent="primary" />
             </div>
           </div>
-          <div className="relative mt-6 grid grid-cols-1 gap-2 sm:flex sm:gap-3">
-            <Button asChild size="lg" className="h-12 w-full text-base sm:w-auto">
-              <Link to="/quiz">
-                Fortsätt träna
-                <Zap className="h-4 w-4" />
-              </Link>
-            </Button>
-            <Button asChild variant="outline" size="lg" className="h-12 w-full text-base sm:w-auto">
-              <Link to="/exam">
-                Starta teoriprov
-                <Timer className="h-4 w-4" />
-              </Link>
+          <div className="relative mt-6">
+            <Button asChild variant="outline" size="lg" className="h-12 w-full rounded-xl sm:w-auto">
+              <Link to="/exam">Starta teoriprov <Timer className="h-4 w-4" /></Link>
             </Button>
           </div>
         </section>
@@ -238,6 +265,23 @@ function ActionCard({
         <div className="mt-0.5 text-[13px] leading-5 text-muted-foreground">{desc}</div>
       </div>
       <ArrowRight className="h-4 w-4 shrink-0 opacity-50 transition-transform group-hover:translate-x-0.5 group-hover:opacity-100 sm:hidden" />
+    </Link>
+  );
+}
+
+function FeatureCard({ to, icon, title, desc, search }: { to: string; icon: React.ReactNode; title: string; desc: string; search?: Record<string, unknown> }) {
+  return (
+    <Link
+      to={to}
+      search={search}
+      className="group flex min-w-0 flex-col rounded-2xl border border-border bg-card p-5 shadow-soft transition-[transform,border-color] duration-200 hover:-translate-y-0.5 hover:border-electric/40 focus-visible:ring-2 focus-visible:ring-ring motion-reduce:hover:translate-y-0"
+    >
+      <span className="grid h-11 w-11 place-items-center rounded-xl bg-electric/10 text-electric">{icon}</span>
+      <span className="mt-4 flex items-center justify-between gap-2 font-display text-base font-bold">
+        {title}
+        <ArrowRight className="h-4 w-4 opacity-40 transition-transform group-hover:translate-x-0.5 group-hover:opacity-100" />
+      </span>
+      <span className="mt-1 text-[13px] leading-5 text-muted-foreground">{desc}</span>
     </Link>
   );
 }
