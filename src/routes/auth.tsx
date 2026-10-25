@@ -119,30 +119,11 @@ function AuthPage() {
           <p className="mt-1 text-sm text-muted-foreground">
             {mode === "forgot"
               ? "Fyll i din e-post – vi skickar en länk för att välja nytt lösenord."
-              : "Spara din progress och lås upp premium."}
+              : "Logga in med samma e-postadress som din lärare gett Premium. Inget köp behövs för tilldelad Premium."}
           </p>
         </div>
 
         <div className="rounded-xl border border-border bg-card p-5 shadow-lifted sm:p-6">
-          <div className="space-y-2">
-            <Button
-              variant="outline"
-              onClick={google}
-              className="w-full"
-            >
-              Fortsätt med Google
-            </Button>
-            <button type="button" className="lovable-auth-button" onClick={lovableSignIn}>
-              Fortsätt med Lovable
-            </button>
-          </div>
-
-          <div className="my-4 flex items-center gap-3 text-xs text-muted-foreground">
-            <div className="h-px flex-1 bg-border" />
-            eller
-            <div className="h-px flex-1 bg-border" />
-          </div>
-
           <form onSubmit={submit} className="space-y-3">
             <div>
               <label
@@ -154,6 +135,7 @@ function AuthPage() {
               <Input
                 id="email"
                 type="email"
+                autoComplete="email"
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
@@ -230,6 +212,12 @@ function AuthPage() {
               {mode === "forgot" ? "Tillbaka till inloggning" : "Glömt lösenordet?"}
             </button>
           </div>
+          {mode !== "forgot" && (
+            <div className="mt-4 space-y-2 border-t border-border pt-4">
+              <Button variant="outline" onClick={google} className="w-full">Fortsätt med Google</Button>
+              <Button variant="outline" onClick={lovableSignIn} className="w-full">Fortsätt med Lovable</Button>
+            </div>
+          )}
         </div>
 
         <p className="text-center text-xs text-muted-foreground">
