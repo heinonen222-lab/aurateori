@@ -6,7 +6,7 @@ import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { AuraLoading, AuraState } from "@/components/AuraState";
-import { adminListUsers, adminSetManualPremium, type AdminUser } from "@/utils/admin.functions";
+import { adminDeleteUser, adminListUsers, adminRevokePremium, adminSetBan, adminSetManualPremium, type AdminUser } from "@/utils/admin.functions";
 import { getPaddleEnvironment } from "@/lib/paddle";
 
 const LABEL: Record<AdminUser["plan"], string> = {
@@ -27,6 +27,22 @@ export function AdminStudents() {
   const [open, setOpen] = useState<AdminUser | null>(null);
   const [custom, setCustom] = useState("");
   const [busy, setBusy] = useState(false);
+  const revoke = useServerFn(adminRevokePremium);
+  const del = useServerFn(adminDeleteUser);
+  const ban = useServerFn(adminSetBan);
+  const act = async (msg: string, confirmText: string | null, fn: () => Promise<unknown>) => {
+    if (confirmText && !confirm(confirmText)) return;
+    setBusy(true);
+    try {
+      await fn();
+      toast.success(msg);
+      void qc.invalidateQueries({ queryKey: ["admin-users"] });
+    } catch (e) {
+      toast.error((e as Error).message);
+    } finally {
+      setBusy(false);
+    }
+  };
   const users = useQuery({ queryKey: ["admin-users"], queryFn: () => list() });
 
   const apply = async (u: AdminUser, until: string | null) => {
@@ -66,6 +82,7 @@ export function AdminStudents() {
                   <div className="text-xs text-muted-foreground">Registrerad {fmt(u.createdAt)}{u.premiumUntil ? ` · Premium till ${fmt(u.premiumUntil)}` : ""}</div>
                 </div>
                 <div className="flex items-center gap-2">
+                  {u.banned && <span className="rounded-md border border-destructive px-2 py-0.5 text-xs font-bold text-destructive">Spärrad</span>}
                   <span className={"rounded-md border px-2 py-0.5 text-xs font-bold " + (u.plan === "free" ? "border-border text-muted-foreground" : "border-premium text-premium")}>{LABEL[u.plan]}</span>
                   <Button size="sm" variant="outline" onClick={() => { setOpen(open?.id === u.id ? null : u); setCustom(""); }}>Hantera Premium</Button>
                 </div>
@@ -86,6 +103,13 @@ export function AdminStudents() {
                   {u.manualUntil && (
                     <Button size="sm" variant="ghost" className="text-destructive" disabled={busy} onClick={() => void apply(u, null)}>Återkalla manuell Premium</Button>
                   )}
+                  <div className="flex flex-wrap gap-2 border-t border-border pt-3">
+                    {u.plan !== "free" && (
+                      <Button size="sm" variant="outline" className="text-destructive" disabled={busy} onClick={() => void act("All Premium borttagen", `Ta bort all Premium för ${u.email}? Paddle-abonnemang avslutas direkt utan återbetalning.`, () => revoke({ data: { userId: u.id } }))}>Ta bort all Premium</Button>
+                    )}
+                    <Button size="sm" variant="outline" disabled={busy} onClick={() => void act(u.banned ? "Spärren hävd" : "Kontot är spärrat", u.banned ? null : `Spärra ${u.email}? Personen kan inte logga in.`, () => ban({ data: { userId: u.id, banned: !u.banned } }))}>{u.banned ? "Häv spärr" : "Banna"}</Button>
+                    <Button size="sm" variant="destructive" disabled={busy} onClick={() => void act("Kontot är raderat", `Radera ${u.email} permanent? Detta går inte att ångra.`, async () => { await del({ data: { userId: u.id } }); setOpen(null); })}>Radera konto</Button>
+                  </div>
                   {busy && <Loader2 className="h-4 w-4 animate-spin" />}
                   <p className="text-xs text-muted-foreground">Manuell Premium påverkar inte köp via Paddle eller Google Play.</p>
                 </div>
