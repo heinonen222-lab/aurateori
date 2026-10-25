@@ -206,16 +206,19 @@ function ActionCard({
   title,
   desc,
   highlight,
+  search,
 }: {
   to: string;
   icon: React.ReactNode;
   title: string;
   desc: string;
   highlight?: boolean;
+  search?: Record<string, unknown>;
 }) {
   return (
     <Link
       to={to}
+      search={search}
       className={`group relative flex h-full min-w-0 flex-col overflow-hidden border-b p-4 transition-colors duration-200 last:border-b-0 hover:bg-accent/40 focus-visible:z-10 focus-visible:ring-2 focus-visible:ring-ring sm:border-b-0 ${
         highlight ? "bg-primary text-primary-foreground hover:bg-primary/95" : "border-border bg-card"
       }`}
