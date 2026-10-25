@@ -1,4 +1,4 @@
-import { Link, useRouterState } from "@tanstack/react-router";
+import { Link, useRouter, useRouterState } from "@tanstack/react-router";
 import { useEffect, useState, type ReactNode } from "react";
 import {
   Home,
@@ -14,6 +14,7 @@ import {
   X,
   UserRound,
   Sparkles,
+  ArrowLeft,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { store, useStore } from "@/lib/store";
@@ -73,6 +74,7 @@ function NavLink({
 
 export function AppShell({ children }: { children: ReactNode }) {
   const s = useStore();
+  const router = useRouter();
   const pathname = useRouterState({ select: (r) => r.location.pathname });
   const [moreOpen, setMoreOpen] = useState(false);
 
@@ -163,6 +165,19 @@ export function AppShell({ children }: { children: ReactNode }) {
 
       <main id="innehall" className="pb-[calc(5rem+env(safe-area-inset-bottom))] lg:ml-60 lg:pb-10">
         <div className="mx-auto max-w-6xl px-4 py-6 sm:px-6 lg:px-10 lg:py-10">
+          {pathname !== "/" && (
+            <Button
+              variant="ghost"
+              className="mb-4 min-h-11 gap-2 px-2 text-muted-foreground hover:text-foreground"
+              onClick={() => {
+                if (router.history.canGoBack()) router.history.back();
+                else void router.navigate({ to: "/" });
+              }}
+            >
+              <ArrowLeft aria-hidden="true" className="h-4 w-4" />
+              Tillbaka
+            </Button>
+          )}
           {children}
           <LegalFooter />
         </div>
