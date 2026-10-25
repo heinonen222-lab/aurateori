@@ -74,18 +74,54 @@ function Dashboard() {
 
   return (
     <AppShell>
-      <section className="space-y-6 sm:space-y-8">
-        <header className="max-w-3xl">
-          <div className="text-xs font-bold uppercase text-muted-foreground">
+      <section className="space-y-5 sm:space-y-7">
+        <header>
+          <div className="text-[11px] font-bold uppercase tracking-[0.14em] text-muted-foreground">
             Personbil · Behörighet B
           </div>
-          <h1 className="mt-2 font-display text-3xl font-extrabold leading-tight sm:text-4xl">
+          <h1 className="mt-1.5 font-display text-[28px] font-extrabold leading-tight sm:text-4xl">
             Ditt körkort börjar här.
           </h1>
-          <p className="mt-2 max-w-xl text-sm leading-relaxed text-muted-foreground sm:text-base">
+          <p className="mt-1.5 max-w-xl text-sm leading-relaxed text-muted-foreground sm:text-base">
             Träna smartare. Förstå trafiken. Var redo för teoriprovet.
           </p>
-          <div className="mt-4 grid grid-cols-1 gap-2 sm:mt-5 sm:flex sm:flex-row sm:items-center sm:gap-3">
+        </header>
+
+        <section
+          aria-labelledby="daily-overview-title"
+          className="relative overflow-hidden rounded-xl border border-border bg-card p-5 shadow-soft sm:p-7"
+        >
+          <div aria-hidden="true" className="pointer-events-none absolute -right-24 -top-24 h-64 w-64 rounded-full bg-primary/10 blur-3xl" />
+          <div className="relative flex items-start justify-between gap-3">
+            <div>
+              <h2 id="daily-overview-title" className="font-display text-lg font-bold">Dagens översikt</h2>
+              <p className="mt-0.5 text-xs text-muted-foreground">Målet är 80 % körkortsklarhet.</p>
+            </div>
+            <span
+              className={`inline-flex shrink-0 items-center gap-1.5 rounded-md px-2 py-1 text-[11px] font-semibold ${
+                stats.readiness >= 80
+                  ? "bg-success/15 text-success"
+                  : stats.readiness >= 50
+                    ? "bg-primary/10 text-primary"
+                    : "bg-muted text-muted-foreground"
+              }`}
+            >
+              {stats.readiness >= 80 ? <CheckCircle2 aria-hidden="true" className="h-3.5 w-3.5" /> : stats.readiness >= 50 ? <Target aria-hidden="true" className="h-3.5 w-3.5" /> : <BookOpenCheck aria-hidden="true" className="h-3.5 w-3.5" />}
+              {stats.readiness >= 80 ? "Provklar" : stats.readiness >= 50 ? "På god väg" : "Kom igång"}
+            </span>
+          </div>
+          <div className="relative mt-5 grid grid-cols-1 items-center gap-6 sm:grid-cols-[auto_minmax(0,1fr)] sm:gap-10">
+            <div className="flex justify-center">
+              <Gauge value={stats.readiness} />
+            </div>
+            <div className="grid min-w-0 grid-cols-2 gap-px overflow-hidden rounded-lg border border-border bg-border sm:grid-cols-4">
+              <Stat icon={<Target className="h-4 w-4" />} label="Frågor" value={stats.total} accent="primary" />
+              <Stat icon={<CheckCircle2 className="h-4 w-4" />} label="Träffsäkerhet" value={`${stats.accuracy}%`} accent="success" />
+              <Stat icon={<Flame className="h-4 w-4" />} label="Träningsdagar" value={summary.trainingDays} accent="warning" />
+              <Stat icon={<Timer className="h-4 w-4" />} label="Senaste prov" value={summary.latestExam ? `${summary.latestExam.correct}/${summary.latestExam.total}` : "–"} accent="primary" />
+            </div>
+          </div>
+          <div className="relative mt-6 grid grid-cols-1 gap-2 sm:flex sm:gap-3">
             <Button asChild size="lg" className="h-12 w-full text-base sm:w-auto">
               <Link to="/quiz">
                 Fortsätt träna
@@ -99,54 +135,12 @@ function Dashboard() {
               </Link>
             </Button>
           </div>
-        </header>
-
-        {!authLoading && !user && <StudentLogin />}
-
-        <SubscriptionCountdown compact />
-
-        <section aria-labelledby="daily-overview-title" className="border-y border-border py-5 sm:py-6">
-          <div className="mb-5 text-center sm:text-left">
-            <h2 id="daily-overview-title" className="font-display text-lg font-bold sm:text-xl">Dagens översikt</h2>
-            <p className="mt-1 text-sm text-muted-foreground">Målet är 80 % körkortsklarhet.</p>
-          </div>
-          <div className="grid grid-cols-1 items-center gap-5 sm:grid-cols-[auto_minmax(0,1fr)] sm:gap-8">
-          <div className="flex min-w-0 flex-col items-center gap-3">
-            <Gauge value={stats.readiness} />
-            <span
-              className={`inline-flex max-w-full items-center justify-center gap-2 rounded-md px-2.5 py-1.5 text-center text-xs font-semibold leading-5 ${
-                stats.readiness >= 80
-                  ? "bg-success/15 text-success"
-                  : stats.readiness >= 50
-                    ? "bg-primary/10 text-primary"
-                    : "bg-muted text-muted-foreground"
-              }`}
-            >
-              {stats.readiness >= 80 ? <CheckCircle2 aria-hidden="true" className="h-4 w-4 shrink-0" /> : stats.readiness >= 50 ? <Target aria-hidden="true" className="h-4 w-4 shrink-0" /> : <BookOpenCheck aria-hidden="true" className="h-4 w-4 shrink-0" />}
-              <span className="min-w-0">
-              {stats.readiness >= 80
-                ? "Provklar – redo för provet"
-                : stats.readiness >= 50
-                  ? "På god väg – slipa detaljerna"
-                  : "Kom igång med grunderna"}
-              </span>
-            </span>
-          </div>
-          <div className="min-w-0">
-            <div className="grid min-w-0 grid-cols-2 gap-x-5 gap-y-4 sm:grid-cols-4">
-              <Stat icon={<Target className="h-4 w-4" />} label="Frågor" value={stats.total} accent="primary" />
-              <Stat icon={<CheckCircle2 className="h-4 w-4" />} label="Träffsäkerhet" value={`${stats.accuracy}%`} accent="success" />
-              <Stat icon={<Flame className="h-4 w-4" />} label="Träningsdagar" value={summary.trainingDays} accent="warning" />
-              <Stat icon={<Timer className="h-4 w-4" />} label="Senaste prov" value={summary.latestExam ? `${summary.latestExam.correct}/${summary.latestExam.total}` : "–"} accent="primary" />
-            </div>
-          </div>
-          </div>
         </section>
 
         {s.wrongQueue.length > 0 && (
           <Link
             to="/stats"
-            className="group grid grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-3 rounded-lg border border-warning/40 bg-warning/10 p-4 transition-[background-color,transform] duration-200 hover:bg-warning/15 active:scale-[0.99] focus-visible:ring-2 focus-visible:ring-ring"
+            className="group grid grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-3 rounded-lg border border-warning/40 bg-warning/10 p-4 transition-colors duration-200 hover:bg-warning/15 focus-visible:ring-2 focus-visible:ring-ring"
           >
             <span className="grid h-10 w-10 shrink-0 place-items-center rounded-lg bg-warning/20 text-warning-foreground"><RotateCcw className="h-5 w-5" /></span>
             <div className="min-w-0">
@@ -157,14 +151,18 @@ function Dashboard() {
           </Link>
         )}
 
+        <SubscriptionCountdown compact />
+
         <div>
-          <h2 className="mb-4 font-display text-xl font-bold">Fler sätt att träna</h2>
-          <div className="grid overflow-hidden rounded-lg border border-border bg-card shadow-soft sm:grid-cols-3 sm:divide-x sm:divide-border">
-            <ActionCard to="/quiz" search={{ mode: "quick" }} icon={<Zap className="h-5 w-5" />} title="Snabbquiz" desc="10 blandade frågor för snabb repetition." />
-            <ActionCard to="/signs" icon={<Signpost className="h-5 w-5" />} title="Vägmärken" desc="Lär dig märkenas betydelse och regler." />
-            <ActionCard to="/forsakring" icon={<ShieldCheck className="h-5 w-5" />} title="Försäkring – gratis" desc="10 frågor med förklaringar. Ingen Premium krävs." />
+          <h2 className="mb-3 font-display text-lg font-bold sm:text-xl">Fler sätt att träna</h2>
+          <div className="grid gap-3 sm:grid-cols-3">
+            <ActionCard to="/quiz" search={{ mode: "quick" }} icon={<Zap className="h-5 w-5" />} title="Snabbquiz" tag="10 frågor" desc="Blandade frågor för snabb repetition." />
+            <ActionCard to="/signs" icon={<Signpost className="h-5 w-5" />} title="Vägmärken" tag="Bibliotek" desc="Lär dig märkenas betydelse och regler." />
+            <ActionCard to="/forsakring" icon={<ShieldCheck className="h-5 w-5" />} title="Försäkring" tag="Gratis" desc="10 frågor med förklaringar." />
           </div>
         </div>
+
+        {!authLoading && !user && <StudentLogin />}
 
         <section className="space-y-4">
           <div className="flex items-end justify-between gap-3">
@@ -198,14 +196,12 @@ function Stat({
     warning: "bg-warning/20 text-warning-foreground",
   }[accent];
   return (
-    <div className="flex min-w-0 flex-col overflow-hidden">
-      <div
-        className={`mb-2 hidden h-7 w-7 items-center justify-center rounded-md sm:inline-flex ${accentBg}`}
-      >
+    <div className="flex min-w-0 flex-col overflow-hidden bg-card p-3">
+      <div className={`mb-2 inline-flex h-7 w-7 items-center justify-center rounded-md ${accentBg}`}>
         {icon}
       </div>
       <AutoFitText maxSize={20} minSize={14} className="h-6 font-black leading-6">{value}</AutoFitText>
-      <span className="mt-1 text-[10px] leading-4 text-muted-foreground">{label}</span>
+      <span className="mt-0.5 text-[11px] leading-4 text-muted-foreground">{label}</span>
     </div>
   );
 }
@@ -215,40 +211,33 @@ function ActionCard({
   icon,
   title,
   desc,
-  highlight,
+  tag,
   search,
 }: {
   to: string;
   icon: React.ReactNode;
   title: string;
   desc: string;
-  highlight?: boolean;
+  tag?: string;
   search?: Record<string, unknown>;
 }) {
   return (
     <Link
       to={to}
       search={search}
-      className={`group relative flex h-full min-w-0 flex-col overflow-hidden border-b p-4 transition-colors duration-200 last:border-b-0 hover:bg-accent/40 focus-visible:z-10 focus-visible:ring-2 focus-visible:ring-ring sm:border-b-0 ${
-        highlight ? "bg-primary text-primary-foreground hover:bg-primary/95" : "border-border bg-card"
-      }`}
+      className="group flex min-w-0 items-center gap-3 rounded-lg border border-border bg-card p-4 shadow-soft transition-colors duration-200 hover:border-primary/40 focus-visible:ring-2 focus-visible:ring-ring sm:flex-col sm:items-start"
     >
-      <div className="flex items-center gap-3">
-        <div
-          className={`inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-lg ${
-            highlight ? "bg-primary-foreground/15" : "bg-primary/10 text-primary"
-          }`}
-        >
-          {icon}
+      <div className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary">
+        {icon}
+      </div>
+      <div className="min-w-0 flex-1">
+        <div className="flex items-center gap-2">
+          <span className="truncate font-bold">{title}</span>
+          {tag && <span className="shrink-0 rounded bg-muted px-1.5 py-0.5 text-[10px] font-semibold text-muted-foreground">{tag}</span>}
         </div>
-        <AutoFitText maxSize={16} minSize={13} className="h-6 min-w-0 flex-1 font-bold leading-6">{title}</AutoFitText>
-        <ArrowRight className="h-4 w-4 shrink-0 opacity-50 transition-transform group-hover:translate-x-0.5 group-hover:opacity-100" />
+        <div className="mt-0.5 text-[13px] leading-5 text-muted-foreground">{desc}</div>
       </div>
-      <div
-        className={`mt-2 text-[13px] leading-5 ${highlight ? "text-primary-foreground/80" : "text-muted-foreground"}`}
-      >
-        {desc}
-      </div>
+      <ArrowRight className="h-4 w-4 shrink-0 opacity-50 transition-transform group-hover:translate-x-0.5 group-hover:opacity-100 sm:hidden" />
     </Link>
   );
 }
