@@ -36,7 +36,7 @@ function Gauge({ value }: { value: number }) {
   const c = 2 * Math.PI * r;
   const offset = c - (value / 100) * c;
   return (
-    <div className="relative grid h-28 w-28 shrink-0 place-items-center sm:h-44 sm:w-44">
+    <div className="relative grid h-36 w-36 shrink-0 place-items-center sm:h-44 sm:w-44">
       <svg viewBox="0 0 160 160" className="h-full w-full -rotate-90" aria-hidden="true">
         <circle cx="80" cy="80" r={r} fill="none" stroke="var(--muted)" strokeWidth="14" />
         <circle
@@ -53,7 +53,7 @@ function Gauge({ value }: { value: number }) {
         />
       </svg>
       <div className="absolute text-center">
-        <div className="font-display text-2xl font-extrabold sm:text-4xl">{value}%</div>
+        <div className="font-display text-3xl font-extrabold sm:text-4xl">{value}%</div>
         <div className="mt-1 text-[9px] font-semibold text-muted-foreground sm:text-[10px]">
           Körkortsklarhet
         </div>
@@ -100,8 +100,25 @@ function Dashboard() {
 
         <SubscriptionCountdown compact />
 
-        <div className="grid grid-cols-[auto_minmax(0,1fr)] items-center gap-4 rounded-lg border border-border bg-card p-4 shadow-soft sm:gap-8 sm:p-6">
-          <Gauge value={stats.readiness} />
+        <div className="grid grid-cols-1 items-center gap-5 rounded-lg border border-border bg-card p-5 shadow-soft sm:grid-cols-[auto_minmax(0,1fr)] sm:gap-8 sm:p-6">
+          <div className="flex flex-col items-center gap-3">
+            <Gauge value={stats.readiness} />
+            <span
+              className={`rounded-md px-2.5 py-1 text-xs font-semibold ${
+                stats.readiness >= 80
+                  ? "bg-success/15 text-success"
+                  : stats.readiness >= 50
+                    ? "bg-primary/10 text-primary"
+                    : "bg-muted text-muted-foreground"
+              }`}
+            >
+              {stats.readiness >= 80
+                ? "Provklar – redo för provet"
+                : stats.readiness >= 50
+                  ? "På god väg – slipa detaljerna"
+                  : "Kom igång med grunderna"}
+            </span>
+          </div>
           <div className="min-w-0">
             <div className="mb-4">
               <h2 className="font-display text-base font-bold sm:text-xl">Dagens översikt</h2>
