@@ -21,6 +21,7 @@ export interface AppState {
   lastActive: string; // yyyy-mm-dd
   theme: "light" | "dark";
   examAttempts: ExamAttempt[];
+  favorites: string[]; // qids saved by the user
 }
 
 const KEY = "korkortskollen-v1";
@@ -35,6 +36,7 @@ const defaultState: AppState = {
   lastActive: "",
   theme: "light",
   examAttempts: [],
+  favorites: [],
 };
 
 function load(): AppState {
@@ -101,6 +103,11 @@ export const store = {
   },
   recordExamAttempt: (correct: number, total: number, passed: boolean) => {
     state.examAttempts = [...state.examAttempts, { at: Date.now(), correct, total, passed }];
+    emit();
+  },
+  toggleFavorite: (qid: string) => {
+    const favs = state.favorites ?? [];
+    state.favorites = favs.includes(qid) ? favs.filter((q) => q !== qid) : [...favs, qid];
     emit();
   },
   toggleTheme: () => {

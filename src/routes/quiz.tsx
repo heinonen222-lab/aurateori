@@ -1,3 +1,4 @@
+import { toast } from "sonner";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import type { ReactNode } from "react";
 import { useEffect, useMemo, useRef, useState } from "react";
@@ -16,9 +17,9 @@ import { BookOpenCheck, RefreshCcw, RotateCcw, TriangleAlert } from "lucide-reac
 import { AuraState } from "@/components/AuraState";
 
 export const Route = createFileRoute("/quiz")({
-  validateSearch: (search: Record<string, unknown>): { topic?: TopicId; mode?: "quick" } => ({
+  validateSearch: (search: Record<string, unknown>): { topic?: TopicId; mode?: "quick" | "favorites" } => ({
     topic: TOPICS.find((topic) => topic.id === search.topic)?.id,
-    mode: search.mode === "quick" ? "quick" : undefined,
+    mode: search.mode === "quick" || search.mode === "favorites" ? search.mode : undefined,
   }),
   head: () => ({
     meta: [
@@ -120,9 +121,12 @@ function QuizPage() {
   // Snabbquiz från startsidan: frågorna ska börja direkt, utan ämnesrutorna först.
   const autoStarted = useRef(false);
   useEffect(() => {
-    if (search.mode !== "quick" || autoStarted.current || allQ.length === 0) return;
+    if (!search.mode || autoStarted.current || allQ.length === 0) return;
     autoStarted.current = true;
-    startQuick();
+    if (search.mode === "quick") return startQuick();
+    const favs = allQ.filter((x) => (s.favorites ?? []).includes(x.id));
+    if (favs.length > 0) startCustom(`Favoriter · ${favs.length} sparade`, seededShuffle(favs, Date.now()));
+    else toast.info("Du har inga sparade favoriter ännu. Tryck på stjärnan på en fråga för att spara den.");
   }, [search.mode, allQ]);
 
   const activePool = custom
