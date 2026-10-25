@@ -56,7 +56,7 @@ function NavLink({
       className={cn(
         "relative flex min-w-0 min-h-11 items-center gap-3 rounded-lg transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring motion-reduce:transition-none",
         variant === "bottom"
-          ? "h-[60px] flex-col justify-center gap-1 rounded-none px-0.5 py-1.5 text-[11px] font-semibold leading-4 focus-visible:ring-inset"
+          ? "h-[60px] flex-col justify-center gap-1 rounded-none px-0.5 py-1.5 text-[10px] min-[360px]:text-[11px] font-semibold leading-4 focus-visible:ring-inset"
           : "px-4 py-3 text-sm font-medium",
         active ? (variant === "bottom" ? "text-primary" : "text-foreground") : "text-muted-foreground hover:bg-muted hover:text-foreground",
         variant === "sheet" && active && "bg-accent text-accent-foreground",
