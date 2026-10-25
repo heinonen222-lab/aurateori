@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { Zap, Timer, Signpost, Flame, Target, CheckCircle2, ArrowRight, RotateCcw, ShieldCheck } from "lucide-react";
+import { Zap, Timer, Signpost, Flame, Target, CheckCircle2, ArrowRight, RotateCcw, ShieldCheck, BookOpenCheck } from "lucide-react";
 import { useQuestions } from "@/hooks/useQuestions";
 import { useNavigate } from "@tanstack/react-router";
 import { TrainingTopics } from "@/components/TrainingTopics";
