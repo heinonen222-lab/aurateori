@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { Check, X } from "lucide-react";
+import { Check, Star, X } from "lucide-react";
+import { store, useStore } from "@/lib/store";
 import { QuestionReference } from "@/components/QuestionReference";
 import type { Question } from "@/data/questions";
 import { SignImage } from "@/components/SignImage";
@@ -29,6 +30,8 @@ export function QuestionCard({
 }: Props) {
   const [selected, setSelected] = useState<number | null>(selectedAnswer ?? null);
   const answered = selected !== null;
+  const favorites = useStore().favorites ?? [];
+  const isFavorite = favorites.includes(question.id);
 
   const pick = (i: number) => {
     if (answered && !examMode) return;
@@ -60,7 +63,22 @@ export function QuestionCard({
         </div>
       )}
 
-      <h2 className="text-lg font-bold leading-snug sm:text-xl">{question.question}</h2>
+      <div className="flex items-start gap-3">
+        <h2 className="min-w-0 flex-1 text-lg font-bold leading-snug sm:text-xl">{question.question}</h2>
+        {!examMode && (
+          <Button
+            type="button"
+            variant="ghost"
+            size="icon"
+            className="h-11 w-11 shrink-0"
+            aria-pressed={isFavorite}
+            aria-label={isFavorite ? "Ta bort från favoriter" : "Spara som favorit"}
+            onClick={() => store.toggleFavorite(question.id)}
+          >
+            <Star className={cn("h-5 w-5", isFavorite && "fill-premium text-premium")} />
+          </Button>
+        )}
+      </div>
 
       <div className="mt-5 space-y-2.5">
         {question.options.map((opt, i) => {
