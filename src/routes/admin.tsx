@@ -12,6 +12,8 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
+import { AdminStudents } from "@/components/AdminStudents";
+import { AdminDeletions } from "@/components/AdminDeletions";
 
 export const Route = createFileRoute("/admin")({
   head: () => ({
@@ -66,6 +68,7 @@ function AdminPage() {
   const [draft, setDraft] = useState<Draft | null>(null);
   const [saving, setSaving] = useState(false);
   const [filter, setFilter] = useState("");
+  const [tab, setTab] = useState<"questions" | "students" | "gdpr">("questions");
 
   const role = useQuery({
     queryKey: ["is-admin", user?.id],
@@ -155,12 +158,29 @@ function AdminPage() {
     (r.question + r.category).toLowerCase().includes(filter.toLowerCase()),
   );
 
+  const TABS = [
+    { id: "questions", label: "Frågor" },
+    { id: "students", label: "Elever & Premium" },
+    { id: "gdpr", label: "Raderingskö" },
+  ] as const;
+
   return (
     <AppShell>
       <section className="space-y-6">
         <Button variant="ghost" size="sm" className="-ml-2" onClick={() => (draft ? setDraft(null) : window.history.length > 1 ? window.history.back() : (window.location.href = "/"))}>
           <ArrowLeft className="h-4 w-4" /> {draft ? "Tillbaka till listan" : "Gå tillbaka"}
         </Button>
+        <div role="tablist" aria-label="Adminsektioner" className="flex gap-1 overflow-x-auto rounded-lg border border-border bg-card p-1">
+          {TABS.map((t) => (
+            <button key={t.id} role="tab" aria-selected={tab === t.id} onClick={() => setTab(t.id)}
+              className={"min-h-11 flex-1 whitespace-nowrap rounded-md px-3 text-sm font-semibold transition-colors " + (tab === t.id ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:text-foreground")}>
+              {t.label}
+            </button>
+          ))}
+        </div>
+        {tab === "students" && <AdminStudents />}
+        {tab === "gdpr" && <AdminDeletions />}
+        {tab === "questions" && (<>
         <header className="flex flex-wrap items-end justify-between gap-3">
           <div>
             <div className="flex items-center gap-2 text-xs font-bold uppercase text-muted-foreground">
@@ -256,6 +276,7 @@ function AdminPage() {
             ))}
           </ul>
         )}
+        </>)}
       </section>
     </AppShell>
   );
