@@ -100,77 +100,19 @@ function Dashboard() {
 
         <SubscriptionCountdown compact />
 
-        <section className="flex flex-wrap items-center justify-between gap-4 border-y border-border py-4">
-          <div className="flex items-start gap-3"><ShieldCheck className="mt-1 h-6 w-6 shrink-0 text-success" /><div><h2 className="text-base font-bold">Gratis försäkringsutbildning</h2><p className="mt-1 text-sm text-muted-foreground">10 frågor med förklaringar · Ingen Premium krävs</p></div></div>
-          <Button asChild variant="outline"><Link to="/forsakring">Träna försäkring <ArrowRight /></Link></Button>
-        </section>
-
-        <div className="relative grid grid-cols-[auto_minmax(0,1fr)] items-center gap-4 border-y border-border py-5 sm:gap-8">
-          <div className="relative z-10 w-fit"><Gauge value={stats.readiness} /></div>
-          <div className="relative z-10 min-w-0">
-            <div className="mb-4 flex items-end justify-between gap-4">
-              <div>
-                <h2 className="font-display text-base font-bold sm:text-xl">Dagens översikt</h2>
-                <p className="mt-1 text-sm text-muted-foreground">Målet är 80 % körkortsklarhet.</p>
-              </div>
-              <span className="hidden rounded-md bg-premium px-2.5 py-1 text-xs font-bold text-premium-foreground sm:inline-flex">Mål 80 %</span>
+        <div className="grid grid-cols-[auto_minmax(0,1fr)] items-center gap-4 rounded-lg border border-border bg-card p-4 shadow-soft sm:gap-8 sm:p-6">
+          <Gauge value={stats.readiness} />
+          <div className="min-w-0">
+            <div className="mb-4">
+              <h2 className="font-display text-base font-bold sm:text-xl">Dagens översikt</h2>
+              <p className="mt-1 text-sm text-muted-foreground">Målet är 80 % körkortsklarhet.</p>
             </div>
             <div className="grid min-w-0 grid-cols-2 gap-3 sm:grid-cols-4">
-            <Stat
-              icon={<Target className="h-4 w-4" />}
-              label="Frågor"
-              value={stats.total}
-              accent="primary"
-            />
-            <Stat
-              icon={<CheckCircle2 className="h-4 w-4" />}
-              label="Träffsäkerhet"
-              value={`${stats.accuracy}%`}
-              accent="success"
-            />
-            <Stat
-              icon={<Flame className="h-4 w-4" />}
-              label="Träningsdagar"
-              value={summary.trainingDays}
-              accent="warning"
-            />
-            <Stat icon={<Timer className="h-4 w-4" />} label="Senaste prov" value={summary.latestExam ? `${summary.latestExam.correct}/${summary.latestExam.total}` : "–"} accent="primary" />
+              <Stat icon={<Target className="h-4 w-4" />} label="Frågor" value={stats.total} accent="primary" />
+              <Stat icon={<CheckCircle2 className="h-4 w-4" />} label="Träffsäkerhet" value={`${stats.accuracy}%`} accent="success" />
+              <Stat icon={<Flame className="h-4 w-4" />} label="Träningsdagar" value={summary.trainingDays} accent="warning" />
+              <Stat icon={<Timer className="h-4 w-4" />} label="Senaste prov" value={summary.latestExam ? `${summary.latestExam.correct}/${summary.latestExam.total}` : "–"} accent="primary" />
             </div>
-          </div>
-        </div>
-
-        <section className="space-y-4">
-          <div className="flex items-center justify-between gap-3"><h2 className="font-display text-xl font-bold">Dina kunskapsområden</h2><Button asChild variant="ghost" size="sm"><Link to="/stats">Statistik <ArrowRight /></Link></Button></div>
-          <TrainingTopics questions={questions} state={s} onSelect={(topic) => void navigate({ to: "/quiz", search: { topic } })} />
-        </section>
-
-        <div>
-          <div className="mb-4 grid grid-cols-[minmax(0,1fr)_auto] items-end gap-4">
-            <div>
-              <h2 className="font-display text-xl font-bold">Fortsätt träna</h2>
-              <p className="mt-1 text-sm text-muted-foreground">Välj ett sätt att komma vidare.</p>
-            </div>
-          </div>
-          <div className="grid overflow-hidden rounded-lg border border-border bg-card shadow-soft sm:grid-cols-3 sm:divide-x sm:divide-border">
-          <ActionCard
-            to="/quiz"
-            icon={<Zap className="h-5 w-5" />}
-            title="Snabbquiz"
-            desc="10 blandade frågor för snabb repetition."
-          />
-          <ActionCard
-            to="/exam"
-            icon={<Timer className="h-5 w-5" />}
-            title="Fullständigt prov"
-            desc="70 frågor · 50 minuter · 65 poänggrundande."
-            highlight
-          />
-          <ActionCard
-            to="/signs"
-            icon={<Signpost className="h-5 w-5" />}
-            title="Vägmärken"
-            desc="Lär dig märkenas betydelse och regler."
-          />
           </div>
         </div>
 
@@ -181,14 +123,32 @@ function Dashboard() {
           >
             <span className="grid h-10 w-10 shrink-0 place-items-center rounded-lg bg-warning/20 text-warning-foreground"><RotateCcw className="h-5 w-5" /></span>
             <div className="min-w-0">
-              <div className="text-sm font-bold">
-                Du har {s.wrongQueue.length} frågor att repetera
-              </div>
+              <div className="text-sm font-bold">Du har {s.wrongQueue.length} frågor att repetera</div>
               <div className="mt-0.5 text-xs text-muted-foreground">Träna på dina svaga områden</div>
             </div>
             <ArrowRight className="h-5 w-5 transition-transform group-hover:translate-x-0.5" />
           </Link>
         )}
+
+        <div>
+          <h2 className="mb-4 font-display text-xl font-bold">Fler sätt att träna</h2>
+          <div className="grid overflow-hidden rounded-lg border border-border bg-card shadow-soft sm:grid-cols-3 sm:divide-x sm:divide-border">
+            <ActionCard to="/quiz" icon={<Zap className="h-5 w-5" />} title="Snabbquiz" desc="10 blandade frågor för snabb repetition." />
+            <ActionCard to="/signs" icon={<Signpost className="h-5 w-5" />} title="Vägmärken" desc="Lär dig märkenas betydelse och regler." />
+            <ActionCard to="/forsakring" icon={<ShieldCheck className="h-5 w-5" />} title="Försäkring – gratis" desc="10 frågor med förklaringar. Ingen Premium krävs." />
+          </div>
+        </div>
+
+        <section className="space-y-4">
+          <div className="flex items-end justify-between gap-3">
+            <div>
+              <h2 className="font-display text-xl font-bold">Dina kunskapsområden</h2>
+              <p className="mt-1 text-sm text-muted-foreground">Träna ett specifikt ämnesområde.</p>
+            </div>
+            <Button asChild variant="ghost" size="sm"><Link to="/stats">Statistik <ArrowRight /></Link></Button>
+          </div>
+          <TrainingTopics questions={questions} state={s} onSelect={(topic) => void navigate({ to: "/quiz", search: { topic } })} />
+        </section>
       </section>
     </AppShell>
   );
