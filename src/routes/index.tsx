@@ -74,7 +74,7 @@ function Dashboard() {
 
   return (
     <AppShell>
-      <section className="space-y-8">
+      <section className="space-y-6 sm:space-y-8">
         <header className="max-w-3xl">
           <div className="text-xs font-bold uppercase text-muted-foreground">
             Personbil · Behörighet B
@@ -85,7 +85,7 @@ function Dashboard() {
           <p className="mt-2 max-w-xl text-sm leading-relaxed text-muted-foreground sm:text-base">
             Träna smartare. Förstå trafiken. Var redo för teoriprovet.
           </p>
-          <div className="mt-5 grid grid-cols-1 gap-3 sm:flex sm:flex-row sm:items-center">
+          <div className="mt-4 grid grid-cols-1 gap-2 sm:mt-5 sm:flex sm:flex-row sm:items-center sm:gap-3">
             <Button asChild size="lg" className="h-12 w-full text-base sm:w-auto">
               <Link to="/quiz">
                 Fortsätt träna
@@ -105,11 +105,16 @@ function Dashboard() {
 
         <SubscriptionCountdown compact />
 
-        <div className="grid grid-cols-1 items-center gap-5 rounded-lg border border-border bg-card p-5 shadow-soft sm:grid-cols-[auto_minmax(0,1fr)] sm:gap-8 sm:p-6">
-          <div className="flex flex-col items-center gap-3">
+        <section aria-labelledby="daily-overview-title" className="border-y border-border py-5 sm:py-6">
+          <div className="mb-5 text-center sm:text-left">
+            <h2 id="daily-overview-title" className="font-display text-lg font-bold sm:text-xl">Dagens översikt</h2>
+            <p className="mt-1 text-sm text-muted-foreground">Målet är 80 % körkortsklarhet.</p>
+          </div>
+          <div className="grid grid-cols-1 items-center gap-5 sm:grid-cols-[auto_minmax(0,1fr)] sm:gap-8">
+          <div className="flex min-w-0 flex-col items-center gap-3">
             <Gauge value={stats.readiness} />
             <span
-              className={`rounded-md px-2.5 py-1 text-xs font-semibold ${
+              className={`inline-flex max-w-full items-center justify-center gap-2 rounded-md px-2.5 py-1.5 text-center text-xs font-semibold leading-5 ${
                 stats.readiness >= 80
                   ? "bg-success/15 text-success"
                   : stats.readiness >= 50
@@ -117,26 +122,26 @@ function Dashboard() {
                     : "bg-muted text-muted-foreground"
               }`}
             >
+              {stats.readiness >= 80 ? <CheckCircle2 aria-hidden="true" className="h-4 w-4 shrink-0" /> : stats.readiness >= 50 ? <Target aria-hidden="true" className="h-4 w-4 shrink-0" /> : <BookOpenCheck aria-hidden="true" className="h-4 w-4 shrink-0" />}
+              <span className="min-w-0">
               {stats.readiness >= 80
                 ? "Provklar – redo för provet"
                 : stats.readiness >= 50
                   ? "På god väg – slipa detaljerna"
                   : "Kom igång med grunderna"}
+              </span>
             </span>
           </div>
           <div className="min-w-0">
-            <div className="mb-4">
-              <h2 className="font-display text-base font-bold sm:text-xl">Dagens översikt</h2>
-              <p className="mt-1 text-sm text-muted-foreground">Målet är 80 % körkortsklarhet.</p>
-            </div>
-            <div className="grid min-w-0 grid-cols-2 gap-3 sm:grid-cols-4">
+            <div className="grid min-w-0 grid-cols-2 gap-x-5 gap-y-4 sm:grid-cols-4">
               <Stat icon={<Target className="h-4 w-4" />} label="Frågor" value={stats.total} accent="primary" />
               <Stat icon={<CheckCircle2 className="h-4 w-4" />} label="Träffsäkerhet" value={`${stats.accuracy}%`} accent="success" />
               <Stat icon={<Flame className="h-4 w-4" />} label="Träningsdagar" value={summary.trainingDays} accent="warning" />
               <Stat icon={<Timer className="h-4 w-4" />} label="Senaste prov" value={summary.latestExam ? `${summary.latestExam.correct}/${summary.latestExam.total}` : "–"} accent="primary" />
             </div>
           </div>
-        </div>
+          </div>
+        </section>
 
         {s.wrongQueue.length > 0 && (
           <Link
