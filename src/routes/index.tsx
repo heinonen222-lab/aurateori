@@ -150,7 +150,7 @@ function Dashboard() {
         <div>
           <h2 className="mb-4 font-display text-xl font-bold">Fler sätt att träna</h2>
           <div className="grid overflow-hidden rounded-lg border border-border bg-card shadow-soft sm:grid-cols-3 sm:divide-x sm:divide-border">
-            <ActionCard to="/quiz" icon={<Zap className="h-5 w-5" />} title="Snabbquiz" desc="10 blandade frågor för snabb repetition." />
+            <ActionCard to="/quiz" search={{ mode: "quick" }} icon={<Zap className="h-5 w-5" />} title="Snabbquiz" desc="10 blandade frågor för snabb repetition." />
             <ActionCard to="/signs" icon={<Signpost className="h-5 w-5" />} title="Vägmärken" desc="Lär dig märkenas betydelse och regler." />
             <ActionCard to="/forsakring" icon={<ShieldCheck className="h-5 w-5" />} title="Försäkring – gratis" desc="10 frågor med förklaringar. Ingen Premium krävs." />
           </div>
