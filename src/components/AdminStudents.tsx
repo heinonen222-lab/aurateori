@@ -26,6 +26,8 @@ export function AdminStudents() {
   const [q, setQ] = useState("");
   const [open, setOpen] = useState<AdminUser | null>(null);
   const [custom, setCustom] = useState("");
+  const [grantEmail, setGrantEmail] = useState("");
+  const [grantDays, setGrantDays] = useState("30");
   const [busy, setBusy] = useState(false);
   const revoke = useServerFn(adminRevokePremium);
   const del = useServerFn(adminDeleteUser);
@@ -69,6 +71,26 @@ export function AdminStudents() {
   return (
     <div className="space-y-4">
       <p className="text-sm text-muted-foreground">{users.data?.length ?? 0} elever · {premiumCount} med Premium</p>
+      <form
+        className="space-y-2 rounded-lg border border-border bg-card p-3"
+        onSubmit={(e) => {
+          e.preventDefault();
+          const target = (users.data ?? []).find((u) => (u.email ?? "").toLowerCase() === grantEmail.trim().toLowerCase());
+          if (!target) { toast.error("Inget konto med den e-postadressen. Personen måste först skapa ett konto."); return; }
+          void apply(target, addDays(Number(grantDays))).then(() => setGrantEmail(""));
+        }}
+      >
+        <div className="text-sm font-semibold">Ge Premium via e-post</div>
+        <div className="flex flex-wrap gap-2">
+          <Input type="email" required placeholder="elev@exempel.se" className="min-w-0 flex-1" value={grantEmail} onChange={(e) => setGrantEmail(e.target.value)} />
+          <select aria-label="Period" className="h-10 rounded-md border border-input bg-background px-2 text-sm" value={grantDays} onChange={(e) => setGrantDays(e.target.value)}>
+            <option value="30">1 månad</option>
+            <option value="90">3 månader</option>
+            <option value="365">1 år</option>
+          </select>
+          <Button type="submit" disabled={busy || !grantEmail.trim()}>Ge Premium</Button>
+        </div>
+      </form>
       <Input placeholder="Sök e-post" value={q} onChange={(e) => setQ(e.target.value)} />
       {rows.length === 0 ? (
         <AuraState icon={Users} title="Inga elever" description="Inga konton matchar sökningen." />
