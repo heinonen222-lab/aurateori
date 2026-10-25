@@ -18,6 +18,7 @@ export type AdminUser = {
   plan: "free" | "paddle" | "play" | "manual";
   premiumUntil: string | null;
   manualUntil: string | null;
+  banned: boolean;
 };
 
 const ACTIVE = ["active", "trialing", "past_due"];
@@ -32,6 +33,9 @@ export const adminListUsers = createServerFn({ method: "GET" })
       db.from("google_play_subscriptions").select("user_id,status,current_period_end"),
     ]);
     if (error) throw new Error("Kunde inte hämta elever.");
+    const { data: authList } = await db.auth.admin.listUsers({ perPage: 1000 });
+    const nowMs = Date.now();
+    const bannedIds = new Set((authList?.users ?? []).filter((u) => u.banned_until && new Date(u.banned_until).getTime() > nowMs).map((u) => u.id));
     const now = new Date().toISOString();
     return (profiles ?? []).map((p) => {
       let plan: AdminUser["plan"] = "free";
@@ -53,7 +57,7 @@ export const adminListUsers = createServerFn({ method: "GET" })
           if (!premiumUntil || g.current_period_end > premiumUntil) premiumUntil = g.current_period_end;
         }
       }
-      return { id: p.id, email: p.email, createdAt: p.created_at, plan, premiumUntil, manualUntil };
+      return { id: p.id, email: p.email, createdAt: p.created_at, plan, premiumUntil, manualUntil, banned: bannedIds.has(p.id) };
     });
   });
 
@@ -131,5 +135,65 @@ export const adminDeleteNow = createServerFn({ method: "POST" })
     const { error: authErr } = await db.auth.admin.deleteUser(uid);
     if (authErr && !/not found/i.test(authErr.message)) throw new Error("Kontot kunde inte raderas.");
     await db.from("deletion_requests").delete().eq("id", data.id);
+    return { ok: true };
+  });
+
+const userIdInput = (d: unknown) => z.object({ userId: z.string().uuid() }).parse(d);
+
+type Db = Awaited<ReturnType<typeof assertAdmin>>;
+
+/** Cancels every Paddle subscription immediately and drops Play bindings for a user. */
+async function revokeAllPremium(db: Db, uid: string) {
+  const { data: subs } = await db.from("subscriptions").select("paddle_subscription_id,environment,status").eq("user_id", uid);
+  const { gatewayFetch } = await import("@/lib/paddle.server");
+  for (const s of subs ?? []) {
+    const id = s.paddle_subscription_id;
+    if (!id.startsWith("manual_") && s.status !== "canceled") {
+      const res = await gatewayFetch(s.environment as "sandbox" | "live", `/subscriptions/${encodeURIComponent(id)}/cancel`, {
+        method: "POST",
+        body: JSON.stringify({ effective_from: "immediately" }),
+      });
+      if (!res.ok && res.status !== 404 && res.status !== 422) throw new Error("Paddle-abonnemanget kunde inte avslutas.");
+    }
+  }
+  const now = new Date().toISOString();
+  await db.from("subscriptions").update({ status: "canceled", current_period_end: now, cancel_at_period_end: false }).eq("user_id", uid);
+  await db.from("google_play_subscriptions").delete().eq("user_id", uid);
+}
+
+export const adminRevokePremium = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator(userIdInput)
+  .handler(async ({ data, context }) => {
+    const db = await assertAdmin(context as unknown as Ctx);
+    await revokeAllPremium(db, data.userId);
+    return { ok: true };
+  });
+
+export const adminDeleteUser = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator(userIdInput)
+  .handler(async ({ data, context }) => {
+    const db = await assertAdmin(context as unknown as Ctx);
+    const uid = data.userId;
+    if (uid === context.userId) throw new Error("Du kan inte radera ditt eget adminkonto.");
+    await revokeAllPremium(db, uid);
+    await db.from("subscriptions").delete().eq("user_id", uid);
+    await db.from("lesson_progress").delete().eq("user_id", uid);
+    await db.from("deletion_requests").delete().eq("user_id", uid);
+    await db.from("profiles").delete().eq("id", uid);
+    const { error } = await db.auth.admin.deleteUser(uid);
+    if (error && !/not found/i.test(error.message)) throw new Error("Kontot kunde inte raderas.");
+    return { ok: true };
+  });
+
+export const adminSetBan = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((d) => z.object({ userId: z.string().uuid(), banned: z.boolean() }).parse(d))
+  .handler(async ({ data, context }) => {
+    const db = await assertAdmin(context as unknown as Ctx);
+    if (data.userId === context.userId) throw new Error("Du kan inte spärra ditt eget konto.");
+    const { error } = await db.auth.admin.updateUserById(data.userId, { ban_duration: data.banned ? "876000h" : "none" });
+    if (error) throw new Error("Spärren kunde inte ändras.");
     return { ok: true };
   });
