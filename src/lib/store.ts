@@ -21,7 +21,7 @@ export interface AppState {
   lastActive: string; // yyyy-mm-dd
   theme: "light" | "dark";
   examAttempts: ExamAttempt[];
-  favorites: string[]; // qids saved by the user
+  favorites?: string[]; // qids saved by the user
 }
 
 const KEY = "korkortskollen-v1";
