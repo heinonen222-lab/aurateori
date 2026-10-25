@@ -20,6 +20,7 @@
 - Billing-enabled Bubblewrap releases must use startUrl with `play=1` and retain that marker during navigation; unavailable Play Billing must never fall back to Paddle inside the Android package.
 
 ## Learning experience
+- Student sign-in on the dashboard uses existing Cloud Auth and subscription checks; login never creates or grants Premium, keeping teacher-assigned access independent of checkout.
 - Keep paid question data behind authorized server-function imports; all practice, dashboard and repetition views share the same accessible question inventory.
 - The free insurance module uses the same public question inventory and progress store as practice; superseded free questions remain server-authorized paid content to preserve saved question IDs.
 - Install bounded module-load recovery in the HTML head before app entry execution; React boundaries cannot catch failed bootstrap imports.

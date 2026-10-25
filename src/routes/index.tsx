@@ -9,6 +9,8 @@ import { AutoFitText } from "@/components/AutoFitText";
 import { SubscriptionCountdown } from "@/components/SubscriptionCountdown";
 import { Button } from "@/components/ui/button";
 import { useStore, computeStats } from "@/lib/store";
+import { useAuth } from "@/hooks/useAuth";
+import { StudentLogin } from "@/components/StudentLogin";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -68,6 +70,7 @@ function Dashboard() {
   const summary = trainingSummary(s);
   const navigate = useNavigate();
   const { questions } = useQuestions();
+  const { user, loading: authLoading } = useAuth();
 
   return (
     <AppShell>
@@ -97,6 +100,8 @@ function Dashboard() {
             </Button>
           </div>
         </header>
+
+        {!authLoading && !user && <StudentLogin />}
 
         <SubscriptionCountdown compact />
 
