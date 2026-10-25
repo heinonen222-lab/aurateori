@@ -196,14 +196,12 @@ function Stat({
     warning: "bg-warning/20 text-warning-foreground",
   }[accent];
   return (
-    <div className="flex min-w-0 flex-col overflow-hidden">
-      <div
-        className={`mb-2 hidden h-7 w-7 items-center justify-center rounded-md sm:inline-flex ${accentBg}`}
-      >
+    <div className="flex min-w-0 flex-col overflow-hidden bg-card p-3">
+      <div className={`mb-2 inline-flex h-7 w-7 items-center justify-center rounded-md ${accentBg}`}>
         {icon}
       </div>
       <AutoFitText maxSize={20} minSize={14} className="h-6 font-black leading-6">{value}</AutoFitText>
-      <span className="mt-1 text-[10px] leading-4 text-muted-foreground">{label}</span>
+      <span className="mt-0.5 text-[11px] leading-4 text-muted-foreground">{label}</span>
     </div>
   );
 }
@@ -213,40 +211,33 @@ function ActionCard({
   icon,
   title,
   desc,
-  highlight,
+  tag,
   search,
 }: {
   to: string;
   icon: React.ReactNode;
   title: string;
   desc: string;
-  highlight?: boolean;
+  tag?: string;
   search?: Record<string, unknown>;
 }) {
   return (
     <Link
       to={to}
       search={search}
-      className={`group relative flex h-full min-w-0 flex-col overflow-hidden border-b p-4 transition-colors duration-200 last:border-b-0 hover:bg-accent/40 focus-visible:z-10 focus-visible:ring-2 focus-visible:ring-ring sm:border-b-0 ${
-        highlight ? "bg-primary text-primary-foreground hover:bg-primary/95" : "border-border bg-card"
-      }`}
+      className="group flex min-w-0 items-center gap-3 rounded-lg border border-border bg-card p-4 shadow-soft transition-colors duration-200 hover:border-primary/40 focus-visible:ring-2 focus-visible:ring-ring sm:flex-col sm:items-start"
     >
-      <div className="flex items-center gap-3">
-        <div
-          className={`inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-lg ${
-            highlight ? "bg-primary-foreground/15" : "bg-primary/10 text-primary"
-          }`}
-        >
-          {icon}
+      <div className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary">
+        {icon}
+      </div>
+      <div className="min-w-0 flex-1">
+        <div className="flex items-center gap-2">
+          <span className="truncate font-bold">{title}</span>
+          {tag && <span className="shrink-0 rounded bg-muted px-1.5 py-0.5 text-[10px] font-semibold text-muted-foreground">{tag}</span>}
         </div>
-        <AutoFitText maxSize={16} minSize={13} className="h-6 min-w-0 flex-1 font-bold leading-6">{title}</AutoFitText>
-        <ArrowRight className="h-4 w-4 shrink-0 opacity-50 transition-transform group-hover:translate-x-0.5 group-hover:opacity-100" />
+        <div className="mt-0.5 text-[13px] leading-5 text-muted-foreground">{desc}</div>
       </div>
-      <div
-        className={`mt-2 text-[13px] leading-5 ${highlight ? "text-primary-foreground/80" : "text-muted-foreground"}`}
-      >
-        {desc}
-      </div>
+      <ArrowRight className="h-4 w-4 shrink-0 opacity-50 transition-transform group-hover:translate-x-0.5 group-hover:opacity-100 sm:hidden" />
     </Link>
   );
 }
