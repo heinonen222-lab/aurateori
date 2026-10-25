@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import type { ReactNode } from "react";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useQuestions } from "@/hooks/useQuestions";
 import { TrainingTopics } from "@/components/TrainingTopics";
 import { TOPICS, matchesTopic, type TopicId } from "@/lib/practice";
@@ -16,7 +16,10 @@ import { BookOpenCheck, RefreshCcw, RotateCcw, TriangleAlert } from "lucide-reac
 import { AuraState } from "@/components/AuraState";
 
 export const Route = createFileRoute("/quiz")({
-  validateSearch: (search: Record<string, unknown>): { topic?: TopicId } => ({ topic: TOPICS.find((topic) => topic.id === search.topic)?.id }),
+  validateSearch: (search: Record<string, unknown>): { topic?: TopicId; mode?: "quick" } => ({
+    topic: TOPICS.find((topic) => topic.id === search.topic)?.id,
+    mode: search.mode === "quick" ? "quick" : undefined,
+  }),
   head: () => ({
     meta: [
       { title: "Övningsfrågor – Aurateori" },
@@ -33,7 +36,6 @@ export const Route = createFileRoute("/quiz")({
   }),
   component: QuizPage,
 });
-
 
 const CATEGORIES: (QuestionCategory | "Alla")[] = [
   "Alla",
@@ -52,7 +54,9 @@ function QuizPage() {
   const [correctCount, setCorrectCount] = useState(0);
   const [custom, setCustom] = useState<{ label: string; list: typeof QUESTIONS } | null>(null);
   const repActive = custom !== null;
-  const setRepActive = (v: boolean) => { if (!v) setCustom(null); };
+  const setRepActive = (v: boolean) => {
+    if (!v) setCustom(null);
+  };
 
   const [seed, setSeed] = useState(0);
 
@@ -62,7 +66,11 @@ function QuizPage() {
 
   const pool = useMemo(() => {
     const all = allQ;
-    const list = topic ? all.filter((q) => matchesTopic(q, topic)) : cat === "Alla" ? all : all.filter((q) => q.category === cat);
+    const list = topic
+      ? all.filter((q) => matchesTopic(q, topic))
+      : cat === "Alla"
+        ? all
+        : all.filter((q) => q.category === cat);
     return seededShuffle(list, seed);
   }, [cat, topic, seed, allQ]);
 
@@ -70,9 +78,7 @@ function QuizPage() {
   const repPool = useMemo(
     () =>
       seededShuffle(
-        allQ.filter((q) =>
-          s.wrongQueue.includes(q.id),
-        ),
+        allQ.filter((q) => s.wrongQueue.includes(q.id)),
         7,
       ),
     [allQ, s.wrongQueue],
@@ -83,218 +89,326 @@ function QuizPage() {
     const m = new Map<string, { total: number; correct: number }>();
     for (const a of s.answers) {
       const e = m.get(a.category) ?? { total: 0, correct: 0 };
-      e.total++; if (a.correct) e.correct++;
+      e.total++;
+      if (a.correct) e.correct++;
       m.set(a.category, e);
     }
     return [...m.entries()]
-      .map(([category, e]) => ({ category, ...e, pct: e.total ? Math.round((e.correct / e.total) * 100) : 0 }))
+      .map(([category, e]) => ({
+        category,
+        ...e,
+        pct: e.total ? Math.round((e.correct / e.total) * 100) : 0,
+      }))
       .sort((a, b) => a.pct - b.pct);
   }, [s.answers]);
   const weakest = catStats[0];
   const startCustom = (label: string, list: typeof QUESTIONS) => {
-    setCustom({ label, list }); setIdx(0); setCorrectCount(0);
+    setCustom({ label, list });
+    setIdx(0);
+    setCorrectCount(0);
   };
   const startWeak = () => {
     if (!weakest) return;
-    startCustom(`Svagaste område · ${weakest.category}`, seededShuffle(allQ.filter((x) => x.category === weakest.category), Date.now()).slice(0, 10));
+    startCustom(
+      `Svagaste område · ${weakest.category}`,
+      seededShuffle(allQ.filter((x) => x.category === weakest.category), Date.now()).slice(0, 10),
+    );
   };
-  const startQuick = () => startCustom("Snabbträning · 10 blandade", seededShuffle(allQ, Date.now()).slice(0, 10));
+  const startQuick = () =>
+    startCustom("Snabbträning · 10 blandade", seededShuffle(allQ, Date.now()).slice(0, 10));
 
-  const activePool = custom ? custom.list.filter((q) => allQ.some((allowed) => allowed.id === q.id)) : pool;
+  // Snabbquiz från startsidan: frågorna ska börja direkt, utan ämnesrutorna först.
+  const autoStarted = useRef(false);
+  useEffect(() => {
+    if (search.mode !== "quick" || autoStarted.current || allQ.length === 0) return;
+    autoStarted.current = true;
+    startQuick();
+  }, [search.mode, allQ]);
+
+  const activePool = custom
+    ? custom.list.filter((q) => allQ.some((allowed) => allowed.id === q.id))
+    : pool;
   const q = activePool[idx];
   const empty = !repActive && pool.length === 0;
   const done = !q && !empty;
+
+  const sessionBar = repActive ? (
+    <div className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-2 rounded-lg border border-premium/30 bg-premium/10 px-4 py-2.5">
+      <p className="min-w-0 text-xs font-bold uppercase tracking-wider text-premium">
+        {custom?.label}
+      </p>
+      <Button
+        variant="ghost"
+        size="sm"
+        onClick={() => {
+          setRepActive(false);
+          setIdx(0);
+          setCorrectCount(0);
+        }}
+      >
+        Avsluta
+      </Button>
+    </div>
+  ) : null;
+
+  const questionBlock = q ? (
+    <>
+      <Progress value={(idx / activePool.length) * 100} aria-label="Framsteg i övningen" />
+      <QuestionCard
+        key={q.id}
+        question={q}
+        index={idx}
+        total={activePool.length}
+        onAnswer={(ok) => {
+          store.recordAnswer(q.id, q.category, ok);
+          if (ok) setCorrectCount((n) => n + 1);
+        }}
+        onNext={() => setIdx((i) => i + 1)}
+      />
+    </>
+  ) : null;
 
   return (
     <AppShell>
       <div className="space-y-6">
         <div>
           <h1 className="font-display text-2xl font-extrabold sm:text-3xl">Övningsfrågor</h1>
-          <p className="mt-1 text-sm text-muted-foreground">
-            Filtrera på kategori och öva i din takt.
-          </p>
+          <p className="mt-1 text-sm text-muted-foreground">Filtrera på kategori och öva i din takt.</p>
         </div>
 
-        <div className="flex flex-wrap items-center justify-between gap-3 border-y border-border py-3"><p className="text-sm text-muted-foreground">Gratis: 10 försäkringsfrågor totalt.{!isPremium && " Övriga frågor kräver Premium."}</p><Button asChild variant="outline" size="sm"><Link to="/forsakring">Träna försäkring</Link></Button></div>
+        {/* Aktiv övning: frågan hamnar längst upp, direkt under rubriken. */}
+        {repActive &&
+          q && (
+            <>
+              {sessionBar}
+              {questionBlock}
+            </>
+          )}
 
-        <TrainingTopics questions={allQ} state={s} selected={topic} onSelect={(id) => { setTopic(id); setCat("Alla"); setIdx(0); setCorrectCount(0); setRepActive(false); }} />
-
-        <div className="no-scrollbar -mx-4 flex gap-2 overflow-x-auto px-4 pb-1 lg:mx-0 lg:flex-wrap lg:px-0">
-          {CATEGORIES.map((c) => (
-            <Button
-              variant="outline"
-              aria-pressed={!topic && cat === c}
-              key={c}
-              onClick={() => {
-                setTopic(null);
-                setCat(c);
-                setIdx(0);
-                setCorrectCount(0);
-                setRepActive(false);
-              }}
-              className={cn(
-                "min-h-11 shrink-0 rounded-lg border px-4 py-2 text-xs font-semibold transition-[background-color,border-color,color] focus-visible:ring-2 focus-visible:ring-ring",
-                !topic && cat === c
-                  ? "border-primary bg-primary text-primary-foreground"
-                  : "border-border bg-card hover:border-primary/40",
-              )}
-            >
-              {c}
-            </Button>
-          ))}
-        </div>
-
-        {!repActive && !empty && (
-          <div className="rounded-lg border border-border bg-card p-4 shadow-soft">
-            <div className="flex flex-wrap items-center justify-between gap-2">
-              <p className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Dina övningar</p>
-              {s.answers.length > 0 && (
-                <p className="text-xs tabular-nums text-muted-foreground">
-                  {stats.total} besvarade · {stats.accuracy}% rätt · {stats.correct} poäng
-                </p>
-              )}
-            </div>
-            <div className="mt-3 grid gap-2 sm:grid-cols-3">
-              <Button
-                variant={repPool.length > 0 ? "default" : "outline"}
-                disabled={repPool.length === 0}
-                onClick={() => startCustom(`Repetition · ${repPool.length} sparade frågor`, repPool)}
-              >
-                <RotateCcw />
-                {repPool.length > 0 ? `Repetera felsvar (${repPool.length})` : "Inga felsvar att repetera"}
-              </Button>
-              <Button variant="outline" disabled={!weakest} onClick={startWeak}>
-                {weakest ? `Öva svagaste · ${weakest.category}` : "Öva svagaste området"}
-              </Button>
-              <Button variant="outline" onClick={startQuick}>
-                Snabbträning 10
-              </Button>
-            </div>
-          </div>
-        )}
-
-        {isError && !empty && (
-          <div className="flex items-start gap-3 rounded-lg border border-warning/25 bg-warning/10 p-4 text-sm" role="status">
-            <TriangleAlert className="mt-0.5 h-4 w-4 shrink-0 text-warning" aria-hidden="true" />
-            <div className="min-w-0 flex-1">
-              <p className="font-semibold">Extra frågor kunde inte hämtas</p>
-              <p className="mt-0.5 text-xs leading-5 text-muted-foreground">Du kan fortsätta med frågorna som redan finns i appen.</p>
-            </div>
-            <Button variant="ghost" size="sm" onClick={() => void refetch()} aria-label="Försök hämta extra frågor igen">
-              <RefreshCcw />
-            </Button>
-          </div>
-        )}
-
-        {empty && (
-          <AuraState
-            icon={BookOpenCheck}
-            title={isError ? "Frågorna kunde inte hämtas" : "Inga frågor i den här kategorin"}
-            description={
-              isError
-                ? "Kontrollera anslutningen och försök igen. Dina tidigare resultat påverkas inte."
-                : isPremium ? "Välj Alla för att fortsätta öva med hela frågebanken." : "Försäkringsutbildningens tio frågor är gratis. Övriga ämnen kräver Premium."
-            }
-            tone={isError ? "danger" : "default"}
-            actionLabel={isError ? "Försök igen" : "Visa alla frågor"}
-            onAction={() => {
-              if (isError) void refetch();
-              else { setTopic(null); setCat("Alla"); }
-            }}
-          >
-            {!isPremium && !isError && <Button asChild className="mt-4"><Link to="/forsakring">Öppna gratis försäkringsutbildning</Link></Button>}
-            {!isError && s.answers.length > 0 && (
-              <div className="mt-5 w-full max-w-sm rounded-lg border border-sidebar-border bg-sidebar/55 p-4 text-left backdrop-blur">
-                <p className="text-xs font-bold uppercase text-premium">Dina resultat</p>
-                <div className="mt-3 grid grid-cols-3 gap-2 text-center">
-                  <MiniFact label="Besvarade" value={stats.total} />
-                  <MiniFact label="Rätt" value={`${stats.accuracy}%`} />
-                  <MiniFact label="Poäng" value={stats.correct} />
-                </div>
-                <ul className="mt-3 space-y-2">
-                  {catStats.slice(0, 5).map((c) => (
-                    <li key={c.category} className="text-xs text-sidebar-foreground/80">
-                      <div className="flex justify-between gap-2"><span className="truncate">{c.category}</span><span className="font-semibold tabular-nums">{c.correct}/{c.total} · {c.pct}%</span></div>
-                      <div className="mt-1 h-1.5 overflow-hidden rounded-full bg-sidebar-accent"><div className="h-full bg-premium" style={{ width: `${c.pct}%` }} /></div>
-                    </li>
-                  ))}
-                </ul>
-                <div className="mt-4 grid gap-2 sm:grid-cols-2">
-                  {weakest && <Button variant="outline" onClick={startWeak}>Öva svagaste området</Button>}
-                  <Button variant="outline" onClick={startQuick}>Snabbträning 10</Button>
-                </div>
-              </div>
-            )}
-            {!isError && repPool.length === 0 && s.answers.length === 0 && (
-              <div className="mt-5 w-full max-w-sm rounded-lg border border-sidebar-border bg-sidebar/55 p-4 text-left backdrop-blur" role="note">
-                <p className="text-xs font-bold uppercase text-premium">Exempel i frågebanken</p>
-                <ul className="mt-3 grid gap-2 text-sm text-sidebar-foreground/80 sm:grid-cols-2">
-                  <li className="rounded-md border border-sidebar-border bg-sidebar-accent/55 px-3 py-2">Högerregeln och väjningsplikt</li>
-                  <li className="rounded-md border border-sidebar-border bg-sidebar-accent/55 px-3 py-2">Hastighet och parkering</li>
-                  <li className="rounded-md border border-sidebar-border bg-sidebar-accent/55 px-3 py-2">Däck och belysning</li>
-                  <li className="rounded-md border border-sidebar-border bg-sidebar-accent/55 px-3 py-2">Risker och säker körning</li>
-                </ul>
-                <p className="mt-3 text-xs leading-5 text-sidebar-foreground/65">Tryck på <strong className="text-sidebar-foreground">Visa alla frågor</strong> eller välj en annan kategori ovan.</p>
-              </div>
-            )}
-            {!isError && repPool.length > 0 && (
-              <div className="mt-5 w-full max-w-sm rounded-lg border border-premium/30 bg-sidebar/55 p-4 text-left backdrop-blur" role="note">
-                <div className="inline-flex items-center gap-2 text-xs font-bold uppercase text-premium">
-                  <RotateCcw className="h-3.5 w-3.5" /> Dina frågor
-                </div>
-                <p className="mt-2 text-sm leading-5 text-sidebar-foreground/80">
-                  Du har {repPool.length} sparade frågor att repetera. Svara på dem direkt här – du får riktig procent och poäng.
-                </p>
-                <div className="mt-3 grid grid-cols-3 gap-2 text-center">
-                  <MiniFact label="Frågor" value={repPool.length} />
-                  <MiniFact label="Träffsäkerhet" value={`${stats.accuracy}%`} />
-                  <MiniFact label="Poäng" value={stats.correct} />
-                </div>
-                <Button
-                  className="mt-4 w-full"
-                  onClick={() => {
-                    startCustom(`Repetition · ${repPool.length} sparade frågor`, repPool);
-                  }}
-                >
-                  Starta repetition
-                </Button>
-              </div>
-            )}
-          </AuraState>
-        )}
-
-        {!done && !empty && q && (
+        {!repActive && (
           <>
-            {repActive && (
-              <div className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-2 rounded-lg border border-premium/30 bg-premium/10 px-4 py-2.5">
-                <p className="min-w-0 text-xs font-bold uppercase tracking-wider text-premium">
-                  {custom?.label}
-                </p>
+            <div className="flex flex-wrap items-center justify-between gap-3 border-y border-border py-3">
+              <p className="text-sm text-muted-foreground">
+                Gratis: 10 försäkringsfrågor totalt.
+                {!isPremium && " Övriga frågor kräver Premium."}
+              </p>
+              <Button asChild variant="outline" size="sm">
+                <Link to="/forsakring">Träna försäkring</Link>
+              </Button>
+            </div>
+
+            <div className="no-scrollbar -mx-4 flex gap-2 overflow-x-auto px-4 pb-1 lg:mx-0 lg:flex-wrap lg:px-0">
+              {CATEGORIES.map((c) => (
+                <Button
+                  variant="outline"
+                  aria-pressed={!topic && cat === c}
+                  key={c}
+                  onClick={() => {
+                    setTopic(null);
+                    setCat(c);
+                    setIdx(0);
+                    setCorrectCount(0);
+                    setRepActive(false);
+                  }}
+                  className={cn(
+                    "min-h-11 shrink-0 rounded-lg border px-4 py-2 text-xs font-semibold transition-[background-color,border-color,color] focus-visible:ring-2 focus-visible:ring-ring",
+                    !topic && cat === c
+                      ? "border-primary bg-primary text-primary-foreground"
+                      : "border-border bg-card hover:border-primary/40",
+                  )}
+                >
+                  {c}
+                </Button>
+              ))}
+            </div>
+
+            {empty ? (
+              <AuraState
+                icon={BookOpenCheck}
+                title={isError ? "Frågorna kunde inte hämtas" : "Inga frågor i den här kategorin"}
+                description={
+                  isError
+                    ? "Kontrollera anslutningen och försök igen. Dina tidigare resultat påverkas inte."
+                    : isPremium
+                      ? "Välj Alla för att fortsätta öva med hela frågebanken."
+                      : "Försäkringsutbildningens tio frågor är gratis. Övriga ämnen kräver Premium."
+                }
+                tone={isError ? "danger" : "default"}
+                actionLabel={isError ? "Försök igen" : "Visa alla frågor"}
+                onAction={() => {
+                  if (isError) void refetch();
+                  else {
+                    setTopic(null);
+                    setCat("Alla");
+                  }
+                }}
+              >
+                {!isPremium && !isError && (
+                  <Button asChild className="mt-4">
+                    <Link to="/forsakring">Öppna gratis försäkringsutbildning</Link>
+                  </Button>
+                )}
+                {!isError && s.answers.length > 0 && (
+                  <div className="mt-5 w-full max-w-sm rounded-lg border border-sidebar-border bg-sidebar/55 p-4 text-left backdrop-blur">
+                    <p className="text-xs font-bold uppercase text-premium">Dina resultat</p>
+                    <div className="mt-3 grid grid-cols-3 gap-2 text-center">
+                      <MiniFact label="Besvarade" value={stats.total} />
+                      <MiniFact label="Rätt" value={`${stats.accuracy}%`} />
+                      <MiniFact label="Poäng" value={stats.correct} />
+                    </div>
+                    <ul className="mt-3 space-y-2">
+                      {catStats.slice(0, 5).map((c) => (
+                        <li key={c.category} className="text-xs text-sidebar-foreground/80">
+                          <div className="flex justify-between gap-2">
+                            <span className="truncate">{c.category}</span>
+                            <span className="font-semibold tabular-nums">
+                              {c.correct}/{c.total} · {c.pct}%
+                            </span>
+                          </div>
+                          <div className="mt-1 h-1.5 overflow-hidden rounded-full bg-sidebar-accent">
+                            <div className="h-full bg-premium" style={{ width: `${c.pct}%` }} />
+                          </div>
+                        </li>
+                      ))}
+                    </ul>
+                    <div className="mt-4 grid gap-2 sm:grid-cols-2">
+                      {weakest && <Button variant="outline" onClick={startWeak}>Öva svagaste området</Button>}
+                      <Button variant="outline" onClick={startQuick}>Snabbträning 10</Button>
+                    </div>
+                  </div>
+                )}
+                {!isError && repPool.length === 0 && s.answers.length === 0 && (
+                  <div
+                    className="mt-5 w-full max-w-sm rounded-lg border border-sidebar-border bg-sidebar/55 p-4 text-left backdrop-blur"
+                    role="note"
+                  >
+                    <p className="text-xs font-bold uppercase text-premium">Exempel i frågebanken</p>
+                    <ul className="mt-3 grid gap-2 text-sm text-sidebar-foreground/80 sm:grid-cols-2">
+                      <li className="rounded-md border border-sidebar-border bg-sidebar-accent/55 px-3 py-2">
+                        Högerregeln och väjningsplikt
+                      </li>
+                      <li className="rounded-md border border-sidebar-border bg-sidebar-accent/55 px-3 py-2">
+                        Hastighet och parkering
+                      </li>
+                      <li className="rounded-md border border-sidebar-border bg-sidebar-accent/55 px-3 py-2">
+                        Däck och belysning
+                      </li>
+                      <li className="rounded-md border border-sidebar-border bg-sidebar-accent/55 px-3 py-2">
+                        Risker och säker körning
+                      </li>
+                    </ul>
+                    <p className="mt-3 text-xs leading-5 text-sidebar-foreground/65">
+                      Tryck på <strong className="text-sidebar-foreground">Visa alla frågor</strong>{" "}
+                      eller välj en annan kategori ovan.
+                    </p>
+                  </div>
+                )}
+                {!isError && repPool.length > 0 && (
+                  <div
+                    className="mt-5 w-full max-w-sm rounded-lg border border-premium/30 bg-sidebar/55 p-4 text-left backdrop-blur"
+                    role="note"
+                  >
+                    <div className="inline-flex items-center gap-2 text-xs font-bold uppercase text-premium">
+                      <RotateCcw className="h-3.5 w-3.5" /> Dina frågor
+                    </div>
+                    <p className="mt-2 text-sm leading-5 text-sidebar-foreground/80">
+                      Du har {repPool.length} sparade frågor att repetera. Svara på dem direkt här –
+                      du får riktig procent och poäng.
+                    </p>
+                    <div className="mt-3 grid grid-cols-3 gap-2 text-center">
+                      <MiniFact label="Frågor" value={repPool.length} />
+                      <MiniFact label="Träffsäkerhet" value={`${stats.accuracy}%`} />
+                      <MiniFact label="Poäng" value={stats.correct} />
+                    </div>
+                    <Button
+                      className="mt-4 w-full"
+                      onClick={() => {
+                        startCustom(`Repetition · ${repPool.length} sparade frågor`, repPool);
+                      }}
+                    >
+                      Starta repetition
+                    </Button>
+                  </div>
+                )}
+              </AuraState>
+            ) : (
+              questionBlock
+            )}
+
+            {!empty && isError && (
+              <div
+                className="flex items-start gap-3 rounded-lg border border-warning/25 bg-warning/10 p-4 text-sm"
+                role="status"
+              >
+                <TriangleAlert
+                  className="mt-0.5 h-4 w-4 shrink-0 text-warning"
+                  aria-hidden="true"
+                />
+                <div className="min-w-0 flex-1">
+                  <p className="font-semibold">Extra frågor kunde inte hämtas</p>
+                  <p className="mt-0.5 text-xs leading-5 text-muted-foreground">
+                    Du kan fortsätta med frågorna som redan finns i appen.
+                  </p>
+                </div>
                 <Button
                   variant="ghost"
                   size="sm"
-                  onClick={() => {
-                    setRepActive(false);
-                    setIdx(0);
-                    setCorrectCount(0);
-                  }}
+                  onClick={() => void refetch()}
+                  aria-label="Försök hämta extra frågor igen"
                 >
-                  Avsluta
+                  <RefreshCcw />
                 </Button>
               </div>
             )}
-            <Progress value={(idx / activePool.length) * 100} aria-label="Framsteg i övningen" />
-            <QuestionCard
-              key={q.id}
-              question={q}
-              index={idx}
-              total={activePool.length}
-              onAnswer={(ok) => {
-                store.recordAnswer(q.id, q.category, ok);
-                if (ok) setCorrectCount((n) => n + 1);
-              }}
-              onNext={() => setIdx((i) => i + 1)}
-            />
+
+            {!empty && (
+              <div className="rounded-lg border border-border bg-card p-4 shadow-soft">
+                <div className="flex flex-wrap items-center justify-between gap-2">
+                  <p className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
+                    Dina övningar
+                  </p>
+                  {s.answers.length > 0 && (
+                    <p className="text-xs tabular-nums text-muted-foreground">
+                      {stats.total} besvarade · {stats.accuracy}% rätt · {stats.correct} poäng
+                    </p>
+                  )}
+                </div>
+                <div className="mt-3 grid gap-2 sm:grid-cols-3">
+                  <Button
+                    variant={repPool.length > 0 ? "default" : "outline"}
+                    disabled={repPool.length === 0}
+                    onClick={() => startCustom(`Repetition · ${repPool.length} sparade frågor`, repPool)}
+                  >
+                    <RotateCcw />
+                    {repPool.length > 0
+                      ? `Repetera felsvar (${repPool.length})`
+                      : "Inga felsvar att repetera"}
+                  </Button>
+                  <Button variant="outline" disabled={!weakest} onClick={startWeak}>
+                    {weakest ? `Öva svagaste · ${weakest.category}` : "Öva svagaste området"}
+                  </Button>
+                  <Button variant="outline" onClick={startQuick}>
+                    Snabbträning 10
+                  </Button>
+                </div>
+              </div>
+            )}
+
+            <div className="space-y-3">
+              <h2 className="font-display text-lg font-bold">Dina kunskapsområden</h2>
+              <TrainingTopics
+                questions={allQ}
+                state={s}
+                selected={topic}
+                onSelect={(id) => {
+                  setTopic(id);
+                  setCat("Alla");
+                  setIdx(0);
+                  setCorrectCount(0);
+                  setRepActive(false);
+                }}
+              />
+            </div>
           </>
         )}
 
@@ -327,8 +441,12 @@ function QuizPage() {
 function MiniFact({ label, value }: { label: string; value: ReactNode }) {
   return (
     <div className="min-w-0 rounded-md border border-sidebar-border bg-sidebar-accent/55 px-2 py-2">
-      <div className="font-display text-lg font-extrabold leading-6 text-sidebar-foreground">{value}</div>
-      <div className="mt-0.5 text-[10px] font-semibold uppercase tracking-wider text-sidebar-foreground/60">{label}</div>
+      <div className="font-display text-lg font-extrabold leading-6 text-sidebar-foreground">
+        {value}
+      </div>
+      <div className="mt-0.5 text-[10px] font-semibold uppercase tracking-wider text-sidebar-foreground/60">
+        {label}
+      </div>
     </div>
   );
 }
