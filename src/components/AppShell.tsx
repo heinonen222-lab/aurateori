@@ -54,16 +54,19 @@ function NavLink({
       onClick={onClick}
       aria-current={active ? "page" : undefined}
       className={cn(
-        "flex min-h-11 items-center gap-3 rounded-lg transition-[background-color,color,transform] duration-200 active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
+        "relative flex min-w-0 min-h-11 items-center gap-3 rounded-lg transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring motion-reduce:transition-none",
         variant === "bottom"
-          ? "flex-col justify-center gap-0.5 px-0.5 py-2 text-[10px] font-semibold"
+          ? "h-[60px] flex-col justify-center gap-1 rounded-none px-0.5 py-1.5 text-[11px] font-semibold leading-4 focus-visible:ring-inset"
           : "px-4 py-3 text-sm font-medium",
-        active ? "text-foreground" : "text-muted-foreground hover:bg-muted hover:text-foreground",
+        active ? (variant === "bottom" ? "text-primary" : "text-foreground") : "text-muted-foreground hover:bg-muted hover:text-foreground",
         variant === "sheet" && active && "bg-accent text-accent-foreground",
       )}
     >
-      <item.icon className={cn(variant === "bottom" ? "h-5 w-5" : "h-5 w-5")} />
-      <span className={cn(variant === "bottom" && "w-full truncate text-center")}>{item.label}</span>
+      {variant === "bottom" && active && <span aria-hidden="true" className="absolute inset-x-5 top-0 h-0.5 rounded-b-sm bg-primary" />}
+      <span className={cn("grid shrink-0 place-items-center", variant === "bottom" && "h-7 w-10 rounded-md", variant === "bottom" && active && "bg-primary/10")}>
+        <item.icon aria-hidden="true" className="h-5 w-5" strokeWidth={active ? 2.5 : 2} />
+      </span>
+      <span className={cn(variant === "bottom" && "w-full text-center", active && "font-bold")}>{item.label}</span>
     </Link>
   );
 }
@@ -166,7 +169,7 @@ export function AppShell({ children }: { children: ReactNode }) {
       </main>
 
       {/* Mobile bottom nav */}
-      <nav className="fixed inset-x-0 bottom-0 z-30 border-t border-border bg-background/95 pb-[env(safe-area-inset-bottom)] shadow-[0_-8px_30px_color-mix(in_oklab,var(--foreground)_7%,transparent)] backdrop-blur-xl lg:hidden" aria-label="Mobilnavigation">
+      <nav className="fixed inset-x-0 bottom-0 z-30 border-t border-border bg-card pb-[env(safe-area-inset-bottom)] shadow-lifted lg:hidden" aria-label="Mobilnavigation">
         <div className="mx-auto grid max-w-md grid-cols-5 px-1">
           {PRIMARY_NAV.map((n) => {
             const active = n.to === "/" ? pathname === "/" : pathname.startsWith(n.to);
