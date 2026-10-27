@@ -6,8 +6,8 @@ import { QUESTIONS } from "@/data/questions";
 import { getPremiumQuestions } from "@/utils/questions.functions";
 
 export function useQuestions() {
-  const { user } = useAuth();
-  const { isActive } = useSubscription();
+  const { user, loading: authLoading } = useAuth();
+  const { isActive, loading: subLoading } = useSubscription();
   const fetchQuestions = useServerFn(getPremiumQuestions);
   const query = useQuery({
     queryKey: ["premium-questions", user?.id],
@@ -16,5 +16,6 @@ export function useQuestions() {
     staleTime: 5 * 60_000,
     refetchInterval: 5 * 60_000,
   });
-  return { ...query, questions: [...QUESTIONS, ...(user && isActive ? query.data ?? [] : [])], isPremium: isActive };
+  return { ...query, questions: [...QUESTIONS, ...(user && isActive ? query.data ?? [] : [])], isPremium: isActive,
+    ready: !authLoading && !(user && subLoading) && !(user && isActive && query.isPending && !query.isError) };
 }

@@ -63,7 +63,7 @@ function QuizPage() {
 
   const s = useStore();
   const stats = computeStats(s);
-  const { questions: allQ, isError, refetch, isPremium } = useQuestions();
+  const { questions: allQ, isError, refetch, isPremium, ready: questionsReady } = useQuestions();
 
   const pool = useMemo(() => {
     const all = allQ;
@@ -121,13 +121,13 @@ function QuizPage() {
   // Snabbquiz från startsidan: frågorna ska börja direkt, utan ämnesrutorna först.
   const autoStarted = useRef(false);
   useEffect(() => {
-    if (!search.mode || autoStarted.current || allQ.length === 0) return;
+    if (!search.mode || autoStarted.current || !questionsReady || allQ.length === 0) return;
     autoStarted.current = true;
     if (search.mode === "quick") return startQuick();
     const favs = allQ.filter((x) => (s.favorites ?? []).includes(x.id));
     if (favs.length > 0) startCustom(`Favoriter · ${favs.length} sparade`, seededShuffle(favs, Date.now()));
     else toast.info("Du har inga sparade favoriter ännu. Tryck på stjärnan på en fråga för att spara den.");
-  }, [search.mode, allQ]);
+  }, [search.mode, allQ, questionsReady]);
 
   const activePool = custom
     ? custom.list.filter((q) => allQ.some((allowed) => allowed.id === q.id))
