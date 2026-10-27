@@ -127,7 +127,7 @@ function QuizPage() {
     const favs = allQ.filter((x) => (s.favorites ?? []).includes(x.id));
     if (favs.length > 0) startCustom(`Favoriter · ${favs.length} sparade`, seededShuffle(favs, Date.now()));
     else toast.info("Du har inga sparade favoriter ännu. Tryck på stjärnan på en fråga för att spara den.");
-  }, [search.mode, allQ]);
+  }, [search.mode, allQ, questionsReady]);
 
   const activePool = custom
     ? custom.list.filter((q) => allQ.some((allowed) => allowed.id === q.id))
