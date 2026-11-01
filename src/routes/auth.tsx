@@ -1,6 +1,6 @@
 import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { Loader2 } from "lucide-react";
+import { Apple, Loader2 } from "lucide-react";
 import { AppShell } from "@/components/AppShell";
 import { supabase } from "@/integrations/supabase/client";
 import { lovable } from "@/integrations/lovable";
@@ -40,6 +40,7 @@ function AuthPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [busy, setBusy] = useState(false);
+  const [oauthBusy, setOauthBusy] = useState<"google" | "lovable" | "apple" | null>(null);
   const [message, setMessage] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
 
@@ -88,7 +89,8 @@ function AuthPage() {
     }
   };
 
-  const oauth = async (provider: "google" | "lovable") => {
+  const oauth = async (provider: "google" | "lovable" | "apple") => {
+    setOauthBusy(provider);
     setError(null);
     setMessage(null);
     if (typeof window !== "undefined") {
@@ -100,9 +102,11 @@ function AuthPage() {
       });
       if (result.error) throw result.error;
       if (result.redirected) return;
-      void navigate({ to: next as never });
+      // useAuth confirms the session before the effect above navigates.
     } catch (err) {
       setError(authErrorMessage(err));
+    } finally {
+      setOauthBusy(null);
     }
   };
 
@@ -163,7 +167,7 @@ function AuthPage() {
 
             <Button
               type="submit"
-              disabled={busy}
+              disabled={busy || oauthBusy !== null}
               className="w-full"
             >
               {busy && <Loader2 className="h-4 w-4 animate-spin" />}
@@ -214,8 +218,12 @@ function AuthPage() {
           </div>
           {mode !== "forgot" && (
             <div className="mt-4 space-y-2 border-t border-border pt-4">
-              <Button variant="outline" onClick={google} className="w-full">Fortsätt med Google</Button>
-              <Button variant="outline" onClick={lovableSignIn} className="w-full">Fortsätt med Lovable</Button>
+              <Button variant="outline" onClick={() => oauth("apple")} disabled={busy || oauthBusy !== null} className="w-full">
+                {oauthBusy === "apple" ? <Loader2 aria-hidden="true" className="h-4 w-4 animate-spin" /> : <Apple aria-hidden="true" className="h-4 w-4" />}
+                {oauthBusy === "apple" ? "Ansluter till Apple…" : "Fortsätt med Apple"}
+              </Button>
+              <Button variant="outline" onClick={google} disabled={busy || oauthBusy !== null} className="w-full">Fortsätt med Google</Button>
+              <Button variant="outline" onClick={lovableSignIn} disabled={busy || oauthBusy !== null} className="w-full">Fortsätt med Lovable</Button>
             </div>
           )}
         </div>

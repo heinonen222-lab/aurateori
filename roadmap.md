@@ -1,5 +1,9 @@
 # Premium omdesign
 
+## Apple-inloggning
+- [x] Aktivera Apple och återanvänd befintlig profilhantering på inloggningssidan
+- [ ] Verifiera Apple-knapp och start av inloggningsflödet
+
 ## Källänkar på varje fråga
 - [x] Visa referens och klickbara källor i träning, admin och provresultat; 623 lokala frågor täckta, adminfrågor använder samma källval, 17 tester godkända och mobilövning verifierad; översiktskällor och modeller märks tydligt
 
