@@ -1,5 +1,9 @@
 # Premium omdesign
 
+## Apple-inloggning
+- [x] Aktivera Apple och återanvänd befintlig profilhantering på inloggningssidan
+- [x] Verifiera Apple-knapp och korrekt OAuth-start; full inloggning med Apple-ID kräver användarens godkännande och är inte verifierad
+
 ## Källänkar på varje fråga
 - [x] Visa referens och klickbara källor i träning, admin och provresultat; 623 lokala frågor täckta, adminfrågor använder samma källval, 17 tester godkända och mobilövning verifierad; översiktskällor och modeller märks tydligt
 
