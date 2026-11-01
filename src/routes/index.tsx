@@ -92,11 +92,11 @@ function Dashboard() {
               <p className="mt-3 max-w-md text-[15px] leading-relaxed text-muted-foreground sm:text-base">
                 Smartare körkortsteori. Öva, testa och följ dina framsteg – allt på ett ställe.
               </p>
-              <div className="mt-6 grid grid-cols-1 gap-2 sm:flex sm:gap-3">
-                <Button asChild size="lg" className="h-12 w-full rounded-xl text-base sm:w-auto">
+              <div className="mt-6 grid grid-cols-1 gap-2 sm:flex sm:flex-wrap sm:gap-3">
+                <Button asChild size="lg" className="h-12 w-full whitespace-nowrap rounded-xl text-base sm:w-auto">
                   <Link to="/quiz">Börja öva <ArrowRight className="h-4 w-4" /></Link>
                 </Button>
-                <Button asChild variant="outline" size="lg" className="h-12 w-full rounded-xl text-base sm:w-auto">
+                <Button asChild variant="outline" size="lg" className="h-12 w-full whitespace-nowrap rounded-xl text-base sm:w-auto">
                   <a href="#sa-fungerar-det">Se hur det fungerar</a>
                 </Button>
               </div>
