@@ -18,6 +18,7 @@
 - Android checkout uses the Digital Goods API with server-side Android Publisher verification; web checkout stays on Paddle to keep provider ownership separate.
 - Play purchase tokens are server-only and atomically bound to one account; refresh Play entitlements before access and keep question-bank grants fresh for at most ten minutes to reject revoked purchases.
 - Billing-enabled Bubblewrap releases must use startUrl with `play=1` and retain that marker during navigation; unavailable Play Billing must never fall back to Paddle inside the Android package.
+- Premium entitlements are decided by subscription status across every payment-environment row: the client hook and the server check must read all of a user's subscription rows, so a granted subscription can never show as inactive in the UI while the server allows access.
 
 ## Learning experience
 - All managed social providers share the public-origin OAuth callback and existing auth/profile lifecycle; navigate only after useAuth confirms a session to preserve account and entitlement boundaries.
