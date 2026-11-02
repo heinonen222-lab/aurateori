@@ -75,14 +75,14 @@ export function useSubscription(options?: { pollUntilActive?: boolean }) {
         "postgres_changes",
         { event: "*", schema: "public", table: "subscriptions", filter: `user_id=eq.${userId}` },
         () => {
-          void queryClient.invalidateQueries({ queryKey: ["subscription", userId, environment] });
+          void queryClient.invalidateQueries({ queryKey: ["subscription", userId] });
         },
       )
       .subscribe();
     return () => {
       void supabase.removeChannel(channel);
     };
-  }, [userId, environment, queryClient]);
+  }, [userId, queryClient]);
 
   const sub = query.data;
   const periodOk = !sub?.current_period_end || new Date(sub.current_period_end) > new Date();
