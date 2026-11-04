@@ -14,6 +14,7 @@ import { deleteAccount } from "@/utils/account.functions";
 import { store, useStore, computeStats } from "@/lib/store";
 import { trainingSummary } from "@/lib/practice";
 import { Input } from "@/components/ui/input";
+import { StudentLogin } from "@/components/StudentLogin";
 
 export const Route = createFileRoute("/konto")({
   head: () => ({
@@ -84,13 +85,16 @@ function AccountPage() {
             Laddar kontouppgifter…
           </div>
         ) : !user ? (
-          <div className="space-y-4 rounded-lg border border-border bg-card p-6 shadow-soft">
-            <p className="text-sm text-muted-foreground">
-              Du är inte inloggad. Logga in för att hantera ditt konto.
-            </p>
-            <Button asChild>
-              <Link to="/auth">Logga in</Link>
-            </Button>
+          <div className="space-y-5">
+            <div className="rounded-lg border border-border bg-card p-6 shadow-soft">
+              <p className="text-sm text-muted-foreground">
+                Du är inte inloggad. Logga in för att hantera ditt konto.
+              </p>
+              <Button asChild className="mt-4">
+                <Link to="/auth">Logga in</Link>
+              </Button>
+            </div>
+            <StudentLogin />
           </div>
         ) : (
           <>
