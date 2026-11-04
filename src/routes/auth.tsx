@@ -9,6 +9,7 @@ import { authErrorMessage } from "@/lib/auth-errors";
 import "@lovable.dev/cloud-auth-js/styles.css";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { SmsLogin } from "@/components/SmsLogin";
 
 export const Route = createFileRoute("/auth")({
   head: () => ({
@@ -218,6 +219,7 @@ function AuthPage() {
           </div>
           {mode !== "forgot" && (
             <div className="mt-4 space-y-2 border-t border-border pt-4">
+              <SmsLogin />
               <Button variant="outline" onClick={() => oauth("apple")} disabled={busy || oauthBusy !== null} className="w-full">
                 {oauthBusy === "apple" ? <Loader2 aria-hidden="true" className="h-4 w-4 animate-spin" /> : <Apple aria-hidden="true" className="h-4 w-4" />}
                 {oauthBusy === "apple" ? "Ansluter till Apple…" : "Fortsätt med Apple"}
