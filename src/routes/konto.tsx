@@ -14,6 +14,7 @@ import { deleteAccount } from "@/utils/account.functions";
 import { store, useStore, computeStats } from "@/lib/store";
 import { trainingSummary } from "@/lib/practice";
 import { Input } from "@/components/ui/input";
+import { StudentLogin } from "@/components/StudentLogin";
 
 export const Route = createFileRoute("/konto")({
   head: () => ({

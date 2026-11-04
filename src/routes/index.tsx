@@ -9,8 +9,7 @@ import { AutoFitText } from "@/components/AutoFitText";
 import { SubscriptionCountdown } from "@/components/SubscriptionCountdown";
 import { Button } from "@/components/ui/button";
 import { useStore, computeStats } from "@/lib/store";
-import { useAuth } from "@/hooks/useAuth";
-import { StudentLogin } from "@/components/StudentLogin";
+
 import logo from "@/assets/aurateori-logo.png";
 import hero from "@/assets/hero-license.jpg";
 
@@ -72,7 +71,6 @@ function Dashboard() {
   const summary = trainingSummary(s);
   const navigate = useNavigate();
   const { questions } = useQuestions();
-  const { user, loading: authLoading } = useAuth();
   const favCount = (s.favorites ?? []).length;
 
   return (
@@ -178,8 +176,6 @@ function Dashboard() {
             <ActionCard to="/quiz" search={{ mode: "favorites" }} icon={<Star className="h-5 w-5" />} title="Favoriter" tag={favCount ? `${favCount} sparade` : undefined} desc="Repetera dina sparade frågor." />
           </div>
         </div>
-
-        {!authLoading && !user && <StudentLogin />}
 
         <section id="kategorier" className="scroll-mt-20 space-y-3">
           <div className="flex items-end justify-between gap-3">
