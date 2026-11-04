@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { Zap, Timer, Signpost, Flame, Target, CheckCircle2, ArrowRight, RotateCcw, ShieldCheck, BookOpenCheck, BookOpen, BarChart3, Star } from "lucide-react";
+import { Zap, Timer, Signpost, Flame, Target, CheckCircle2, ArrowRight, RotateCcw, ShieldCheck, BookOpenCheck, Star } from "lucide-react";
 import { useQuestions } from "@/hooks/useQuestions";
 import { useNavigate } from "@tanstack/react-router";
 import { TrainingTopics } from "@/components/TrainingTopics";
@@ -255,23 +255,6 @@ function ActionCard({
         <div className="mt-0.5 text-[13px] leading-5 text-muted-foreground">{desc}</div>
       </div>
       <ArrowRight className="h-4 w-4 shrink-0 opacity-50 transition-transform group-hover:translate-x-0.5 group-hover:opacity-100 sm:hidden" />
-    </Link>
-  );
-}
-
-function FeatureCard({ to, icon, title, desc, search }: { to: string; icon: React.ReactNode; title: string; desc: string; search?: Record<string, unknown> }) {
-  return (
-    <Link
-      to={to}
-      search={search}
-      className="group flex min-w-0 flex-col rounded-2xl border border-border bg-card p-5 shadow-soft transition-[transform,border-color] duration-200 hover:-translate-y-0.5 hover:border-electric/40 focus-visible:ring-2 focus-visible:ring-ring motion-reduce:hover:translate-y-0"
-    >
-      <span className="grid h-11 w-11 place-items-center rounded-xl bg-electric/10 text-electric">{icon}</span>
-      <span className="mt-4 flex items-center justify-between gap-2 font-display text-base font-bold">
-        {title}
-        <ArrowRight className="h-4 w-4 opacity-40 transition-transform group-hover:translate-x-0.5 group-hover:opacity-100" />
-      </span>
-      <span className="mt-1 text-[13px] leading-5 text-muted-foreground">{desc}</span>
     </Link>
   );
 }
