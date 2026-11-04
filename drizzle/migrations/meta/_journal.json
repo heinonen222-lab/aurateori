@@ -22,6 +22,13 @@
       "when": 1792591551896,
       "tag": "0002_google_play_subscriptions",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1793802610913,
+      "tag": "0003_restrict_has_role_to_self",
+      "breakpoints": true
     }
   ]
 }
