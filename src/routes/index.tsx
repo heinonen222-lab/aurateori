@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { Zap, Timer, Signpost, Flame, Target, CheckCircle2, ArrowRight, RotateCcw, ShieldCheck, BookOpenCheck, BookOpen, BarChart3, Star } from "lucide-react";
+import { Zap, Timer, Signpost, Flame, Target, CheckCircle2, ArrowRight, RotateCcw, ShieldCheck, BookOpenCheck, Star } from "lucide-react";
 import { useQuestions } from "@/hooks/useQuestions";
 import { useNavigate } from "@tanstack/react-router";
 import { TrainingTopics } from "@/components/TrainingTopics";
@@ -97,7 +97,7 @@ function Dashboard() {
                   <Link to="/quiz">Börja öva <ArrowRight className="h-4 w-4" /></Link>
                 </Button>
                 <Button asChild variant="outline" size="lg" className="h-12 w-full whitespace-nowrap rounded-xl text-base sm:w-auto">
-                  <a href="#sa-fungerar-det">Se hur det fungerar</a>
+                  <a href="#kategorier">Se kategorier</a>
                 </Button>
               </div>
             </div>
@@ -109,17 +109,6 @@ function Dashboard() {
               fetchPriority="high"
               className="animate-aura-float aspect-[4/3] w-full rounded-xl object-cover shadow-soft"
             />
-          </div>
-        </section>
-
-        <section id="sa-fungerar-det" aria-labelledby="features-title" className="scroll-mt-20">
-          <h2 id="features-title" className="font-display text-lg font-bold sm:text-xl">Så fungerar Aurateori</h2>
-          <p className="mt-1 text-sm text-muted-foreground">Fyra verktyg som tar dig hela vägen till teoriprovet.</p>
-          <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-            <FeatureCard to="/quiz" icon={<BookOpen className="h-5 w-5" />} title="Teori" desc="Träna på teorifrågor efter kategori." />
-            <FeatureCard to="/exam" icon={<Timer className="h-5 w-5" />} title="Övningsprov" desc="Testa dina kunskaper inför teoriprovet." />
-            <FeatureCard to="/stats" icon={<BarChart3 className="h-5 w-5" />} title="Statistik" desc="Följ dina framsteg och se vad du behöver träna mer på." />
-            <FeatureCard to="/quiz" search={{ mode: "favorites" }} icon={<Star className="h-5 w-5" />} title="Favoriter" desc={`Spara frågor och repetera dem senare.${favCount ? ` ${favCount} sparade.` : ""}`} />
           </div>
         </section>
 
@@ -182,20 +171,21 @@ function Dashboard() {
 
         <div>
           <h2 className="mb-3 font-display text-lg font-bold sm:text-xl">Fler sätt att träna</h2>
-          <div className="grid gap-3 sm:grid-cols-3">
+          <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
             <ActionCard to="/quiz" search={{ mode: "quick" }} icon={<Zap className="h-5 w-5" />} title="Snabbquiz" tag="10 frågor" desc="Blandade frågor för snabb repetition." />
             <ActionCard to="/signs" icon={<Signpost className="h-5 w-5" />} title="Vägmärken" tag="Bibliotek" desc="Lär dig märkenas betydelse och regler." />
             <ActionCard to="/forsakring" icon={<ShieldCheck className="h-5 w-5" />} title="Försäkring" tag="Gratis" desc="10 frågor med förklaringar." />
+            <ActionCard to="/quiz" search={{ mode: "favorites" }} icon={<Star className="h-5 w-5" />} title="Favoriter" tag={favCount ? `${favCount} sparade` : undefined} desc="Repetera dina sparade frågor." />
           </div>
         </div>
 
         {!authLoading && !user && <StudentLogin />}
 
-        <section className="space-y-4">
+        <section id="kategorier" className="scroll-mt-20 space-y-3">
           <div className="flex items-end justify-between gap-3">
             <div>
-              <h2 className="font-display text-xl font-bold">Dina kunskapsområden</h2>
-              <p className="mt-1 text-sm text-muted-foreground">Träna ett specifikt ämnesområde.</p>
+              <h2 className="font-display text-lg font-bold sm:text-xl">Kategorier</h2>
+              <p className="mt-0.5 text-sm text-muted-foreground">Välj ett ämne att träna på.</p>
             </div>
             <Button asChild variant="ghost" size="sm"><Link to="/stats">Statistik <ArrowRight /></Link></Button>
           </div>
@@ -265,23 +255,6 @@ function ActionCard({
         <div className="mt-0.5 text-[13px] leading-5 text-muted-foreground">{desc}</div>
       </div>
       <ArrowRight className="h-4 w-4 shrink-0 opacity-50 transition-transform group-hover:translate-x-0.5 group-hover:opacity-100 sm:hidden" />
-    </Link>
-  );
-}
-
-function FeatureCard({ to, icon, title, desc, search }: { to: string; icon: React.ReactNode; title: string; desc: string; search?: Record<string, unknown> }) {
-  return (
-    <Link
-      to={to}
-      search={search}
-      className="group flex min-w-0 flex-col rounded-2xl border border-border bg-card p-5 shadow-soft transition-[transform,border-color] duration-200 hover:-translate-y-0.5 hover:border-electric/40 focus-visible:ring-2 focus-visible:ring-ring motion-reduce:hover:translate-y-0"
-    >
-      <span className="grid h-11 w-11 place-items-center rounded-xl bg-electric/10 text-electric">{icon}</span>
-      <span className="mt-4 flex items-center justify-between gap-2 font-display text-base font-bold">
-        {title}
-        <ArrowRight className="h-4 w-4 opacity-40 transition-transform group-hover:translate-x-0.5 group-hover:opacity-100" />
-      </span>
-      <span className="mt-1 text-[13px] leading-5 text-muted-foreground">{desc}</span>
     </Link>
   );
 }
