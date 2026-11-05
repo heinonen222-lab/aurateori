@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { Zap, Timer, Signpost, Flame, Target, CheckCircle2, ArrowRight, RotateCcw, ShieldCheck, BookOpenCheck, Star } from "lucide-react";
 import { useQuestions } from "@/hooks/useQuestions";
+import { useSubscription } from "@/hooks/useSubscription";
 import { useNavigate } from "@tanstack/react-router";
 import { TrainingTopics } from "@/components/TrainingTopics";
 import { trainingSummary } from "@/lib/practice";
@@ -72,6 +73,7 @@ function Dashboard() {
   const navigate = useNavigate();
   const { questions } = useQuestions();
   const favCount = (s.favorites ?? []).length;
+  const { isActive: isPremium } = useSubscription();
 
   return (
     <AppShell>
@@ -94,9 +96,11 @@ function Dashboard() {
                 <Button asChild size="lg" className="h-12 w-full whitespace-nowrap rounded-xl text-base sm:w-auto">
                   <Link to="/quiz">Börja öva <ArrowRight className="h-4 w-4" /></Link>
                 </Button>
-                <Button asChild variant="outline" size="lg" className="h-12 w-full whitespace-nowrap rounded-xl text-base sm:w-auto">
-                  <a href="#kategorier">Se kategorier</a>
-                </Button>
+                {isPremium && (
+                  <Button asChild variant="outline" size="lg" className="h-12 w-full whitespace-nowrap rounded-xl text-base sm:w-auto">
+                    <a href="#kategorier">Se kategorier</a>
+                  </Button>
+                )}
               </div>
             </div>
             <img
@@ -167,6 +171,7 @@ function Dashboard() {
 
         <SubscriptionCountdown compact />
 
+        {isPremium && (<>
         <div>
           <h2 className="mb-3 font-display text-lg font-bold sm:text-xl">Fler sätt att träna</h2>
           <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
@@ -187,6 +192,7 @@ function Dashboard() {
           </div>
           <TrainingTopics questions={questions} state={s} onSelect={(topic) => void navigate({ to: "/quiz", search: { topic } })} />
         </section>
+        </>)}
       </section>
     </AppShell>
   );
