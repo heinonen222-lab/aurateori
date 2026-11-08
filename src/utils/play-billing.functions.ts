@@ -5,7 +5,7 @@ import { PLAY_PLANS } from "@/lib/play-billing";
 
 export const verifyPlayCheckout = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator(z.object({ purchaseToken: z.string().min(10).max(4096), productId: z.enum(PLAY_PLANS) }))
+  .validator(z.object({ purchaseToken: z.string().min(10).max(4096), productId: z.enum(PLAY_PLANS) }))
   .handler(async ({ data, context }) => {
     const { verifyPlayPurchase, tokenHash } = await import("@/lib/play-billing.server");
     const verified = await verifyPlayPurchase(data.purchaseToken, data.productId);

@@ -12,7 +12,7 @@ const inputSchema = z.object({
 const cache = new Map<string, string>();
 
 export const resolvePaddlePrice = createServerFn({ method: "GET" })
-  .inputValidator((data: unknown) => inputSchema.parse(data))
+  .validator((data: unknown) => inputSchema.parse(data))
   .handler(async ({ data }): Promise<string> => {
     const key = `${data.environment}:${data.priceId}`;
     const cached = cache.get(key);

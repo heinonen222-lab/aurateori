@@ -63,7 +63,7 @@ export const adminListUsers = createServerFn({ method: "GET" })
 
 export const adminSetManualPremium = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((d) =>
+  .validator((d) =>
     z.object({
       userId: z.string().uuid(),
       environment: z.enum(["sandbox", "live"]),
@@ -111,7 +111,7 @@ export const adminListDeletions = createServerFn({ method: "GET" })
 
 export const adminCancelDeletion = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((d) => z.object({ id: z.string().uuid() }).parse(d))
+  .validator((d) => z.object({ id: z.string().uuid() }).parse(d))
   .handler(async ({ data, context }) => {
     const db = await assertAdmin(context as unknown as Ctx);
     const { error } = await db.from("deletion_requests").delete().eq("id", data.id);
@@ -121,7 +121,7 @@ export const adminCancelDeletion = createServerFn({ method: "POST" })
 
 export const adminDeleteNow = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((d) => z.object({ id: z.string().uuid() }).parse(d))
+  .validator((d) => z.object({ id: z.string().uuid() }).parse(d))
   .handler(async ({ data, context }) => {
     const db = await assertAdmin(context as unknown as Ctx);
     const { data: req, error } = await db.from("deletion_requests").select("user_id").eq("id", data.id).maybeSingle();
@@ -163,7 +163,7 @@ async function revokeAllPremium(db: Db, uid: string) {
 
 export const adminRevokePremium = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator(userIdInput)
+  .validator(userIdInput)
   .handler(async ({ data, context }) => {
     const db = await assertAdmin(context as unknown as Ctx);
     await revokeAllPremium(db, data.userId);
@@ -172,7 +172,7 @@ export const adminRevokePremium = createServerFn({ method: "POST" })
 
 export const adminDeleteUser = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator(userIdInput)
+  .validator(userIdInput)
   .handler(async ({ data, context }) => {
     const db = await assertAdmin(context as unknown as Ctx);
     const uid = data.userId;
@@ -189,7 +189,7 @@ export const adminDeleteUser = createServerFn({ method: "POST" })
 
 export const adminSetBan = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((d) => z.object({ userId: z.string().uuid(), banned: z.boolean() }).parse(d))
+  .validator((d) => z.object({ userId: z.string().uuid(), banned: z.boolean() }).parse(d))
   .handler(async ({ data, context }) => {
     const db = await assertAdmin(context as unknown as Ctx);
     if (data.userId === context.userId) throw new Error("Du kan inte spärra ditt eget konto.");

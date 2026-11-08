@@ -89,7 +89,7 @@ export const checkPremiumAccess = createServerFn({ method: "GET" })
 
 export const getBillingStatus = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((data: { environment: PaddleEnvInput }) => data)
+  .validator((data: { environment: PaddleEnvInput }) => data)
   .handler(async ({ data, context }): Promise<BillingStatus> => {
     const environment = data.environment === "live" ? "live" : "sandbox";
 
