@@ -40,7 +40,7 @@ function Gauge({ value }: { value: number }) {
   const c = 2 * Math.PI * r;
   const offset = c - (value / 100) * c;
   return (
-    <div className="relative grid h-32 w-32 shrink-0 place-items-center sm:h-44 sm:w-44">
+    <div className="relative grid h-32 w-32 shrink-0 place-items-center max-[400px]:h-28 max-[400px]:w-28 sm:h-44 sm:w-44">
       <svg viewBox="0 0 160 160" className="h-full w-full -rotate-90" aria-hidden="true">
         <circle cx="80" cy="80" r={r} fill="none" stroke="var(--muted)" strokeWidth="14" />
         <circle
@@ -82,7 +82,7 @@ function Dashboard() {
           <div aria-hidden="true" className="pointer-events-none absolute -left-32 -top-32 h-80 w-80 rounded-full bg-electric/15 blur-3xl" />
           <div className="relative grid items-center gap-3 p-4 sm:gap-6 sm:p-8 md:grid-cols-[minmax(0,1fr)_minmax(0,0.95fr)] md:gap-8">
             <div className="min-w-0">
-              <div className="flex items-center gap-2.5">
+              <div className="flex items-center gap-2.5 max-[400px]:hidden">
                 <img src={logo} alt="" width={36} height={36} className="h-7 w-7 shrink-0 rounded-lg shadow-soft sm:h-9 sm:w-9" />
                 <span className="font-display text-base font-extrabold sm:text-lg">Aurateori</span>
               </div>
@@ -109,7 +109,7 @@ function Dashboard() {
               width={1280}
               height={960}
               fetchPriority="high"
-              className="h-32 w-full rounded-xl object-cover shadow-soft sm:aspect-[4/3] sm:h-auto sm:animate-aura-float"
+              className="h-32 w-full rounded-xl object-cover shadow-soft max-[400px]:h-24 sm:aspect-[4/3] sm:h-auto sm:animate-aura-float"
             />
           </div>
         </section>
