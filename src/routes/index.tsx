@@ -87,7 +87,7 @@ function Dashboard() {
                 <span className="font-display text-base font-extrabold sm:text-lg">Aurateori</span>
               </div>
               <h1 className="mt-3 font-display text-[26px] font-extrabold leading-[1.08] sm:mt-5 sm:text-5xl">
-                Ta körkortet med <span className="text-electric">Aurateori</span>
+                Ta körkortet med <span className="whitespace-nowrap text-electric">Aurateori</span>
               </h1>
               <p className="mt-2 max-w-md text-sm leading-5 text-muted-foreground sm:mt-3 sm:text-base sm:leading-relaxed">
                 Smartare körkortsteori. Öva, testa och följ dina framsteg – allt på ett ställe.
