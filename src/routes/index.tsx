@@ -40,7 +40,7 @@ function Gauge({ value }: { value: number }) {
   const c = 2 * Math.PI * r;
   const offset = c - (value / 100) * c;
   return (
-    <div className="relative grid h-36 w-36 shrink-0 place-items-center sm:h-44 sm:w-44">
+    <div className="relative grid h-32 w-32 shrink-0 place-items-center max-[400px]:h-28 max-[400px]:w-28 sm:h-44 sm:w-44">
       <svg viewBox="0 0 160 160" className="h-full w-full -rotate-90" aria-hidden="true">
         <circle cx="80" cy="80" r={r} fill="none" stroke="var(--muted)" strokeWidth="14" />
         <circle
@@ -77,27 +77,27 @@ function Dashboard() {
 
   return (
     <AppShell>
-      <section className="space-y-5 sm:space-y-7">
+      <section className="space-y-3 sm:space-y-7">
         <section className="relative overflow-hidden rounded-2xl border border-border bg-card shadow-soft">
           <div aria-hidden="true" className="pointer-events-none absolute -left-32 -top-32 h-80 w-80 rounded-full bg-electric/15 blur-3xl" />
-          <div className="relative grid items-center gap-6 p-5 sm:p-8 md:grid-cols-[minmax(0,1fr)_minmax(0,0.95fr)] md:gap-8">
+          <div className="relative grid items-center gap-3 p-4 sm:gap-6 sm:p-8 md:grid-cols-[minmax(0,1fr)_minmax(0,0.95fr)] md:gap-8">
             <div className="min-w-0">
-              <div className="flex items-center gap-2.5">
-                <img src={logo} alt="" width={36} height={36} className="h-9 w-9 rounded-[10px] shadow-soft" />
-                <span className="font-display text-lg font-extrabold tracking-tight">Aurateori</span>
+              <div className="flex items-center gap-2.5 max-[400px]:hidden">
+                <img src={logo} alt="" width={36} height={36} className="h-7 w-7 shrink-0 rounded-lg shadow-soft sm:h-9 sm:w-9" />
+                <span className="font-display text-base font-extrabold sm:text-lg">Aurateori</span>
               </div>
-              <h1 className="mt-5 font-display text-[32px] font-extrabold leading-[1.08] tracking-tight sm:text-5xl">
-                Ta körkortet med <span className="text-electric">Aurateori</span>
+              <h1 className="mt-3 font-display text-[26px] font-extrabold leading-[1.08] sm:mt-5 sm:text-5xl">
+                Ta körkortet med <span className="whitespace-nowrap text-electric">Aurateori</span>
               </h1>
-              <p className="mt-3 max-w-md text-[15px] leading-relaxed text-muted-foreground sm:text-base">
+              <p className="mt-2 max-w-md text-sm leading-5 text-muted-foreground sm:mt-3 sm:text-base sm:leading-relaxed">
                 Smartare körkortsteori. Öva, testa och följ dina framsteg – allt på ett ställe.
               </p>
-              <div className="mt-6 grid grid-cols-1 gap-2 sm:flex sm:flex-wrap sm:gap-3">
-                <Button asChild size="lg" className="h-12 w-full whitespace-nowrap rounded-xl text-base sm:w-auto">
+              <div className={`mt-3 grid ${isPremium ? "grid-cols-2" : "grid-cols-1"} gap-2 sm:mt-6 sm:flex sm:flex-wrap sm:gap-3`}>
+                <Button asChild size="lg" className="h-11 min-w-0 w-full whitespace-nowrap rounded-xl px-3 text-sm sm:h-12 sm:w-auto sm:text-base">
                   <Link to="/quiz">Börja öva <ArrowRight className="h-4 w-4" /></Link>
                 </Button>
                 {isPremium && (
-                  <Button asChild variant="outline" size="lg" className="h-12 w-full whitespace-nowrap rounded-xl text-base sm:w-auto">
+                  <Button asChild variant="outline" size="lg" className="h-11 min-w-0 w-full whitespace-nowrap rounded-xl px-3 text-sm sm:h-12 sm:w-auto sm:text-base">
                     <a href="#kategorier">Se kategorier</a>
                   </Button>
                 )}
@@ -109,18 +109,18 @@ function Dashboard() {
               width={1280}
               height={960}
               fetchPriority="high"
-              className="animate-aura-float aspect-[4/3] w-full rounded-xl object-cover shadow-soft"
+              className="h-32 w-full rounded-xl object-cover shadow-soft max-[400px]:h-24 sm:aspect-[4/3] sm:h-auto sm:animate-aura-float"
             />
           </div>
         </section>
 
         <section
           aria-labelledby="daily-overview-title"
-          className="relative overflow-hidden rounded-2xl border border-border bg-card p-5 shadow-soft sm:p-7"
+          className="relative overflow-hidden rounded-2xl border border-border bg-card p-4 shadow-soft sm:p-7"
         >
           <div aria-hidden="true" className="pointer-events-none absolute -right-24 -top-24 h-64 w-64 rounded-full bg-primary/10 blur-3xl" />
-          <div className="relative flex items-start justify-between gap-3">
-            <div>
+          <div className="relative grid grid-cols-[minmax(0,1fr)_auto] items-start gap-3 sm:flex sm:justify-between">
+            <div className="min-w-0">
               <h2 id="daily-overview-title" className="font-display text-lg font-bold">Dagens översikt</h2>
               <p className="mt-0.5 text-xs text-muted-foreground">Målet är 80 % körkortsklarhet.</p>
             </div>
@@ -137,7 +137,7 @@ function Dashboard() {
               {stats.readiness >= 80 ? "Provklar" : stats.readiness >= 50 ? "På god väg" : "Kom igång"}
             </span>
           </div>
-          <div className="relative mt-5 grid grid-cols-1 items-center gap-6 sm:grid-cols-[auto_minmax(0,1fr)] sm:gap-10">
+          <div className="relative mt-3 grid grid-cols-1 items-center gap-4 sm:mt-5 sm:grid-cols-[auto_minmax(0,1fr)] sm:gap-10">
             <div className="flex justify-center">
               <Gauge value={stats.readiness} />
             </div>
