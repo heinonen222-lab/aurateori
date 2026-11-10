@@ -10,6 +10,7 @@ import "@lovable.dev/cloud-auth-js/styles.css";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { SmsLogin } from "@/components/SmsLogin";
+import { oauthReturnPath } from "@/lib/oauth-return-path";
 
 export const Route = createFileRoute("/auth")({
   head: () => ({
@@ -29,10 +30,7 @@ export const Route = createFileRoute("/auth")({
   component: AuthPage,
 });
 
-function safePath(value: string | null): string {
-  if (!value || !value.startsWith("/") || value.startsWith("//")) return "/";
-  return value;
-}
+const safePath = (value: string | null): string => oauthReturnPath(value);
 
 function AuthPage() {
   const navigate = useNavigate();
