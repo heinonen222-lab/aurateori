@@ -28,6 +28,7 @@ import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as StatsRouteImport } from './routes/stats'
 import { Route as TermsRouteImport } from './routes/terms'
 import { Route as CheckoutSuccessRouteImport } from './routes/checkout.success'
+import { Route as DotlovableOauthConsentRouteImport } from './routes/[.]lovable.oauth.consent'
 import { Route as ApiPublicHooksProcessDeletionsRouteImport } from './routes/api/public/hooks/process-deletions'
 import { Route as ApiPublicPaymentsWebhookRouteImport } from './routes/api/public/payments/webhook'
 
@@ -126,6 +127,11 @@ const CheckoutSuccessRoute = CheckoutSuccessRouteImport.update({
   path: '/checkout/success',
   getParentRoute: () => rootRouteImport,
 } as any)
+const DotlovableOauthConsentRoute = DotlovableOauthConsentRouteImport.update({
+  id: '/.lovable/oauth/consent',
+  path: '/.lovable/oauth/consent',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiPublicHooksProcessDeletionsRoute =
   ApiPublicHooksProcessDeletionsRouteImport.update({
     id: '/api/public/hooks/process-deletions',
@@ -159,6 +165,7 @@ export interface FileRoutesByFullPath {
   '/stats': typeof StatsRoute
   '/terms': typeof TermsRoute
   '/checkout/success': typeof CheckoutSuccessRoute
+  '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/api/public/hooks/process-deletions': typeof ApiPublicHooksProcessDeletionsRoute
   '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
 }
@@ -182,6 +189,7 @@ export interface FileRoutesByTo {
   '/stats': typeof StatsRoute
   '/terms': typeof TermsRoute
   '/checkout/success': typeof CheckoutSuccessRoute
+  '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/api/public/hooks/process-deletions': typeof ApiPublicHooksProcessDeletionsRoute
   '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
 }
@@ -206,6 +214,7 @@ export interface FileRoutesById {
   '/stats': typeof StatsRoute
   '/terms': typeof TermsRoute
   '/checkout/success': typeof CheckoutSuccessRoute
+  '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/api/public/hooks/process-deletions': typeof ApiPublicHooksProcessDeletionsRoute
   '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
 }
@@ -231,6 +240,7 @@ export interface FileRouteTypes {
     | '/stats'
     | '/terms'
     | '/checkout/success'
+    | '/.lovable/oauth/consent'
     | '/api/public/hooks/process-deletions'
     | '/api/public/payments/webhook'
   fileRoutesByTo: FileRoutesByTo
@@ -254,6 +264,7 @@ export interface FileRouteTypes {
     | '/stats'
     | '/terms'
     | '/checkout/success'
+    | '/.lovable/oauth/consent'
     | '/api/public/hooks/process-deletions'
     | '/api/public/payments/webhook'
   id:
@@ -277,6 +288,7 @@ export interface FileRouteTypes {
     | '/stats'
     | '/terms'
     | '/checkout/success'
+    | '/.lovable/oauth/consent'
     | '/api/public/hooks/process-deletions'
     | '/api/public/payments/webhook'
   fileRoutesById: FileRoutesById
@@ -301,6 +313,7 @@ export interface RootRouteChildren {
   StatsRoute: typeof StatsRoute
   TermsRoute: typeof TermsRoute
   CheckoutSuccessRoute: typeof CheckoutSuccessRoute
+  DotlovableOauthConsentRoute: typeof DotlovableOauthConsentRoute
   ApiPublicHooksProcessDeletionsRoute: typeof ApiPublicHooksProcessDeletionsRoute
   ApiPublicPaymentsWebhookRoute: typeof ApiPublicPaymentsWebhookRoute
 }
@@ -440,6 +453,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CheckoutSuccessRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/.lovable/oauth/consent': {
+      id: '/.lovable/oauth/consent'
+      path: '/.lovable/oauth/consent'
+      fullPath: '/.lovable/oauth/consent'
+      preLoaderRoute: typeof DotlovableOauthConsentRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/public/hooks/process-deletions': {
       id: '/api/public/hooks/process-deletions'
       path: '/api/public/hooks/process-deletions'
@@ -477,6 +497,7 @@ const rootRouteChildren: RootRouteChildren = {
   StatsRoute: StatsRoute,
   TermsRoute: TermsRoute,
   CheckoutSuccessRoute: CheckoutSuccessRoute,
+  DotlovableOauthConsentRoute: DotlovableOauthConsentRoute,
   ApiPublicHooksProcessDeletionsRoute: ApiPublicHooksProcessDeletionsRoute,
   ApiPublicPaymentsWebhookRoute: ApiPublicPaymentsWebhookRoute,
 }
