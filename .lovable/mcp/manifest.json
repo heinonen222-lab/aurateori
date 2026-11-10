@@ -1,0 +1,66 @@
+{
+  "version": 1,
+  "sdk_version": "3.3.0",
+  "path": "/mcp",
+  "auth": {
+    "type": "oauth",
+    "issuer": "https://svmacmiwmzxowywfrjja.supabase.co/auth/v1",
+    "accepted_audiences": [
+      "authenticated"
+    ]
+  },
+  "mcp": {
+    "server": {
+      "name": "aurateori",
+      "version": "0.1.0",
+      "title": "Aurateori"
+    },
+    "tools": [
+      {
+        "name": "get_premium_status",
+        "title": "Premium-status",
+        "description": "Visa den inloggade elevens Premium-status och när tillgången gäller till.",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "type": "object",
+          "properties": {},
+          "additionalProperties": false
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "get_practice_questions",
+        "title": "Övningsfrågor",
+        "description": "Hämta Premium-övningsfrågor (med svar och förklaring), valfritt filtrerade på kategori. Kräver Premium.",
+        "annotations": {
+          "readOnlyHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "type": "object",
+          "properties": {
+            "category": {
+              "description": "Kategori, t.ex. Trafikregler.",
+              "type": "string",
+              "maxLength": 80
+            },
+            "limit": {
+              "description": "Antal frågor (1–20, standard 5).",
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 20
+            }
+          },
+          "additionalProperties": false
+        },
+        "outputSchema": null
+      }
+    ]
+  }
+}
