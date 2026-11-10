@@ -17,6 +17,7 @@ import { Route as FlashcardsRouteImport } from './routes/flashcards'
 import { Route as ForsakringRouteImport } from './routes/forsakring'
 import { Route as GenomgangarRouteImport } from './routes/genomgangar'
 import { Route as KontoRouteImport } from './routes/konto'
+import { Route as McpRouteImport } from './routes/mcp'
 import { Route as PriserRouteImport } from './routes/priser'
 import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as QuizRouteImport } from './routes/quiz'
@@ -27,7 +28,9 @@ import { Route as SignsRouteImport } from './routes/signs'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as StatsRouteImport } from './routes/stats'
 import { Route as TermsRouteImport } from './routes/terms'
+import { Route as Char91DotwellKnownChar93OauthProtectedResourceRouteImport } from './routes/[.well-known]/oauth-protected-resource'
 import { Route as CheckoutSuccessRouteImport } from './routes/checkout.success'
+import { Route as DotlovableOauthConsentRouteImport } from './routes/[.]lovable.oauth.consent'
 import { Route as ApiPublicHooksProcessDeletionsRouteImport } from './routes/api/public/hooks/process-deletions'
 import { Route as ApiPublicPaymentsWebhookRouteImport } from './routes/api/public/payments/webhook'
 
@@ -69,6 +72,11 @@ const GenomgangarRoute = GenomgangarRouteImport.update({
 const KontoRoute = KontoRouteImport.update({
   id: '/konto',
   path: '/konto',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const McpRoute = McpRouteImport.update({
+  id: '/mcp',
+  path: '/mcp',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PriserRoute = PriserRouteImport.update({
@@ -121,9 +129,20 @@ const TermsRoute = TermsRouteImport.update({
   path: '/terms',
   getParentRoute: () => rootRouteImport,
 } as any)
+const Char91DotwellKnownChar93OauthProtectedResourceRoute =
+  Char91DotwellKnownChar93OauthProtectedResourceRouteImport.update({
+    id: '/.well-known/oauth-protected-resource',
+    path: '/.well-known/oauth-protected-resource',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const CheckoutSuccessRoute = CheckoutSuccessRouteImport.update({
   id: '/checkout/success',
   path: '/checkout/success',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DotlovableOauthConsentRoute = DotlovableOauthConsentRouteImport.update({
+  id: '/.lovable/oauth/consent',
+  path: '/.lovable/oauth/consent',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ApiPublicHooksProcessDeletionsRoute =
@@ -148,6 +167,7 @@ export interface FileRoutesByFullPath {
   '/forsakring': typeof ForsakringRoute
   '/genomgangar': typeof GenomgangarRoute
   '/konto': typeof KontoRoute
+  '/mcp': typeof McpRoute
   '/priser': typeof PriserRoute
   '/privacy': typeof PrivacyRoute
   '/quiz': typeof QuizRoute
@@ -158,7 +178,9 @@ export interface FileRoutesByFullPath {
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/stats': typeof StatsRoute
   '/terms': typeof TermsRoute
+  '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   '/checkout/success': typeof CheckoutSuccessRoute
+  '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/api/public/hooks/process-deletions': typeof ApiPublicHooksProcessDeletionsRoute
   '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
 }
@@ -171,6 +193,7 @@ export interface FileRoutesByTo {
   '/forsakring': typeof ForsakringRoute
   '/genomgangar': typeof GenomgangarRoute
   '/konto': typeof KontoRoute
+  '/mcp': typeof McpRoute
   '/priser': typeof PriserRoute
   '/privacy': typeof PrivacyRoute
   '/quiz': typeof QuizRoute
@@ -181,7 +204,9 @@ export interface FileRoutesByTo {
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/stats': typeof StatsRoute
   '/terms': typeof TermsRoute
+  '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   '/checkout/success': typeof CheckoutSuccessRoute
+  '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/api/public/hooks/process-deletions': typeof ApiPublicHooksProcessDeletionsRoute
   '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
 }
@@ -195,6 +220,7 @@ export interface FileRoutesById {
   '/forsakring': typeof ForsakringRoute
   '/genomgangar': typeof GenomgangarRoute
   '/konto': typeof KontoRoute
+  '/mcp': typeof McpRoute
   '/priser': typeof PriserRoute
   '/privacy': typeof PrivacyRoute
   '/quiz': typeof QuizRoute
@@ -205,7 +231,9 @@ export interface FileRoutesById {
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/stats': typeof StatsRoute
   '/terms': typeof TermsRoute
+  '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   '/checkout/success': typeof CheckoutSuccessRoute
+  '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/api/public/hooks/process-deletions': typeof ApiPublicHooksProcessDeletionsRoute
   '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
 }
@@ -220,6 +248,7 @@ export interface FileRouteTypes {
     | '/forsakring'
     | '/genomgangar'
     | '/konto'
+    | '/mcp'
     | '/priser'
     | '/privacy'
     | '/quiz'
@@ -230,7 +259,9 @@ export interface FileRouteTypes {
     | '/sitemap.xml'
     | '/stats'
     | '/terms'
+    | '/.well-known/oauth-protected-resource'
     | '/checkout/success'
+    | '/.lovable/oauth/consent'
     | '/api/public/hooks/process-deletions'
     | '/api/public/payments/webhook'
   fileRoutesByTo: FileRoutesByTo
@@ -243,6 +274,7 @@ export interface FileRouteTypes {
     | '/forsakring'
     | '/genomgangar'
     | '/konto'
+    | '/mcp'
     | '/priser'
     | '/privacy'
     | '/quiz'
@@ -253,7 +285,9 @@ export interface FileRouteTypes {
     | '/sitemap.xml'
     | '/stats'
     | '/terms'
+    | '/.well-known/oauth-protected-resource'
     | '/checkout/success'
+    | '/.lovable/oauth/consent'
     | '/api/public/hooks/process-deletions'
     | '/api/public/payments/webhook'
   id:
@@ -266,6 +300,7 @@ export interface FileRouteTypes {
     | '/forsakring'
     | '/genomgangar'
     | '/konto'
+    | '/mcp'
     | '/priser'
     | '/privacy'
     | '/quiz'
@@ -276,7 +311,9 @@ export interface FileRouteTypes {
     | '/sitemap.xml'
     | '/stats'
     | '/terms'
+    | '/.well-known/oauth-protected-resource'
     | '/checkout/success'
+    | '/.lovable/oauth/consent'
     | '/api/public/hooks/process-deletions'
     | '/api/public/payments/webhook'
   fileRoutesById: FileRoutesById
@@ -290,6 +327,7 @@ export interface RootRouteChildren {
   ForsakringRoute: typeof ForsakringRoute
   GenomgangarRoute: typeof GenomgangarRoute
   KontoRoute: typeof KontoRoute
+  McpRoute: typeof McpRoute
   PriserRoute: typeof PriserRoute
   PrivacyRoute: typeof PrivacyRoute
   QuizRoute: typeof QuizRoute
@@ -300,7 +338,9 @@ export interface RootRouteChildren {
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   StatsRoute: typeof StatsRoute
   TermsRoute: typeof TermsRoute
+  Char91DotwellKnownChar93OauthProtectedResourceRoute: typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   CheckoutSuccessRoute: typeof CheckoutSuccessRoute
+  DotlovableOauthConsentRoute: typeof DotlovableOauthConsentRoute
   ApiPublicHooksProcessDeletionsRoute: typeof ApiPublicHooksProcessDeletionsRoute
   ApiPublicPaymentsWebhookRoute: typeof ApiPublicPaymentsWebhookRoute
 }
@@ -361,6 +401,13 @@ declare module '@tanstack/react-router' {
       path: '/konto'
       fullPath: '/konto'
       preLoaderRoute: typeof KontoRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/mcp': {
+      id: '/mcp'
+      path: '/mcp'
+      fullPath: '/mcp'
+      preLoaderRoute: typeof McpRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/priser': {
@@ -433,11 +480,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof TermsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/.well-known/oauth-protected-resource': {
+      id: '/.well-known/oauth-protected-resource'
+      path: '/.well-known/oauth-protected-resource'
+      fullPath: '/.well-known/oauth-protected-resource'
+      preLoaderRoute: typeof Char91DotwellKnownChar93OauthProtectedResourceRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/checkout/success': {
       id: '/checkout/success'
       path: '/checkout/success'
       fullPath: '/checkout/success'
       preLoaderRoute: typeof CheckoutSuccessRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/.lovable/oauth/consent': {
+      id: '/.lovable/oauth/consent'
+      path: '/.lovable/oauth/consent'
+      fullPath: '/.lovable/oauth/consent'
+      preLoaderRoute: typeof DotlovableOauthConsentRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/api/public/hooks/process-deletions': {
@@ -466,6 +527,7 @@ const rootRouteChildren: RootRouteChildren = {
   ForsakringRoute: ForsakringRoute,
   GenomgangarRoute: GenomgangarRoute,
   KontoRoute: KontoRoute,
+  McpRoute: McpRoute,
   PriserRoute: PriserRoute,
   PrivacyRoute: PrivacyRoute,
   QuizRoute: QuizRoute,
@@ -476,7 +538,10 @@ const rootRouteChildren: RootRouteChildren = {
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   StatsRoute: StatsRoute,
   TermsRoute: TermsRoute,
+  Char91DotwellKnownChar93OauthProtectedResourceRoute:
+    Char91DotwellKnownChar93OauthProtectedResourceRoute,
   CheckoutSuccessRoute: CheckoutSuccessRoute,
+  DotlovableOauthConsentRoute: DotlovableOauthConsentRoute,
   ApiPublicHooksProcessDeletionsRoute: ApiPublicHooksProcessDeletionsRoute,
   ApiPublicPaymentsWebhookRoute: ApiPublicPaymentsWebhookRoute,
 }
