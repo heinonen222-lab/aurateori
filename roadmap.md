@@ -8,3 +8,6 @@
 - [ ] Skarpa priser: månad visar 149 kr och år 499 kr i Paddle, men appen annonserar 249/1 999 — rättningen avböts av användaren, inväntar godkännande
 - [ ] Stripe: appen kör redan Paddle (Lovable Payments) — inväntar besked om byte eller behåll
 - [ ] ElevenLabs: anslutningskortet avböts av användaren — avvaktar besked
+
+- [ ] Granska köp/konto/abonnemangsflöden, ställ frågor, planera och åtgärda luckor, testplan med testkort
+- [ ] Skapa Premium-katalog (249/599/1999 kr) i testmiljön
