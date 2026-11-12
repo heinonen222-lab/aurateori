@@ -65,24 +65,14 @@ export const checkPremiumAccess = createServerFn({ method: "GET" })
     for (const row of playRows ?? []) {
       try { if ((await verifyPlayPurchase(row.purchase_token)).allowed) return { allowed: true }; } catch { /* Fall back only to independently valid Paddle access. */ }
     }
-    const now = new Date().toISOString();
+    const { currentPaymentEnv, rowGrantsAccess } = await import("@/lib/entitlement");
     const { data, error } = await context.supabase
       .from("subscriptions")
-      .select("status,current_period_end")
+      .select("status,current_period_end,environment,paddle_subscription_id")
       .eq("user_id", context.userId);
-
     if (error) throw new Error(error.message);
-
-    const allowed = (data ?? []).some((row) => {
-      const end = row.current_period_end;
-      const withinPeriod = !end || end > now;
-      const statusActive =
-        ACTIVE_STATUSES.includes(row.status) ||
-        // past_due: Paddle retries payment (dunning) — keep access until it cancels.
-        row.status === "past_due" ||
-        (row.status === "canceled" && !!end);
-      return statusActive && withinPeriod;
-    });
+    const env = currentPaymentEnv();
+    const allowed = (data ?? []).some((row) => rowGrantsAccess(row, env));
 
     return { allowed };
   });

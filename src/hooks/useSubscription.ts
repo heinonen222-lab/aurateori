@@ -1,6 +1,7 @@
 // @refresh reset
 import { useEffect } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { currentPaymentEnv, rowInEnvironment } from "@/lib/entitlement";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { useServerFn } from "@tanstack/react-start";
@@ -62,7 +63,8 @@ export function useSubscription(options?: { pollUntilActive?: boolean }) {
         .eq("user_id", userId)
         .order("created_at", { ascending: false });
       if (error) throw new Error(error.message);
-      return pickSubscription(data ?? []);
+      const env = currentPaymentEnv();
+      return pickSubscription((data ?? []).filter((r) => rowInEnvironment(r, env)));
     },
   });
 

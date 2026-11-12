@@ -1,4 +1,5 @@
 import { defineTool, ToolError } from "@lovable.dev/mcp-js";
+import { currentPaymentEnv, rowGrantsAccess } from "@/lib/entitlement";
 import { supabaseForUser } from "../supabase";
 
 export default defineTool({
@@ -11,15 +12,13 @@ export default defineTool({
     const db = supabaseForUser(ctx);
     const { data, error } = await db
       .from("subscriptions")
-      .select("status, current_period_end, cancel_at_period_end")
+      .select("status, current_period_end, cancel_at_period_end, environment, paddle_subscription_id")
       .order("current_period_end", { ascending: false })
       .limit(10);
     if (error) throw new ToolError("Kunde inte läsa prenumerationen.");
     const now = Date.now();
-    const active = (data ?? []).find(
-      (r) => ["active", "trialing", "past_due"].includes(r.status) &&
-        (!r.current_period_end || new Date(r.current_period_end).getTime() > now),
-    );
+    const env = currentPaymentEnv();
+    const active = (data ?? []).find((r) => rowGrantsAccess(r, env, now));
     const result = {
       premium: Boolean(active),
       status: active?.status ?? data?.[0]?.status ?? "none",
